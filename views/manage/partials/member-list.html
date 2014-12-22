@@ -1,0 +1,20 @@
+<table class="table" ng-cloak>
+	<thead>
+		<tr>
+			<th class="hidden-xs">#</th>
+			<th>Member Name</th>
+			<th class="hidden-xs">Email</th>
+			<th class="hidden-xs">Phone</th>
+			<th class="hidden-xs">Childcare</th>
+		</tr>
+	</thead>
+	<tbody class="rowclickable">
+		<tr ng-repeat="member in members">
+			<td class="hidden-xs">{{member.id}}</td>
+			<td><a href="#members/{{member.id}}">{{member.name}}</a></td>
+			<td class="hidden-xs">{{member.email}}</td>
+			<td class="hidden-xs">{{member.phone}}</td>
+			<td class="hidden-xs">{{member.child_care}}</td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,38 @@
+body { padding-top: 70px; }
+.rowclickable tr { cursor: pointer; }
+.rowclickable tr:hover > td { background-color: #d9edf7; }
+#footer { color: #999; text-align: center; margin-top: 30px; }
+.footer-sm { 
+	font-size: 0.85em; 
+	opacity: 0.4; 
+	transition: opacity .25s ease-in-out;
+	-moz-transition: opacity .25s ease-in-out;
+	-webkit-transition: opacity .25s ease-in-out;
+}
+#footer a { color: #999; }
+.footer-sm:hover { font-size: 0.85em; opacity: 0.6; }
+.loading { padding: 30px; color: #AAA; }
+.glyphicon-spin {
+	-webkit-animation: spin 1000ms infinite linear;
+	animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(359deg);
+		transform: rotate(359deg);
+	}
+}
+@keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(359deg);
+		transform: rotate(359deg);
+	}
+}

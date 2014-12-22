@@ -1,0 +1,19 @@
+{
+    "name": "churchis", 
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/firelit/firelit-framework"
+        }
+    ],
+    "require": {
+        "firelit/framework": "dev-master",
+        "lusitanian/oauth": "~0.3",
+        "mailgun/mailgun-php": "~1.7.2"
+    },
+    "autoload": {
+        "psr-0": {
+            "": ["controllers/", "library/"]
+        }
+    }
+}

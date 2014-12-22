@@ -1,0 +1,32 @@
+<div class="row" ng-cloak>
+	<div class="col-sm-12">
+		<h3 class="page-header">{{member.name}}</h3>
+	</div>
+</div>
+<div class="row" ng-cloak>
+	<div class="col-sm-6">
+		<dl class="dl-horizontal group-details">
+			<dt>Contact Preference</dt>
+			<dd>{{member.contact_pref}}</dd>
+			<dt>Email</dt>
+			<dd>{{member.email}}</dd>
+			<dt>Phone</dt>
+			<dd>{{member.phone}}</dd>
+			<dt>Address</dt>
+			<dd><div>{{member.address}}</div><div>{{member.city}} {{member.zip}}</div></dd>
+			<dt>Child Care</dt>
+			<dd>{{member.child_care}}</dd>
+		</dl> 
+	</div>
+	<div class="col-sm-6">
+		<div class="well">
+			<strong>Groups</strong>
+			<ul class="group-members">
+				<li ng-hide="member.groups.length"><em class="text-muted">Not in any groups</em></li>
+				<li ng-repeat="group in member.groups">
+					<a href="#/groups/{{group.id}}">{{group.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
