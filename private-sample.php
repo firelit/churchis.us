@@ -6,6 +6,8 @@ $_SERVER['GOOGLE_SEC'] = 'GOOGLE SECRET';
 $_SERVER['MAILGUN_KEY'] = 'MAILGUN API KEY';
 $_SERVER['MAILGUN_DOM'] = 'MAILGUN DOMAIN';
 
+$_SERVER['PASS_HASH_SALT'] = 'ENTER RANDOM HASH SALT';
+
 // Set as environmental variables in Apache or set here
 if (!isset($_SERVER['DB_HOST'])) $_SERVER['DB_HOST'] = 'localhost';
 if (!isset($_SERVER['DB_NAME'])) $_SERVER['DB_NAME'] = 'DB_NAME';

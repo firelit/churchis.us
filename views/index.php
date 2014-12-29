@@ -7,20 +7,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css">
 		<style>
 			body {
-				background: url('/assets/tile.png') repeat white;
+				background: url('/assets/retina_wood.png') repeat white;
 			}
 			#wrap {
 				max-width: 430px;
 			}
 			#body {
-				padding: 75px 0;
+				padding: 60px 0;
 			}
-			#footer { color: #999; }
+			#footer { color: #b59871; }
 				.footer-em { font-style: italic; }
 				.footer-sm { 
 					font-size: 0.85em; 
@@ -29,19 +28,31 @@
 					-moz-transition: opacity .25s ease-in-out;
 					-webkit-transition: opacity .25s ease-in-out;
 				}
-				#footer a { color: #999; }
+				#footer a { color: #b59871; }
 				.footer-sm:hover { font-size: 0.85em; opacity: 0.8; }
+			label {
+				color: #917248;
+			}
+			input[type="text"], input[type="password"], .btn-default {
+				border: 1px solid #d5c1a5;
+			}
 			#bottom {
-				margin-top: 150px;
+				margin-top: 80px;
 			}
 			button {
 				margin-top: 10px;
 				border: none;
 				background: none;
 			}
-			#google {
-				width: 160px;
-				border: none;
+			#staff-login {
+				margin-top: 50px;
+				opacity: 0.5;
+			}
+			#staff-login:hover {
+				opacity: 1.0;
+			}
+			#staff-login .btn-default:hover {
+				background-color: white;
 			}
 		</style>
 
@@ -64,22 +75,34 @@
 						if ($loggedIn) {
 
 							?>
-							You're logged in, <?=htmlentities($loggedInAs); ?>!<br>
+							<a href="/manage/">You're logged in, <?=htmlentities($loggedInAs); ?>!</a><br>
 							<a href="/logout">Log Out</a>
 							<?php
 
 						} else {
 
 							?>
-							<form method="post" action="/login">
+							<form method="post" action="/login" class="text-left clearfix center-block" style="width:300px;">
 								<?php
 
 								if (!empty($loginError))
-									echo '<p class="text-danger">'. $loginError .'</p>';
+									echo '<p class="alert alert-danger">'. $loginError .'</p>';
 
 								?>
-								<button type="submit"><img id="google" alt="Login with Google" src="/assets/google.png"></button>
-								<input type="hidden" name="go" value="/manage/">
+								<div class="form-group">
+									<label for="email">Email Address</label>
+									<input type="text" name="email" placeholder="Email" class="form-control input-lg">
+								</div>
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input type="password" name="password" placeholder="Password" class="form-control input-lg">
+								</div>
+								<button class="btn btn-primary btn-lg pull-right" type="submit">Login</button>
+								<input type="hidden" name="type" value="local">
+							</form>
+							<form method="post" action="/login" id="staff-login">
+								<button class="btn btn-default btn-sm" type="submit">Frontline Staff Login</button>
+								<input type="hidden" name="type" value="google">
 							</form>
 							<?php
 

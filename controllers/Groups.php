@@ -2,6 +2,20 @@
 
 class Groups extends APIController {
 	
+	private $session, $user, $okGroups, $limitSql;
+
+	public function __construct() {
+		
+		$this->session = Firelit\Session::init();
+		$this->user = User::find($this->session->userId);
+
+		if ($this->user->role != 'ADMIN')
+			$this->okGroups = $this->user->getGroupIds();
+		else 
+			$this->okGroups = array();
+
+	}
+
 	public function viewAll() {
 
 		$sql = "SELECT * FROM `semesters` WHERE `status`='OPEN' ORDER BY `start_date` ASC LIMIT 1";
@@ -18,6 +32,9 @@ class Groups extends APIController {
 		$groups = array();
 
 		while ($group = $q->getObject('Group')) {
+
+			if (!in_array($group->id, $this->okGroups)) 
+				continue;
 
 			$groups[] = array(
 				'id' => $group->id,
@@ -47,6 +64,9 @@ class Groups extends APIController {
 
 		if (!$group) 
 			throw new Firelit\RouteToError(404, 'Group not found.');
+
+		if (!in_array($group->id, $this->okGroups)) 
+			throw new Firelit\RouteToError(400, 'Not authorized to view this group.');
 
 		$members = $group->getMembers();
 		$membersReturn = array();
@@ -96,6 +116,9 @@ class Groups extends APIController {
 
 		if (!$group) 
 			throw new Firelit\RouteToError(404, 'Group not found.');
+
+		if (!in_array($group->id, $this->okGroups)) 
+			throw new Firelit\RouteToError(400, 'Not authorized to edit this group.');
 
 		$request = Firelit\Request::init();
 

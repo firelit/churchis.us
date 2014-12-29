@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `churchis_main`.`users` (
   `password` VARCHAR(50) NULL DEFAULT NULL,
   `status` ENUM('ENABLED','DISABLED','LOCKED') NOT NULL DEFAULT 'ENABLED',
   `role` ENUM('ADMIN','USER') NOT NULL DEFAULT 'USER',
-  `service` ENUM('GOOGLE') NOT NULL,
+  `service` ENUM('GOOGLE','LOCAL') NOT NULL,
   `service_id` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email` (`email` ASC))

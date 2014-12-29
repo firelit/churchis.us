@@ -21,7 +21,7 @@ class APIController extends Firelit\Controller {
 		$router->errorRoute(400, function($code, $message) use ($resp) {
 			$resp->setCode(400);
 			$resp->respond(array(
-				'errors' => array(array('message' => 'Invalid request'))
+				'errors' => array(array('message' => (empty($message) ? 'Invalid request' : $message)))
 			));
 			exit;
 		});
@@ -32,12 +32,13 @@ class APIController extends Firelit\Controller {
 
 			$resp->setCode(500);
 			$resp->respond(array(
-				'errors' => array(array('message' => $e->getMessage()))
+				'errors' => array(array('message' => $message))
 			));
 			exit;
 		});
 
 		$session = Firelit\Session::init();
+		
 		if (!$session->loggedIn)
 			throw new Firelit\RouteToError(400, 'User not authenticated');
 	

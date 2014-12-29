@@ -3,6 +3,7 @@
 use OAuth\OAuth2\Service\Google;
 use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
+use Firelit\InputValidator as InputValidator;
 
 class Login extends Firelit\Controller {
 	
@@ -17,10 +18,85 @@ class Login extends Firelit\Controller {
 
 	public function login() {
 
-		if (($this->request->method == 'POST') && isset($this->request->post['go'])) 
-			$this->session->loginGo = ($this->secure ? 'https' : 'http') .'://'. $this->request->host . $this->request->post['go'];
+		if (($this->request->post['type'] == 'google') || (!empty($this->request->get['code'])))
+			return $this->googleLogin(); 
 
-		return $this->googleLogin(); // Only one available
+		if ($this->request->post['type'] == 'local')
+			return $this->localLogin(); 
+
+		$this->session->loggedIn = false;
+		$this->session->loginError = 'Incorrect login type selected.';
+		$this->response->redirect( '/' );
+
+	}
+
+	public function localLogin() {
+
+		$email = strtolower(trim($this->request->post['email']));
+
+		$iv = new InputValidator(InputValidator::EMAIL, $email);
+		if (!$iv->isValid()) {
+			$this->session->loggedIn = false;
+			$this->session->loginError = 'Email address is not valid.';
+
+			$this->response->redirect('/');
+			exit;
+		}
+
+		$password = $this->request->post['password'];
+
+		if (strlen($password) < 2) {
+			$this->session->loggedIn = false;
+			$this->session->loginError = 'The password field is required.';
+
+			$this->response->redirect('/');
+			exit;
+		}
+
+		$user = User::findByEmail($email);
+
+		if (!$user) {
+			sleep(1);
+
+			$this->session->loggedIn = false;
+			$this->session->loginError = 'No account found with this email address.';
+
+			$this->response->redirect('/');
+			exit;
+		}
+
+		if ($user->status != 'ENABLED') {
+			$this->session->loggedIn = false;
+			$this->session->loginError = 'This account has been disabled.';
+
+			$this->response->redirect('/');
+			exit;
+		}
+
+		if ($user->service == 'GOOGLE') {
+			$this->googleLogin();
+			exit;
+		}
+
+		if ($user->service != 'LOCAL') {
+			$this->session->loggedIn = false;
+			$this->session->loginError = 'Login method not available for given email.';
+
+			$this->response->redirect('/');
+			exit;
+		}
+
+		if (!$user->validatePassword($password)) {
+			sleep(1);
+			
+			$this->session->loggedIn = false;
+			$this->session->loginError = 'The password is incorrect.';
+
+			$this->response->redirect('/');
+			exit;
+		}
+
+		$this->executeLogin($user);
 
 	}
 
@@ -30,10 +106,13 @@ class Login extends Firelit\Controller {
 
 		$storage = new Session();
 
+		$host = $this->request->host;
+		$proto = ($this->request->secure ? 'https://' : 'http://');
+
 		$credentials = new Credentials(
 			$_SERVER['GOOGLE_KEY'],
 			$_SERVER['GOOGLE_SEC'],
-			'http://churchis.us/login/callback'
+			$proto . $host .'/login/callback'
 		);
 
 		$googleService = $servFactory->createService('google', $credentials, $storage, array('email', 'profile'));
@@ -62,47 +141,53 @@ class Login extends Firelit\Controller {
 				$this->session->loggedIn = false;
 				$this->session->loginError = 'There are no accounts with this email address.';
 
-				$this->response->redirect( $this->session->loginGo );
+				$this->response->redirect('/');
 				exit;
 			}
 
-			$u = User::findByEmail($email);
+			$user = User::findByEmail($email);
 
-			if (!$u) {
+			if (!$user) {
 				// TODO: Create an account if it matches a partner email host
 				$this->session->loggedIn = false;
 				$this->session->loginError = 'There are no accounts with this email address.';
 
-				$this->response->redirect( $this->session->loginGo );
+				$this->response->redirect('/');
 				exit;
 			}
 
-			if ($u->service != 'GOOGLE') {
+			if ($user->service != 'GOOGLE') {
 				$this->session->loggedIn = false;
 				$this->session->loginError = 'Your account requires local authentication. Please enter your email and password below.';
 
-				$this->response->redirect( $this->session->loginGo );
+				$this->response->redirect('/');
 				exit;
 			}
 
-			if (empty($u->service_id)) {
-				// First time logging in? Save that UID
-				$u->service_id = $result['id'];
-				$u->save();
+			if ($user->status != 'ENABLED') {
+				$this->session->loggedIn = false;
+				$this->session->loginError = 'This account has been disabled.';
 
-			} elseif ($u->service_id != $result['id']) {
+				$this->response->redirect('/');
+				exit;
+			}
+
+			if (empty($user->service_id)) {
+				// First time logging in? Save that UID
+				$user->service_id = $result['id'];
+				$user->save();
+
+			} elseif ($user->service_id != $result['id']) {
 				$this->session->loggedIn = false;
 				$this->session->loginError = 'Your Google UID does not match our records. Please try again or contact us.';
 
-				$this->response->redirect( $this->session->loginGo );
+				$this->response->redirect('/');
 				exit;
 			}
 
-			$this->executeLogin($u, 'GOOGLE');
+			$this->executeLogin($user);
 
 		} else {
-
-			if (empty($this->session->loginGo)) $this->session->loginGo = '/';
 
 			$this->response->redirect( $googleService->getAuthorizationUri() );
 
@@ -124,15 +209,12 @@ class Login extends Firelit\Controller {
 		else return $url;
 	}
 
-	public function executeLogin($u, $service) {
+	public function executeLogin($user) {
 
 		$this->session->loggedIn = true;
-		$this->session->userId = $u->id;
+		$this->session->userId = $user->id;
 
-		$go = $this->session->loginGo;
-		unset($this->session->loginGo);
-
-		$this->response->redirect( $go );
+		$this->response->redirect('/manage/');
 
 	}
 

@@ -7,7 +7,7 @@ class MemberSignup extends Firelit\Controller {
 	public function viewForm() {
 
 		$request = Firelit\Request::init();
-		$sid = $request->get['sid'];
+		$sid = isset($request->get['sid']) ? $request->get['sid'] : false;
 
 		if ($sid) {
 
@@ -24,7 +24,7 @@ class MemberSignup extends Firelit\Controller {
 
 		}
 
-		if (!$semester) {
+		if (empty($semester)) {
 
 			$sql = "SELECT * FROM `semesters` WHERE `status`='OPEN' ORDER BY `start_date` ASC LIMIT 1";
 			$q = new Firelit\Query($sql);

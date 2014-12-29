@@ -217,7 +217,7 @@
 
 		<!-- Multiple Radios (inline) -->
 		<div class="form-group">
-			<label class="control-label" for="childcare">Providing Child Care?</label>
+			<label class="control-label" for="childcare">Will child care be needed?</label>
 			<div> 
 				<label class="radio-inline" for="childcare-0">
 					<input type="radio" name="childcare" id="childcare-0" value="No" checked="checked"> No
@@ -225,6 +225,7 @@
 				<label class="radio-inline" for="childcare-1">
 					<input type="radio" name="childcare" id="childcare-1" value="Yes"> Yes
 				</label>
+				<span class="help-block">Child care will most likely be provided if you meet at Frontline. If meeting offsite, childcare <em>may</em> be available.</span> 
 			</div>
 		</div>
 
