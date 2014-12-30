@@ -34,9 +34,9 @@
 	<div class="col-sm-6">
 		<div class="well">
 			<strong>Members</strong>
-			<ul class="group-members">
-				<li ng-hide="group.members.length"><em class="text-muted">No members</em></li>
-				<li ng-repeat="member in group.members">
+			<ul class="group-members list-group">
+				<li class="list-group-item" ng-hide="group.members.length"><em class="text-muted">No members</em></li>
+				<li class="list-group-item" ng-repeat="member in group.members">
 					<a href="#/members/{{member.id}}">{{member.name}}</a>
 				</li>
 			</ul>

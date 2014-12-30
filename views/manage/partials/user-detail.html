@@ -1,0 +1,33 @@
+<div class="row" ng-cloak>
+	<div class="col-sm-12">
+		<h3 class="page-header">{{user.name}}</h3>
+	</div>
+</div>
+<div class="row" ng-cloak>
+	<div class="col-sm-6">
+		<dl class="dl-horizontal group-details">
+			<dt>Email</dt>
+			<dd>{{user.email}}</dd>
+			<dt>Role</dt>
+			<dd>{{user.role}}</dd>
+			<dt>Service</dt>
+			<dd>{{user.service}}</dd>
+			<dt>Status</dt>
+			<dd>{{user.status}}</dd>
+			<dt>Created</dt>
+			<dd>{{user.created}}</dd>
+		</dl> 
+	</div>
+	<div class="col-sm-6">
+		<div class="well">
+			<strong>Has Access To</strong>
+			<ul class="group-members list-group">
+				<li class="list-group-item" ng-hide="user.role == 'ADMIN' || user.groups.length"><em class="text-muted">No groups</em></li>
+				<li class="list-group-item" ng-show="user.role == 'ADMIN'"><em class="text-muted">All groups</em></li>
+				<li class="list-group-item" ng-hide="user.role == 'ADMIN'" ng-repeat="group in user.groups">
+					<a href="#/groups/{{group.id}}">{{group.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

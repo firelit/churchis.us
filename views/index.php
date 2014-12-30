@@ -17,7 +17,7 @@
 				max-width: 430px;
 			}
 			#body {
-				padding: 60px 0;
+				padding: 50px 0 20px;
 			}
 			#footer { color: #b59871; }
 				.footer-em { font-style: italic; }
@@ -45,7 +45,7 @@
 				background: none;
 			}
 			#staff-login {
-				margin-top: 50px;
+				margin-top: 60px;
 				opacity: 0.5;
 			}
 			#staff-login:hover {
@@ -113,7 +113,7 @@
 				</div> <!-- /#content -->
 			</div> <!-- /#body -->
 			<div id="footer">
-				<p class="footer-em">And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another &ndash; and all the more as you see the Day approaching.</p>
+				<!-- <p class="footer-em">And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another &ndash; and all the more as you see the Day approaching.</p> -->
 				<p class="footer-sm">Built with <i class="fa fa-heart"></i> by <a href="https://twitter.com/bigoness">Biggie</a></p>
 			</div>
 		</div>

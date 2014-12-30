@@ -1,7 +1,7 @@
 var churchis = angular.module('churchis', [
-  'ngRoute',
-  'churchisServices',
-  'churchisControllers'
+	'ngRoute',
+	'churchisServices',
+	'churchisControllers'
 ]);
 
 churchis.config(['$routeProvider',
@@ -23,6 +23,14 @@ churchis.config(['$routeProvider',
 			.when('/members/:memberId', {
 				templateUrl: '/views/manage/partials/member-detail.html',
 				controller: 'MemberDetailCtl'
+			})
+			.when('/users', {
+				templateUrl: '/views/manage/partials/user-list.html',
+				controller: 'UserListCtl'
+			})
+			.when('/users/:userId', {
+				templateUrl: '/views/manage/partials/user-detail.html',
+				controller: 'UserDetailCtl'
 			})
 			.otherwise({
 				redirectTo: '/groups'
@@ -48,6 +56,16 @@ churchisServices.factory('Member', ['$resource',
 	function($resource) {
 
 		return $resource('/api/members/:memberId', {memberId: '@id'}, {
+			query: { method: 'GET', isArray: true }
+		});
+
+	}
+]);
+
+churchisServices.factory('User', ['$resource',
+	function($resource) {
+
+		return $resource('/api/users/:userId', {userId: '@id'}, {
 			query: { method: 'GET', isArray: true }
 		});
 
@@ -116,11 +134,15 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', 'Gro
 	}
 ]);
 
-churchisControllers.controller('MemberListCtl', ['$scope', 'Member', 
-	function($scope, Member) {
+churchisControllers.controller('MemberListCtl', ['$scope', '$location', 'Member', 
+	function($scope, $location, Member) {
 
 		$scope.members = Member.query();
 		
+		$scope.viewMember = function(member) {
+			$location.path('/members/' + member.id);
+		}
+
 	}
 ]);
 
@@ -129,5 +151,25 @@ churchisControllers.controller('MemberDetailCtl', ['$scope', '$routeParams', 'Me
 
 		$scope.member = Member.get({memberId: $routeParams.memberId});
 		
+	}
+]);
+
+churchisControllers.controller('UserListCtl', ['$scope', '$location', 'User', 
+	function($scope, $location, User) {
+
+		$scope.users = User.query();
+		
+		$scope.viewUser = function(user) {
+			$location.path('/users/' + user.id);
+		}
+
+	}
+]);
+
+churchisControllers.controller('UserDetailCtl', ['$scope', '$routeParams', 'User',
+	function($scope, $routeParams, User) {
+
+		$scope.user = User.get({userId: $routeParams.userId});
+
 	}
 ]);

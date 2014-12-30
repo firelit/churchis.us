@@ -8,4 +8,13 @@ class Semester extends Firelit\DatabaseObject {
 	// Optional fields to set in extension
 	protected static $colsJson = array(); // Columns that should be automatically JSON-encoded/decoded when using
 
+	static public function latestOpen() {
+
+		$sql = "SELECT * FROM `". static::$tableName ."` WHERE `status`='OPEN' ORDER BY `start_date` ASC LIMIT 1";
+		$q = new Firelit\Query($sql);
+
+		return $q->getObject( get_called_class() );
+
+	}
+	
 }

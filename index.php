@@ -77,3 +77,11 @@ $router->add('GET', '!^/api/members$!', function() {
 	$router->add('GET', '!^/api/members/(\d+)$!', function($matches) {
 		Controller::handoff('Members', 'view', $matches[0]);
 	});
+
+$router->add('GET', '!^/api/users$!', function() {
+	Controller::handoff('Users', 'viewAll');
+});
+
+	$router->add('GET', '!^/api/users/(\d+)$!', function($matches) {
+		Controller::handoff('Users', 'view', $matches[0]);
+	});

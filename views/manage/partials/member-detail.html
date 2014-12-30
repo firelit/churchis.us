@@ -20,10 +20,10 @@
 	</div>
 	<div class="col-sm-6">
 		<div class="well">
-			<strong>Groups</strong>
-			<ul class="group-members">
-				<li ng-hide="member.groups.length"><em class="text-muted">Not in any groups</em></li>
-				<li ng-repeat="group in member.groups">
+			<strong>Member Of</strong>
+			<ul class="group-members list-group">
+				<li class="list-group-item" ng-hide="member.groups.length"><em class="text-muted">Not in any groups</em></li>
+				<li class="list-group-item" ng-repeat="group in member.groups">
 					<a href="#/groups/{{group.id}}">{{group.name}}</a>
 				</li>
 			</ul>

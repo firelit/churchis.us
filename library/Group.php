@@ -32,4 +32,26 @@ class Group extends Firelit\DatabaseObject {
 
 	}
 
+	public function getArray() {
+		
+		return array(
+			'id' => $this->id,
+			'name' => $this->name,
+			'status' => $this->status,
+			'public_id' => $this->public_id,
+			'description' => $this->description,
+			'leader' => $this->data['leader'],
+			'when' => (is_array($this->data['days']) ? implode(', ', $this->data['days']) : '') .' '. $this->data['time'],
+			'days' => (is_array($this->data['days']) ? $this->data['days'] : array()),
+			'time' => $this->data['time'],
+			'where' => (!empty($this->data['location_short']) ? $this->data['location_short'] : $this->data['location']),
+			'childcare' => ($this->data['childcare'] ? 'Provided' : 'Not available'),
+			'gender' => $this->data['gender'],
+			'demographic' => $this->data['demographic'],
+			'cost' => ($this->data['cost'] ? 'Yes' : 'No'),
+			'max_members' => $this->max_members,
+			'full' => ($this->status == 'FULL')
+		);
+
+	}
 }

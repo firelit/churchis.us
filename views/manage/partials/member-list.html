@@ -9,9 +9,9 @@
 		</tr>
 	</thead>
 	<tbody class="rowclickable">
-		<tr ng-repeat="member in members">
+		<tr ng-repeat="member in members" ng-click="viewMember(member);">
 			<td class="hidden-xs">{{member.id}}</td>
-			<td><a href="#members/{{member.id}}">{{member.name}}</a></td>
+			<td>{{member.name}}</td>
 			<td class="hidden-xs">{{member.email}}</td>
 			<td class="hidden-xs">{{member.phone}}</td>
 			<td class="hidden-xs">{{member.child_care}}</td>

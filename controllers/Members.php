@@ -2,36 +2,56 @@
 
 class Members extends APIController {
 	
+	private $session, $user, $okGroups;
+
+	public function __construct() {
+		
+		parent::__construct();
+
+		$this->session = Firelit\Session::init();
+		$this->user = User::find($this->session->userId);
+
+		if ($this->user->role != 'ADMIN')
+			$this->okGroups = $this->user->getGroups();
+		else 
+			$this->okGroups = array();
+
+		$groupIds = array();
+
+		// Now let's extract group IDs
+		foreach ($this->okGroups as $group)
+			$groupIds[] = $group->id;
+
+		$this->okGroups = $groupIds;
+
+	}
+
 	public function viewAll() {
 
-		$sql = "SELECT * FROM `semesters` WHERE `status`='OPEN' ORDER BY `start_date` ASC LIMIT 1";
-		$q = new Firelit\Query($sql);
-
-		$semester = $q->getObject('Semester');
+		$semester = Semester::latestOpen();
 
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
-		$sql = "SELECT * FROM `members` WHERE `semester_id`=:semester_id ORDER BY `name`, `email`, `created` ASC";
+		if ($this->user->role != 'ADMIN') {
+
+			if (!sizeof($this->okGroups)) $this->okGroups[] = 0;
+
+			$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `members`.`semester_id`=:semester_id AND `groups_members`.`group_id` IN (". implode(',', $this->okGroups) .") ORDER BY `name`, `email`, `created` ASC";
+		
+		} else {
+
+			$sql = "SELECT * FROM `members` WHERE `semester_id`=:semester_id ORDER BY `name`, `email`, `created` ASC";
+
+		}
+
 		$q = new Firelit\Query($sql, array(':semester_id' => $semester->id));
 
 		$members = array();
 
 		while ($member = $q->getObject('Member')) {
 
-			$members[] = array(
-				'id' => $member->id,
-				'name' => $member->name,
-				'email' => $member->email,
-				'phone' => $member->phone,
-				'address' => $member->address,
-				'city' => $member->city,
-				'state' => $member->state,
-				'zip' => $member->zip,
-				'contact_pref' => $member->contact_pref,
-				'child_care' => $member->child_care,
-				'created' => $member->created
-			);
+			$members[] = $member->getArray();
 
 		}
 
@@ -51,37 +71,20 @@ class Members extends APIController {
 
 		foreach ($groups as $group) {
 
-			$groupsReturn[] = array(
-				'id' => $group->id,
-				'name' => $group->name,
-				'status' => $group->status,
-				'public_id' => $group->public_id,
-				'description' => $group->description,
-				'leader' => $group->data['leader'],
-				'when' => (is_array($group->data['days']) ? implode(', ', $group->data['days']) : '') .' '. $group->data['time'],
-				'where' => (!empty($group->data['location_short']) ? $group->data['location_short'] : $group->data['location']),
-				'childcare' => ($group->data['childcare'] ? 'Provided' : 'Not available'),
-				'gender' => $group->data['gender'],
-				'demographic' => $group->data['demographic'],
-				'full' => ($group->status == 'FULL')
-			);
+			if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+				continue;
+
+			$groupsReturn[] = $group->getArray();
 
 		}
 
-		$this->response->respond(array(
-			'id' => $member->id,
-			'name' => $member->name,
-			'email' => $member->email,
-			'phone' => $member->phone,
-			'address' => $member->address,
-			'city' => $member->city,
-			'state' => $member->state,
-			'zip' => $member->zip,
-			'contact_pref' => $member->contact_pref,
-			'child_care' => $member->child_care,
-			'created' => $member->created,
-			'groups' => $groupsReturn
-		));
+		if (($this->user->role != 'ADMIN') && !sizeof($groupsReturn)) 
+			throw new Firelit\RouteToError(400, 'Access to member forbidden.');
+
+		$return = $member->getArray();
+		$return['groups'] = $groupsReturn;
+
+		$this->response->respond($return);
 
 	}
 }

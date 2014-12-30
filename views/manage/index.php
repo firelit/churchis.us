@@ -36,6 +36,7 @@
 					<ul class="nav navbar-nav" ng-controller="HeaderCtl">
 						<li ng-class="{ active: isActive('/groups(/\d+)?') }"><a href="#/groups">Groups</a></li>
 						<li ng-class="{ active: isActive('/members(/\d+)?') }"><a href="#/members">Members</a></li>
+						<li ng-class="{ active: isActive('/users(/\d+)?') }"><a href="#/users">Users</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="hidden-xs"><a><?=htmlentities($loggedInAs); ?></a></li>

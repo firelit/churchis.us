@@ -34,16 +34,16 @@ class User extends Firelit\DatabaseObject {
 
 	}
 
-	public function getGroupIds() {
+	public function getGroups() {
 
-		$sql = "SELECT `group_id` FROM `users_groups` WHERE `user_id`=:user_id ORDER BY `group_id`";
+		$sql = "SELECT `groups`.* FROM `groups` INNER JOIN `users_groups` ON `groups`.`id`=`users_groups`.`group_id` WHERE `users_groups`.`user_id`=:user_id";
 		$q = new Firelit\Query($sql, array(':user_id' => $this->id));
 
 		$groups = array();
 
-		while ($row = $q->getRow())
-			$groups[] = $row['group_id'];
-
+		while ($group = $q->getObject('Group'))
+			$groups[] = $group;
+		
 		return $groups;
 
 	}
@@ -54,6 +54,20 @@ class User extends Firelit\DatabaseObject {
 		$q = new Firelit\Query($sql, array(':email' => $email));
 
 		return $q->getObject('User');
+		
+	}
+
+	public function getArray() {
+
+		return array(
+			'id' => $this->id,
+			'name' => $this->name,
+			'email' => $this->email,
+			'status' => $this->status,
+			'role' => $this->role,
+			'service' => $this->service,
+			'created' => $this->created
+		);
 		
 	}
 
