@@ -3,14 +3,19 @@
 </div>
 <div class="row" ng-hide="!group.id">
 	<div class="col-sm-12">
-		<h3 class="page-header"><small class="label label-default">#{{group.public_id}}</small> {{group.name}}</h3>
+		<h3 class="page-header">
+			<small class="label label-default">#{{group.public_id}}</small> {{group.name}} 
+			<small ng-show="editmode">Edit Group</small>
+		</h3>
 	</div>
 </div>
 <div class="row" ng-hide="editmode || !group.id">
 	<div class="col-sm-6">
 		<p class="group-description">{{group.description}}</p>
 		<dl class="dl-horizontal group-details">
-			<dt>Group Leader</dt>
+			<dt>Status</dt>
+				<dd><span ng-class="statusToLabel(group.status)">{{group.status}}</span></dd>
+			<dt>Leader</dt>
 				<dd>{{group.leader}}</dd>
 			<dt>Meeting Time</dt>
 				<dd>{{group.days.join(', ')}} {{group.time}}</dd>
@@ -25,150 +30,193 @@
 			<dt>Costs Involved</dt>
 				<dd>{{group.cost}}</dd>
 			<dt>Max Group Size</dt>
-				<dd>{{group.max_members}} <span class="label label-danger" ng-show="group.full">FULL</span></dd>
-		</dl> 
+				<dd>{{group.max_members}}</dd>
+		</dl>
 		<div>
-			<span class="btn btn-default btn-sm" id="group-edit-now" ng-click="editmode = true"><i class="glyphicon glyphicon-pencil"></i></span>
+			<span class="btn btn-default btn-sm" ng-click="editmode = true"><i class="glyphicon glyphicon-pencil"></i></span>
 		</div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-6" ng-hide="membermode">
 		<div class="well">
-			<strong>Members</strong>
+			<div class="members-header clearfix">
+				<button class="btn btn-sm btn-primary pull-right" ng-click="membermode = true"><i class="fa fa-plus"></i> Add</button>
+				<h4>Members</h4>
+			</div>
 			<ul class="group-members list-group">
-				<li class="list-group-item" ng-hide="group.members.length"><em class="text-muted">No members</em></li>
-				<li class="list-group-item" ng-repeat="member in group.members">
+				<li class="list-group-item" ng-if="!group.members.length"><em class="text-muted">No members</em></li>
+				<li class="list-group-item" ng-repeat="member in group.members" id="member-{{member.id}}">
+					<a class="group-member-delete pull-right" ng-click="removeMember(member.id)"><i class="fa fa-times-circle"></i></button>
 					<a href="#/members/{{member.id}}">{{member.name}}</a>
 				</li>
 			</ul>
 		</div>
 	</div>
-</div>
-<div class="row" ng-show="editmode">
-	<div class="col-sm-4">
+	<div class="col-sm-6" ng-show="membermode">
+		<div class="well">
 
-		<div class="form-group">
-			<label for="public_id">Group ID</label>
-			<input type="text" id="public_id" class="form-control" ng-model="group.public_id">
-		</div>
+			<h4>Add New Member</h4>
 
-		<div class="form-group">
-			<label for="name">Group Name</label>
-			<input type="text" id="name" class="form-control" ng-model="group.name">
-		</div>
-
-		<div class="form-group">
-			<label for="leader">Group Leader</label>
-			<input type="text" id="leader" class="form-control" ng-model="group.leader">
-		</div>
-
-		<div class="form-group">
-			<label for="description">Description</label>
-			<textarea id="description" class="form-control" ng-model="group.description" rows="3"></textarea>
-		</div>
-
-	</div>
-	<div class="col-sm-4">
-
-		<div class="form-group">
-			<label for="maxsize">Max Group Size</label>  
-			<div>
-				<select id="maxsize" name="maxsize" class="form-control" ng-model="group.max_members">
-					<option ng-repeat="i in avail_maxsize" value="{{i}}">{{i}}</option>
-				</select> 
+			<div class="form-group">
+				<label for="member-name">Member Name</label>
+				<input type="text" id="member-name" class="form-control">
 			</div>
-		</div>
 
-		<div class="form-group">
-			<label for="where">Meeting Place</label>
-			<input type="text" id="where" class="form-control" ng-model="group.where">
-		</div>
+			<div class="form-group">
+				<label for="member-email">Email</label>
+				<input type="text" id="member-email" class="form-control">
+			</div>
 
-		<div class="form-group">
-			<label for="when">Meeting Time</label>
-			<input type="text" id="when" class="form-control" ng-model="group.time">
-		</div>
+			<div class="form-group">
+				<label for="member-phone">Phone</label>
+				<input type="text" id="member-phone" class="form-control">
+			</div>
 
-		<div class="form-group">
-			<label for="days">Meeting Days</label>
-			<div>
-				<div ng-repeat="day in avail_days" class="checkbox">
-					<label>
-						<input type="checkbox" name="days[]" value="{{day}}" ng-checked="group.days.indexOf(day) > -1" ng-click="dayToggle(day)"> {{day}}
+			<div class="form-group">
+				<button ng-click="createMember()" class="btn btn-primary">Add Now</button>
+				<button ng-click="membermode = false" class="btn btn-default">Cancel</button>
+			</div>	
+
+		</div>
+	</div>
+</div>
+<div ng-show="editmode">
+
+	<div class="row">
+		<div class="col-sm-4">
+
+			<div class="form-group">
+				<label for="public_id">Group ID</label>
+				<input type="text" id="public_id" class="form-control" ng-model="group.public_id">
+			</div>
+
+			<div class="form-group">
+				<label for="name">Group Name</label>
+				<input type="text" id="name" class="form-control" ng-model="group.name">
+			</div>
+
+			<div class="form-group">
+				<label for="leader">Group Leader</label>
+				<input type="text" id="leader" class="form-control" ng-model="group.leader">
+			</div>
+
+			<div class="form-group">
+				<label for="description">Description</label>
+				<textarea id="description" class="form-control" ng-model="group.description" rows="3"></textarea>
+			</div>
+
+		</div>
+		<div class="col-sm-4">
+
+			<div class="form-group">
+				<label for="where">Meeting Place</label>
+				<input type="text" id="where" class="form-control" ng-model="group.where">
+			</div>
+
+			<div class="form-group">
+				<label for="when">Meeting Time</label>
+				<input type="text" id="when" class="form-control" ng-model="group.time">
+			</div>
+
+			<div class="form-group">
+				<label for="days">Meeting Days</label>
+				<div>
+					<div ng-repeat="day in avail_days" class="checkbox">
+						<label>
+							<input type="checkbox" name="days[]" value="{{day}}" ng-checked="group.days.indexOf(day) > -1" ng-click="dayToggle(day)"> {{day}}
+						</label>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-sm-4">
+
+			<div class="form-group">
+				<label for="maxsize">Group Status</label>  
+				<div>
+					<select id="status" name="status" class="form-control" ng-model="group.status">
+						<option ng-repeat="i in avail_status" value="{{i}}">{{i}}</option>
+					</select> 
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="maxsize">Max Group Size</label>  
+				<div>
+					<select id="maxsize" name="maxsize" class="form-control" ng-model="group.max_members">
+						<option ng-repeat="i in avail_maxsize" value="{{i}}">{{i}}</option>
+					</select> 
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="cost">Cost Involved?</label>
+				<div>
+					<label class="radio-inline" for="cost-0">
+						<input type="radio" name="cost" id="cost-0" value="No" ng-model="group.cost"> No
+					</label>
+					<label class="radio-inline" for="cost-1">
+						<input type="radio" name="cost" id="cost-1" value="Yes" ng-model="group.cost"> Yes (e.g., books)
 					</label>
 				</div>
 			</div>
-		</div>
 
+			<div class="form-group">
+				<label for="childcare">Childcare Provided?</label>
+				<div> 
+					<label class="radio-inline" for="childcare-0">
+						<input type="radio" name="childcare" id="childcare-0" value="Not available" ng-model="group.childcare"> No
+					</label> 
+					<label class="radio-inline" for="childcare-1">
+						<input type="radio" name="childcare" id="childcare-1" value="Provided" ng-model="group.childcare"> Yes
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="gender">Gender Preference?</label>
+				<div> 
+					<label class="radio-inline" for="gender-0">
+						<input type="radio" name="gender" id="gender-0" value="None" ng-model="group.gender"> None
+					</label> 
+					<label class="radio-inline" for="gender-1">
+						<input type="radio" name="gender" id="gender-1" value="Male" ng-model="group.gender"> Male
+					</label>
+					<label class="radio-inline" for="gender-2">
+						<input type="radio" name="gender" id="gender-2" value="Female" ng-model="group.gender"> Female
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="demographic">Demographic Focus?</label>
+				<div> 
+					<label class="radio-inline" for="demographic-0">
+						<input type="radio" name="demographic" id="demographic-0" value="None" ng-model="group.demographic"> None
+					</label> 
+					<label class="radio-inline" for="demographic-1">
+						<input type="radio" name="demographic" id="demographic-1" value="Married" ng-model="group.demographic"> Married
+					</label>
+					<label class="radio-inline" for="demographic-2">
+						<input type="radio" name="demographic" id="demographic-2" value="Parenting" ng-model="group.demographic"> Parenting
+					</label>
+					<label class="radio-inline" for="demographic-3">
+						<input type="radio" name="demographic" id="demographic-3" value="Single" ng-model="group.demographic"> Single
+					</label>
+					<label class="radio-inline" for="demographic-4">
+						<input type="radio" name="demographic" id="demographic-4" value="Young Adult" ng-model="group.demographic"> Young Adult
+					</label>
+				</div>
+			</div>
+
+		</div>
 	</div>
-	<div class="col-sm-4">
-
-		<div class="form-group">
-			<label for="cost">Cost Involved?</label>
-			<div>
-				<label class="radio-inline" for="cost-0">
-					<input type="radio" name="cost" id="cost-0" value="No" ng-model="group.cost"> No
-				</label>
-				<label class="radio-inline" for="cost-1">
-					<input type="radio" name="cost" id="cost-1" value="Yes" ng-model="group.cost"> Yes (e.g., books)
-				</label>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="form-group">
+				<button ng-click="updateGroup()" class="btn btn-primary">Save Changes</button>
+				<button ng-click="cancelEdit()" class="btn btn-default">Cancel</button>
 			</div>
-		</div>
-
-		<div class="form-group">
-			<label for="childcare">Childcare Provided?</label>
-			<div> 
-				<label class="radio-inline" for="childcare-0">
-					<input type="radio" name="childcare" id="childcare-0" value="Not available" ng-model="group.childcare"> No
-				</label> 
-				<label class="radio-inline" for="childcare-1">
-					<input type="radio" name="childcare" id="childcare-1" value="Provided" ng-model="group.childcare"> Yes
-				</label>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label for="gender">Gender Preference?</label>
-			<div> 
-				<label class="radio-inline" for="gender-0">
-					<input type="radio" name="gender" id="gender-0" value="None" ng-model="group.gender"> None
-				</label> 
-				<label class="radio-inline" for="gender-1">
-					<input type="radio" name="gender" id="gender-1" value="Male" ng-model="group.gender"> Male
-				</label>
-				<label class="radio-inline" for="gender-2">
-					<input type="radio" name="gender" id="gender-2" value="Female" ng-model="group.gender"> Female
-				</label>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label for="demographic">Demographic Focus?</label>
-			<div> 
-				<label class="radio-inline" for="demographic-0">
-					<input type="radio" name="demographic" id="demographic-0" value="None" ng-model="group.demographic"> None
-				</label> 
-				<label class="radio-inline" for="demographic-1">
-					<input type="radio" name="demographic" id="demographic-1" value="Married" ng-model="group.demographic"> Married
-				</label>
-				<label class="radio-inline" for="demographic-2">
-					<input type="radio" name="demographic" id="demographic-2" value="Parenting" ng-model="group.demographic"> Parenting
-				</label>
-				<label class="radio-inline" for="demographic-3">
-					<input type="radio" name="demographic" id="demographic-3" value="Single" ng-model="group.demographic"> Single
-				</label>
-				<label class="radio-inline" for="demographic-4">
-					<input type="radio" name="demographic" id="demographic-4" value="Young Adult" ng-model="group.demographic"> Young Adult
-				</label>
-			</div>
-		</div>
-
-	</div>
-</div>
-<div class="row" ng-show="editmode">
-	<div class="col-sm-4">
-		<div class="form-group">
-			<button ng-click="updateGroup()" class="btn btn-primary">Save Changes</button>
-			<button ng-click="cancelEdit()" class="btn btn-default">Cancel</button>
 		</div>
 	</div>
 </div>

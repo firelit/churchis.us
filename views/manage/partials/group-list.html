@@ -17,7 +17,7 @@
 		<tr ng-repeat="group in groups" ng-click="viewGroup(group);">
 			<td class="hidden-xs">{{group.public_id}}</td>
 			<td>{{group.name}}</td>
-			<td class="hidden-xs">{{group.status}}</td>
+			<td class="hidden-xs"><span ng-class="statusToLabel(group.status)">{{group.status}}</span></td>
 			<td>{{group.leader}}</td>
 			<td class="hidden-xs">{{group.childcare}}</td>
 			<td class="hidden-xs">{{group.gender}}</td>

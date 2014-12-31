@@ -5,7 +5,7 @@
 #group-list .group-radio { float: left; }
 #group-list .group-id { margin-bottom: 10px; margin-top: -5px; }
 #group-list .sg-name { font-size: 1.2em; margin-left: 20px; margin-top: 0; color: #333; }
-#group-list li { padding-bottom: 10px; color: #555; }
+#group-list li { position: relative; padding-bottom: 10px; color: #555; }
 #group-side small.help-block { color: #a94442; }
 #group-side .form-control-feedback { opacity: 0; }
 #group-list .group-descrip { margin-top: 0.7em; }

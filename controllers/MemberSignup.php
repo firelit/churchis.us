@@ -6,32 +6,7 @@ class MemberSignup extends Firelit\Controller {
 
 	public function viewForm() {
 
-		$request = Firelit\Request::init();
-		$sid = isset($request->get['sid']) ? $request->get['sid'] : false;
-
-		if ($sid) {
-
-			$sql = "SELECT * FROM `semesters` WHERE `id`=:id ORDER BY `start_date` ASC LIMIT 1";
-			$q = new Firelit\Query($sql, array(':id' => $sid));
-
-			$semester = $q->getObject('Semester');
-
-			if (!$semester)
-				throw new Firelit\RouteToError(400, 'No small group semesters found.');
-
-			if ($semester->status != 'OPEN')
-				throw new Firelit\RouteToError(400, 'This small group semester is not open.');
-
-		}
-
-		if (empty($semester)) {
-
-			$sql = "SELECT * FROM `semesters` WHERE `status`='OPEN' ORDER BY `start_date` ASC LIMIT 1";
-			$q = new Firelit\Query($sql);
-
-			$semester = $q->getObject('Semester');
-
-		}
+		$semester = Semester::latestOpen();
 
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
@@ -61,6 +36,11 @@ class MemberSignup extends Firelit\Controller {
 
 		if ($group->status != 'OPEN')
 			throw new Firelit\RouteToError(400, 'No selected small group is no longer open.');
+
+		$total = $group->getMemberCount();
+
+		if ($total >= $group->max_members)
+			throw new Firelit\RouteToError(400, 'Sorry, this group is full! Please click back and pick a different group.');
 
 		$semester = Semester::find($group->semester_id);
 
@@ -104,10 +84,6 @@ class MemberSignup extends Firelit\Controller {
 		else
 			$childcount = 0;
 
-		$total = $group->getMemberCount();
-		if ($total > $group->max_members)
-			throw new Firelit\RouteToError(400, 'Sorry, this group is full!');
-
 		try {
 
 			$member = Member::create(array(
@@ -124,17 +100,7 @@ class MemberSignup extends Firelit\Controller {
 				'child_care' => $childcount
 			));
 
-		} catch (Exception $e) {
-			throw new Firelit\RouteToError(500, $e->getMessage());
-		}
-
-		try {
-
-			$q = new Firelit\Query();
-			$q->insert('groups_members', array(
-				'group_id' => $group->id,
-				'member_id' => $member->id
-			));
+			$member->addToGroup($group->id);
 
 		} catch (Exception $e) {
 			throw new Firelit\RouteToError(500, $e->getMessage());

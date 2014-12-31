@@ -56,7 +56,9 @@ churchisServices.factory('Member', ['$resource',
 	function($resource) {
 
 		return $resource('/api/members/:memberId', {memberId: '@id'}, {
-			query: { method: 'GET', isArray: true }
+			query: { method: 'GET', isArray: true },
+			update: { method: 'PUT' },
+			save: { method: 'POST' }
 		});
 
 	}
@@ -96,11 +98,18 @@ churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group',
 			$location.path('/groups/' + group.id);
 		}
 
+		$scope.statusToLabel = function(stat) {
+			if (stat == 'OPEN') return 'label label-success';
+			else if (stat == 'FULL') return 'label label-danger';
+			else if (stat == 'CLOSED') return 'label label-info';
+			else if (stat == 'CANCELED') return 'label label-default';
+		}
+
 	}
 ]);
 
-churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', 'Group',
-	function($scope, $routeParams, Group) {
+churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', 'Group', 'Member',
+	function($scope, $routeParams, $http, Group, Member) {
 
 		$scope.group = Group.get({groupId: $routeParams.groupId});
 
@@ -130,6 +139,66 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', 'Gro
 
 		$scope.avail_maxsize = range;
 		$scope.avail_days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		$scope.avail_status = ['OPEN', 'CLOSED', 'FULL', 'CANCELED'];
+
+		$scope.statusToLabel = function(stat) {
+			if (stat == 'OPEN') return 'label label-success';
+			else if (stat == 'FULL') return 'label label-danger';
+			else if (stat == 'CLOSED') return 'label label-info';
+			else if (stat == 'CANCELED') return 'label label-default';
+		}
+
+		$scope.createMember = function() {
+			var member = new Member();
+
+			member.name = $("#member-name").val();
+			member.email = $("#member-email").val();
+			member.phone = $("#member-phone").val();
+			member.group = $routeParams.groupId;
+
+			member.$save(function() {
+
+				$http
+					.post('/api/groups/'+ $routeParams.groupId +'/members/'+ member.id)
+					.success(function() {
+
+						$("#member-name").val('');
+						$("#member-email").val('');
+						$("#member-phone").val('');
+
+						$scope.group = Group.get({groupId: $routeParams.groupId});
+						$scope.membermode = false;
+
+					})
+					.error(function() {
+						alert('An error occured');
+					});
+
+			});
+		}
+
+		$scope.removeMember = function(memberId) {
+			var conf = confirm('Remove this member from the group?');
+			if (!conf) return;
+
+			$http
+				.delete('/api/groups/'+ $routeParams.groupId +'/members/'+ memberId)
+				.success(function() {
+
+					$('#member-'+ memberId).fadeOut(function() {
+						
+						$scope.group = Group.get({groupId: $routeParams.groupId});
+
+					});
+
+				})
+				.error(function() {
+					alert('An error occured');
+				});
+
+			return false;
+
+		}
 
 	}
 ]);
@@ -151,6 +220,16 @@ churchisControllers.controller('MemberDetailCtl', ['$scope', '$routeParams', 'Me
 
 		$scope.member = Member.get({memberId: $routeParams.memberId});
 		
+		$scope.cancelEdit = function() {
+			$scope.member = Member.get({memberId: $routeParams.memberId});
+			$scope.editmode = false;
+		}
+
+		$scope.updateMember = function() {
+			Member.update($scope.member);
+			$scope.editmode = false;
+		}
+
 	}
 ]);
 

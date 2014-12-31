@@ -59,9 +59,10 @@ class Members extends APIController {
 
 	}
 
-	public function view($id) {
+	public function view($id, $member = false) {
 
-		$member = Member::find($id);
+		if (!$member)
+			$member = Member::find($id);
 
 		if (!$member) 
 			throw new Firelit\RouteToError(404, 'Member not found.');
@@ -87,4 +88,110 @@ class Members extends APIController {
 		$this->response->respond($return);
 
 	}
+
+	public function edit($id) {
+
+		$member = Member::find($id);
+
+		if (!$member) 
+			throw new Firelit\RouteToError(404, 'Member not found.');
+
+		if ($this->user->role != 'ADMIN') {
+
+			$groups = $member->getGroups();
+			$match = false;
+			
+			foreach ($this->okGroups as $groupId) {
+				foreach ($groups as $group) {
+					if ($groupId == $group->id) {
+						$match = true;
+						break 2;
+					}
+				}
+			}
+
+			if (!$match)
+				throw new Firelit\RouteToError(400, 'Not authorized to edit this member.');
+
+		}
+
+		$request = Firelit\Request::init();
+
+		$member->name = trim($request->put['name']);
+		$member->email = trim($request->put['email']);
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $member->email);
+		if (!$iv->isValid()) $member->email = null;
+
+		$member->phone = trim($request->put['phone']);
+		if (empty($member->phone)) $member->phone = null;
+
+		$member->address = trim($request->put['address']);
+		if (empty($member->address)) $member->address = null;
+
+		$member->city = trim($request->put['city']);
+		if (empty($member->city)) $member->city = null;
+
+		$member->state = trim($request->put['state']);
+		if (empty($member->state)) $member->state = null;
+
+		$member->zip = trim($request->put['zip']);
+		if (empty($member->zip)) $member->zip = null;
+
+		$member->child_care = intval($request->put['child_care']);
+		$member->contact_pref = $request->put['contact_pref'];
+
+		$member->save();
+
+		$this->view($id, $member);
+
+	}
+
+	public function create() {
+
+		$request = Firelit\Request::init();
+
+		$group = $request->post['group'];
+
+		if (!preg_match('/^\d+$/', $group))
+			throw new Firelit\RouteToError(400, 'Invalid group specified.');
+
+		$group = Group::find($group);
+
+		if (!$group)
+			throw new Firelit\RouteToError(400, 'Invalid group specified.');
+
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->user->getGroups())) 
+			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
+
+		$semester = Semester::find($group->semester_id);
+
+		if (!$semester || ($semester->status != 'OPEN'))
+			throw new Firelit\RouteToError(400, 'Group is not part of a valid semester.');
+
+		$name = trim($request->post['name']);
+
+		if (strlen($name) < 2) 
+			throw new Firelit\RouteToError(400, 'The name must be at least 2 characters long.');
+
+		$email = strtolower(trim($request->post['email']));
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $email);
+		if (!$iv->isValid()) $email = null;
+		
+		$phone = trim($request->post['phone']);
+		if (empty($phone)) $phone = null;
+
+		$member = Member::create(array(
+			'semester_id' => $semester->id,
+			'name' => $name,
+			'email' => $email,
+			'phone' => $phone,
+			'contact_pref' => 'EITHER'
+		));
+
+		$this->view($member->id, $member);
+
+	}
+
 }

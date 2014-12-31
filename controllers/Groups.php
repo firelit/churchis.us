@@ -91,8 +91,11 @@ class Groups extends APIController {
 		$request = Firelit\Request::init();
 
 		$group->public_id = trim($request->put['public_id']);
+		if (empty($group->public_id)) $group->public_id = null;
+
 		$group->name = trim($request->put['name']);
 		$group->description = trim($request->put['description']);
+		$group->status = $request->put['status'];
 
 		$data = $group->data;
 		$data['leader'] = trim($request->put['leader']);
@@ -107,13 +110,68 @@ class Groups extends APIController {
 
 		$max_members = intval($request->put['max_members']);
 		if ($group->max_members != $max_members) {
-			// TODO: Adjust status (Full?)
+			// Status is set above, let's not change here
 			$group->max_members = $max_members;
+
 		}
 
 		$group->save();
 
 		$this->view($id, $group);
+
+	}
+
+	public function addMember($groupId, $memberId) {
+
+		$group = Group::find($groupId);
+
+		if (!$group)
+			throw new Firelit\RouteToError(400, 'Invalid group specified.');
+
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->user->getGroups())) 
+			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
+
+		$semester = Semester::find($group->semester_id);
+
+		if (!$semester || ($semester->status != 'OPEN'))
+			throw new Firelit\RouteToError(400, 'Group is not part of a valid semester.');
+
+		$member = Member::find($memberId);
+
+		if (!$member)
+			throw new Firelit\RouteToError(400, 'Invalid member specified.');
+
+		$group->addMember($member->id);
+
+		$this->response->code(204);
+		$this->response->cancel();
+
+	}
+
+	public function removeMember($groupId, $memberId) {
+
+		$group = Group::find($groupId);
+
+		if (!$group)
+			throw new Firelit\RouteToError(400, 'Invalid group specified.');
+
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->user->getGroups())) 
+			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
+
+		$semester = Semester::find($group->semester_id);
+
+		if (!$semester || ($semester->status != 'OPEN'))
+			throw new Firelit\RouteToError(400, 'Group is not part of a valid semester.');
+
+		$member = Member::find($memberId);
+
+		if (!$member)
+			throw new Firelit\RouteToError(400, 'Invalid member specified.');
+
+		$group->removeMember($member->id);
+
+		$this->response->code(204);
+		$this->response->cancel();
 
 	}
 

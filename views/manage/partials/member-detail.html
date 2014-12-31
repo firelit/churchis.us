@@ -1,9 +1,16 @@
-<div class="row" ng-cloak>
+<div class="loading text-center" ng-show="!member.id">
+	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
+</div>
+<div class="row" ng-hide="!member.id">
 	<div class="col-sm-12">
-		<h3 class="page-header">{{member.name}}</h3>
+		<h3 class="page-header">
+			{{member.name}} 
+			<small ng-show="editmode">Edit Member</small>
+		</h3>
 	</div>
 </div>
-<div class="row" ng-cloak>
+<div class="row" ng-hide="editmode || !member.id">
+
 	<div class="col-sm-6">
 		<dl class="dl-horizontal group-details">
 			<dt>Contact Preference</dt>
@@ -17,16 +24,100 @@
 			<dt>Child Care</dt>
 			<dd>{{member.child_care}}</dd>
 		</dl> 
+		<div>
+			<span class="btn btn-default btn-sm" ng-click="editmode = true"><i class="glyphicon glyphicon-pencil"></i></span>
+		</div>
 	</div>
 	<div class="col-sm-6">
 		<div class="well">
-			<strong>Member Of</strong>
+			<h4>Groups</h4>
 			<ul class="group-members list-group">
-				<li class="list-group-item" ng-hide="member.groups.length"><em class="text-muted">Not in any groups</em></li>
+				<li class="list-group-item" ng-if="!member.groups.length"><em class="text-muted">Not in any groups</em></li>
 				<li class="list-group-item" ng-repeat="group in member.groups">
 					<a href="#/groups/{{group.id}}">{{group.name}}</a>
 				</li>
 			</ul>
+		</div>
+	</div>
+
+</div>
+<div ng-show="editmode">
+
+	<div class="row">
+		<div class="col-sm-4">
+
+			<div class="form-group">
+				<label for="name">Member Name</label>
+				<input type="text" id="name" class="form-control" ng-model="member.name">
+			</div>
+
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="text" id="email" class="form-control" ng-model="member.email">
+			</div>
+
+			<div class="form-group">
+				<label for="phone">Phone</label>
+				<input type="text" id="phone" class="form-control" ng-model="member.phone">
+			</div>
+
+		</div>
+		<div class="col-sm-4">
+
+			<div class="form-group">
+				<label for="address">Address</label>
+				<input type="text" id="address" class="form-control" ng-model="member.address">
+			</div>
+
+			<div class="form-group">
+				<label for="city">City</label>
+				<input type="text" id="city" class="form-control" ng-model="member.city">
+			</div>
+
+			<div class="form-group">
+				<label for="state">State</label>
+				<input type="text" id="state" class="form-control" value="MI" maxlength="2" ng-model="member.state">
+			</div>
+
+			<div class="form-group">
+				<label for="zip">Zip</label>
+				<input type="text" id="zip" class="form-control" ng-model="member.zip">
+			</div>
+
+		</div>
+		<div class="col-sm-4">
+
+			<div class="form-group">
+				<label for="pref">Contact Preference</label>
+				<div>
+					<label class="radio-inline" for="pref-0">
+						<input type="radio" name="contact_pref" id="pref-0" value="PHONE" ng-model="member.contact_pref"> Phone
+					</label>
+					<label class="radio-inline" for="pref-1">
+						<input type="radio" name="contact_pref" id="pref-1" value="EMAIL" ng-model="member.contact_pref"> Email
+					</label>
+					<label class="radio-inline" for="pref-2">
+						<input type="radio" name="contact_pref" id="pref-2" value="BOTH" ng-model="member.contact_pref"> Both
+					</label>
+					<label class="radio-inline" for="pref-3">
+						<input type="radio" name="contact_pref" id="pref-3" value="EITHER" ng-model="member.contact_pref"> Either
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="child_care">Children Needing Childcare</label>
+				<input type="text" id="child_care" class="form-control" ng-model="member.child_care">
+			</div>
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="form-group">
+				<button ng-click="updateMember()" class="btn btn-primary">Save Changes</button>
+				<button ng-click="cancelEdit()" class="btn btn-default">Cancel</button>
+			</div>
 		</div>
 	</div>
 </div>

@@ -20,7 +20,7 @@ class Group extends Firelit\DatabaseObject {
 
 	public function getMembers() {
 
-		$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `members`.`id`=`groups_members`.`member_id` WHERE `groups_members`.`group_id`=:group_id";
+		$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `members`.`id`=`groups_members`.`member_id` WHERE `groups_members`.`group_id`=:group_id ORDER BY `members`.`name`";
 		$q = new Firelit\Query($sql, array(':group_id' => $this->id));
 
 		$members = array();
@@ -29,6 +29,42 @@ class Group extends Firelit\DatabaseObject {
 			$members[] = $member;
 		
 		return $members;
+
+	}
+
+	public function addMember($memberId, $leader = false) {
+		
+		$sql = "REPLACE INTO `groups_members` (`group_id`, `member_id`, `leader`) VALUES (:group_id, :member_id, :leader)";
+		$q = new Firelit\Query($sql, array(
+			':group_id' => $this->id,
+			':member_id' => $memberId,
+			':leader' => $leader
+		));
+
+		if ($this->getMemberCount() >= $this->max_members) {
+
+			$this->status = 'FULL';
+			$this->save();
+
+		}
+
+	}
+
+	public function removeMember($memberId) {
+		
+		$sql = "DELETE FROM `groups_members` WHERE `group_id`=:group_id AND `member_id`=:member_id";
+		$q = new Firelit\Query($sql, array(
+			':group_id' => $this->id,
+			':member_id' => $memberId
+		));
+
+		// If removing this member drops below max members, and the status is FULL, fix status
+		if ((($this->getMemberCount() + 1) == $this->max_members) && ($this->status == 'FULL')) {
+
+			$this->status = 'OPEN';
+			$this->save();
+
+		}
 
 	}
 
