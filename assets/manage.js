@@ -1,8 +1,24 @@
+$(function() {
+	// Collapse navbar when menu itme clicked (in mobile)
+	$(document).ready(function () {
+		$(".navbar-nav li a").click(function(event) {
+			$(".navbar-collapse").collapse('hide');
+		});
+	});
+});
+
 var churchis = angular.module('churchis', [
 	'ngRoute',
 	'churchisServices',
 	'churchisControllers'
 ]);
+
+churchis.filter("nl2br", function($filter) {
+	return function(data) {
+		if (!data) return data;
+		return data.replace(/\n\r?/g, '<br />');
+	};
+});
 
 churchis.config(['$routeProvider',
 	function($routeProvider) {
@@ -46,7 +62,8 @@ churchisServices.factory('Group', ['$resource',
 
 		return $resource('/api/groups/:groupId', {groupId: '@id'}, {
 			query: { method: 'GET', isArray: true },
-			update: { method: 'PUT' }
+			update: { method: 'PUT' },
+			delete: { method: 'DELETE' }
 		});
 
 	}
@@ -58,7 +75,8 @@ churchisServices.factory('Member', ['$resource',
 		return $resource('/api/members/:memberId', {memberId: '@id'}, {
 			query: { method: 'GET', isArray: true },
 			update: { method: 'PUT' },
-			save: { method: 'POST' }
+			save: { method: 'POST' },
+			delete: { method: 'DELETE' }
 		});
 
 	}
@@ -108,19 +126,19 @@ churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group',
 	}
 ]);
 
-churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', 'Group', 'Member',
-	function($scope, $routeParams, $http, Group, Member) {
+churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', '$location', 'Group', 'Member',
+	function($scope, $routeParams, $http, $location, Group, Member) {
 
 		$scope.group = Group.get({groupId: $routeParams.groupId});
 
 		$scope.updateGroup = function() {
 			Group.update($scope.group);
-			$scope.editmode = false;
+			$scope.edit_mode = false;
 		}
 
 		$scope.cancelEdit = function() {
 			$scope.group = Group.get({groupId: $routeParams.groupId});
-			$scope.editmode = false;
+			$scope.edit_mode = false;
 		}
 
 		$scope.dayToggle = function(day) {
@@ -133,13 +151,27 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 
 		}
 
+		$scope.deleteGroup = function() {
+			var conf = confirm('Delete group? This cannot be undone.');
+			if (!conf) return;
+			
+			$scope.group.$delete();
+			$location.path('/groups');
+		}
+
 		var range = new Array();
 		for (var i = 6; i < 20; i++)
 			range.push(i);
 
+		$scope.is_admin = window.is_admin;
 		$scope.avail_maxsize = range;
 		$scope.avail_days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		$scope.avail_status = ['OPEN', 'CLOSED', 'FULL', 'CANCELED'];
+		$scope.avail_status = [
+			{value: 'OPEN', name: 'OPEN: Accepting new members'},
+			{value: 'FULL', name: 'FULL: Reached member limit'},
+			{value: 'CLOSED', name: 'CLOSED: Not accepting new members'},
+			{value: 'CANCELED', name: 'CANCELED: Group has been canceled'}
+		];
 
 		$scope.statusToLabel = function(stat) {
 			if (stat == 'OPEN') return 'label label-success';
@@ -167,7 +199,7 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 						$("#member-phone").val('');
 
 						$scope.group = Group.get({groupId: $routeParams.groupId});
-						$scope.membermode = false;
+						$scope.member_mode = false;
 
 					})
 					.error(function() {
@@ -215,20 +247,31 @@ churchisControllers.controller('MemberListCtl', ['$scope', '$location', 'Member'
 	}
 ]);
 
-churchisControllers.controller('MemberDetailCtl', ['$scope', '$routeParams', 'Member',
-	function($scope, $routeParams, Member) {
+churchisControllers.controller('MemberDetailCtl', ['$scope', '$routeParams', '$location', 'Member',
+	function($scope, $routeParams, $location, Member) {
 
 		$scope.member = Member.get({memberId: $routeParams.memberId});
 		
 		$scope.cancelEdit = function() {
 			$scope.member = Member.get({memberId: $routeParams.memberId});
-			$scope.editmode = false;
+			$scope.edit_mode = false;
 		}
 
 		$scope.updateMember = function() {
 			Member.update($scope.member);
-			$scope.editmode = false;
+			$scope.edit_mode = false;
 		}
+
+		$scope.deleteMember = function() {
+			var conf = confirm('Delete member? This cannot be undone.');
+			if (!conf) return;
+
+			$scope.member.$delete();
+			$location.path('/members');
+		}
+
+		$scope.is_admin = window.is_admin;
+		$scope.avail_states = ['MI'];
 
 	}
 ]);

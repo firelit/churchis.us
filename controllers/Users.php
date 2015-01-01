@@ -48,7 +48,7 @@ class Users extends APIController {
 		if (($this->user->role != 'ADMIN') && ($user->id != $this->user->id))
 			throw new Firelit\RouteToError(400, 'Access to user forbidden.');
 
-		$groups = $user->getGroups();
+		$groups = $user->getGroupAccess();
 		$groupsReturn = array();
 
 		foreach ($groups as $group) {

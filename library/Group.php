@@ -32,16 +32,25 @@ class Group extends Firelit\DatabaseObject {
 
 	}
 
-	public function addMember($memberId, $leader = false) {
+	public function addMember(Member $member, $leader = false) {
 		
+		if ($member->semester_id != $this->semester_id) {
+			// Member in wrong semster
+			// Possible fix: 
+			//		Clone the member and assign to this group? 
+			//		Problem: Return the new member to caller?
+			throw new Exception('Member and group semesters do not match');
+		}
+
 		$sql = "REPLACE INTO `groups_members` (`group_id`, `member_id`, `leader`) VALUES (:group_id, :member_id, :leader)";
 		$q = new Firelit\Query($sql, array(
 			':group_id' => $this->id,
-			':member_id' => $memberId,
+			':member_id' => $member->id,
 			':leader' => $leader
 		));
 
-		if ($this->getMemberCount() >= $this->max_members) {
+		// If adding this member puts us at max members, and the status is OPEN, fix status
+		if (($this->status == 'OPEN') && ($this->getMemberCount() >= $this->max_members)) {
 
 			$this->status = 'FULL';
 			$this->save();
@@ -50,16 +59,16 @@ class Group extends Firelit\DatabaseObject {
 
 	}
 
-	public function removeMember($memberId) {
+	public function removeMember(Member $member) {
 		
 		$sql = "DELETE FROM `groups_members` WHERE `group_id`=:group_id AND `member_id`=:member_id";
 		$q = new Firelit\Query($sql, array(
 			':group_id' => $this->id,
-			':member_id' => $memberId
+			':member_id' => $member->id
 		));
 
 		// If removing this member drops below max members, and the status is FULL, fix status
-		if ((($this->getMemberCount() + 1) == $this->max_members) && ($this->status == 'FULL')) {
+		if (($this->status == 'FULL') && (($this->getMemberCount() + 1) == $this->max_members)) {
 
 			$this->status = 'OPEN';
 			$this->save();

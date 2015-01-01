@@ -1,7 +1,6 @@
 <table class="table" ng-cloak>
 	<thead>
 		<tr>
-			<th class="hidden-xs">#</th>
 			<th>User Name</th>
 			<th class="hidden-xs">Role</th>
 			<th>Email</th>
@@ -10,7 +9,6 @@
 	</thead>
 	<tbody class="rowclickable">
 		<tr ng-repeat="user in users" ng-click="viewUser(user);">
-			<td class="hidden-xs">{{user.id}}</td>
 			<td>{{user.name}}</td>
 			<td class="hidden-xs">{{user.role}}</td>
 			<td>{{user.email}}</td>

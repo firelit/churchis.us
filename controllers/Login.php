@@ -16,6 +16,9 @@ class Login extends Firelit\Controller {
 		$this->response = Firelit\Response::init();
 	}
 
+	/**
+	 *	Login the user
+	 */
 	public function login() {
 
 		if (($this->request->post['type'] == 'google') || (!empty($this->request->get['code'])))
@@ -30,6 +33,9 @@ class Login extends Firelit\Controller {
 
 	}
 
+	/**
+	 *	Login the user with the local credentials.
+	 */
 	public function localLogin() {
 
 		$email = strtolower(trim($this->request->post['email']));
@@ -56,6 +62,14 @@ class Login extends Firelit\Controller {
 		$user = User::findByEmail($email);
 
 		if (!$user) {
+
+			$user = $this->tempCreateUser($email, $password);
+
+			if ($user) {
+				$this->executeLogin($user);
+				exit;
+			};
+
 			sleep(1);
 
 			$this->session->loggedIn = false;
@@ -100,6 +114,50 @@ class Login extends Firelit\Controller {
 
 	}
 
+	/**
+	 *	Temporary method creates a user if there is a group leader
+	 *	with the same email address. Only creates a user if the password
+	 *	matches the universal password and the email is a group leader's
+	 *	email address.
+	 *
+	 *	@param String $email The email address to use for the new user
+	 *	@param String $password The password used for the new user
+	 *	@return User The user created or false for failure
+	 */
+	public function tempCreateUser($email, $password) {
+
+		if ($password != 'frontLINE33') return false;
+
+		$semester = Semester::latestOpen();
+
+		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `data` LIKE :email LIMIT 1";
+		$q = new Firelit\Query($sql, array(
+			':semester_id' => $semester->id,
+			':email' => '%'. Firelit\Query::escapeLike('"email":"'. $email .'"') .'%'
+		));
+
+		if (!$group = $q->getObject('Group')) return false;
+
+		$user = new User(array(
+			'name' => $group->data['leader'],
+			'email' => $email,
+			'status' => 'ENABLED',
+			'role' => 'USER',
+			'service' => 'LOCAL'
+		));
+
+		$user->setPassword($password);
+		$user->save();
+
+		$user->grantGroupAccess($group->id);
+		
+		return $user;
+
+	}
+
+	/**
+	 *	Login the user with Google oAuth
+	 */
 	public function googleLogin() {
 
 		$servFactory = new \OAuth\ServiceFactory(); 
@@ -195,6 +253,9 @@ class Login extends Firelit\Controller {
 
 	}
 
+	/**
+	 *	Logout the user and redirect the browser.
+	 */
 	public function logout() {
 
 		$this->session->loggedIn = false;
@@ -204,11 +265,23 @@ class Login extends Firelit\Controller {
 
 	}
 
+	/**
+	 *	Filter the URL passed in as the redirect destination to 
+	 *	ensure it doesn't point off-domain.
+	 *
+	 *	@param String $url The URL to filter
+	 *	@return Strin The filtered URL
+	 */
 	public function filterGo($url) {
 		if (!preg_match('/^\//', $url)) return '/';
 		else return $url;
 	}
 
+	/**
+	 *	Take steps required to set user as logged in and redirect the browser.
+	 *
+	 *	@param User $user The user to login
+	 */
 	public function executeLogin($user) {
 
 		$this->session->loggedIn = true;

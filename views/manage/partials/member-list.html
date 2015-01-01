@@ -3,7 +3,7 @@
 		<tr>
 			<th>Member Name</th>
 			<th class="hidden-xs">Email</th>
-			<th class="hidden-xs">Phone</th>
+			<th>Phone</th>
 			<th class="hidden-xs">Childcare</th>
 		</tr>
 	</thead>
@@ -11,8 +11,13 @@
 		<tr ng-repeat="member in members" ng-click="viewMember(member);">
 			<td>{{member.name}}</td>
 			<td class="hidden-xs">{{member.email}}</td>
-			<td class="hidden-xs">{{member.phone}}</td>
-			<td class="hidden-xs">{{member.child_care}}</td>
+			<td><a href="tel:{{member.phone}}" class="visible-xs-inline">{{member.phone}}</a>
+				<span class="hidden-xs">{{member.phone}}</span></td>
+			<td class="hidden-xs"><ng-pluralize count="member.child_care" when="{
+					'0': 'Not needed',
+					'one': '{} child',
+					'other': '{} children'
+				}"></ng-pluralize></td>
 		</tr>
 	</tbody>
 </table>

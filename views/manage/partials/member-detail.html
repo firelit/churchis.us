@@ -4,44 +4,50 @@
 <div class="row" ng-hide="!member.id">
 	<div class="col-sm-12">
 		<h3 class="page-header">
-			{{member.name}} 
-			<small ng-show="editmode">Edit Member</small>
+			<i class="fa fa-user"></i> {{member.name}} 
+			<small ng-show="edit_mode">Edit Member</small>
 		</h3>
 	</div>
 </div>
-<div class="row" ng-hide="editmode || !member.id">
+<div class="row" ng-hide="edit_mode || !member.id">
 
 	<div class="col-sm-6">
 		<dl class="dl-horizontal group-details">
 			<dt>Contact Preference</dt>
 			<dd>{{member.contact_pref}}</dd>
 			<dt>Email</dt>
-			<dd>{{member.email}}</dd>
+			<dd><a href="mailto:{{member.email}}">{{member.email}}</a></dd>
 			<dt>Phone</dt>
-			<dd>{{member.phone}}</dd>
+			<dd><a href="tel:{{member.phone}}" class="visible-xs-inline">{{member.phone}}</a>
+				<span class="hidden-xs">{{member.phone}}</span></dd>
 			<dt>Address</dt>
-			<dd><div>{{member.address}}</div><div>{{member.city}} {{member.zip}}</div></dd>
+			<dd><div>{{member.address}}</div><div>{{member.city}} {{member.state}} {{member.zip}}</div></dd>
 			<dt>Child Care</dt>
-			<dd>{{member.child_care}}</dd>
+			<dd><ng-pluralize count="member.child_care" when="{
+					'0': 'Not needed',
+					'one': '{} child',
+					'other': '{} children'
+				}"></ng-pluralize></dd>
 		</dl> 
-		<div>
-			<span class="btn btn-default btn-sm" ng-click="editmode = true"><i class="glyphicon glyphicon-pencil"></i></span>
-		</div>
+		<p>
+			<span class="btn btn-default btn-sm pull-right" ng-show="is_admin" ng-click="deleteMember()"><i class="glyphicon glyphicon-trash"></i></span>
+			<span class="btn btn-default btn-sm" ng-click="edit_mode = true"><i class="glyphicon glyphicon-pencil"></i></span>
+		</p>
 	</div>
 	<div class="col-sm-6">
 		<div class="well">
-			<h4>Groups</h4>
+			<h4>Group Membership</h4>
 			<ul class="group-members list-group">
 				<li class="list-group-item" ng-if="!member.groups.length"><em class="text-muted">Not in any groups</em></li>
 				<li class="list-group-item" ng-repeat="group in member.groups">
-					<a href="#/groups/{{group.id}}">{{group.name}}</a>
+					<span class="label label-default">#{{group.public_id}}</span> <a href="#/groups/{{group.id}}">{{group.name}}</a>
 				</li>
 			</ul>
 		</div>
 	</div>
 
 </div>
-<div ng-show="editmode">
+<div ng-show="edit_mode">
 
 	<div class="row">
 		<div class="col-sm-4">
@@ -76,7 +82,11 @@
 
 			<div class="form-group">
 				<label for="state">State</label>
-				<input type="text" id="state" class="form-control" value="MI" maxlength="2" ng-model="member.state">
+				<div>
+					<select id="state" name="state" class="form-control" ng-model="member.state">
+						<option ng-repeat="i in avail_states" value="{{i}}">{{i}}</option>
+					</select> 
+				</div>
 			</div>
 
 			<div class="form-group">

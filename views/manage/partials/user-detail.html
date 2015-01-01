@@ -22,10 +22,10 @@
 		<div class="well">
 			<h4>Has Access To</h4>
 			<ul class="group-members list-group">
-				<li class="list-group-item" ng-hide="user.role == 'ADMIN' || user.groups.length"><em class="text-muted">No groups</em></li>
-				<li class="list-group-item" ng-show="user.role == 'ADMIN'"><em class="text-muted">All groups</em></li>
-				<li class="list-group-item" ng-hide="user.role == 'ADMIN'" ng-repeat="group in user.groups">
-					<a href="#/groups/{{group.id}}">{{group.name}}</a>
+				<li class="list-group-item" ng-if="!user.groups.length &amp;&amp; user.role != 'ADMIN'"><em class="text-muted">No groups</em></li>
+				<li class="list-group-item" ng-if="user.role == 'ADMIN'"><em class="text-muted">All groups</em></li>
+				<li class="list-group-item" ng-if="user.role != 'ADMIN'" ng-repeat="group in user.groups">
+					<span class="label label-default">#{{group.public_id}}</span> <a href="#/groups/{{group.id}}">{{group.name}}</a>
 				</li>
 			</ul>
 		</div>

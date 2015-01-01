@@ -49,6 +49,11 @@ class MemberSignup extends Firelit\Controller {
 
 		$first = trim($request->post['first']);
 		$last = trim($request->post['last']);
+		$name = $first .' '. $last;
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::NAME, $name);
+		$name = $iv->getNormalized();
+
 		$address = trim($request->post['address']);
 		$city = trim($request->post['city']);
 		$zip = trim($request->post['zip']);
@@ -88,7 +93,7 @@ class MemberSignup extends Firelit\Controller {
 
 			$member = Member::create(array(
 				'semester_id' => $semester->id,
-				'name' => $first .' '. $last,
+				'name' => $name,
 				'email' => $email,
 				'phone' => $phone,
 				'email' => $email,

@@ -5,11 +5,11 @@
 	<div class="col-sm-12">
 		<h3 class="page-header">
 			<small class="label label-default">#{{group.public_id}}</small> {{group.name}} 
-			<small ng-show="editmode">Edit Group</small>
+			<small ng-show="edit_mode">Edit Group</small>
 		</h3>
 	</div>
 </div>
-<div class="row" ng-hide="editmode || !group.id">
+<div class="row" ng-hide="edit_mode || !group.id">
 	<div class="col-sm-6">
 		<p class="group-description">{{group.description}}</p>
 		<dl class="dl-horizontal group-details">
@@ -30,17 +30,18 @@
 			<dt>Costs Involved</dt>
 				<dd>{{group.cost}}</dd>
 			<dt>Max Group Size</dt>
-				<dd>{{group.max_members}}</dd>
+				<dd>{{group.max_members}} members</dd>
 		</dl>
-		<div>
-			<span class="btn btn-default btn-sm" ng-click="editmode = true"><i class="glyphicon glyphicon-pencil"></i></span>
-		</div>
+		<p>
+			<span class="btn btn-default btn-sm pull-right" ng-show="is_admin" ng-click="deleteGroup()"><i class="glyphicon glyphicon-trash"></i></span>
+			<span class="btn btn-default btn-sm" ng-click="edit_mode = true"><i class="glyphicon glyphicon-pencil"></i></span>
+		</p>
 	</div>
-	<div class="col-sm-6" ng-hide="membermode">
+	<div class="col-sm-6" ng-hide="member_mode">
 		<div class="well">
 			<div class="members-header clearfix">
-				<button class="btn btn-sm btn-primary pull-right" ng-click="membermode = true"><i class="fa fa-plus"></i> Add</button>
-				<h4>Members</h4>
+				<button class="btn btn-sm btn-primary pull-right" ng-click="member_mode = true"><i class="fa fa-plus"></i> Add</button>
+				<h4><i class="fa fa-group"></i> Members</h4>
 			</div>
 			<ul class="group-members list-group">
 				<li class="list-group-item" ng-if="!group.members.length"><em class="text-muted">No members</em></li>
@@ -51,7 +52,7 @@
 			</ul>
 		</div>
 	</div>
-	<div class="col-sm-6" ng-show="membermode">
+	<div class="col-sm-6" ng-show="member_mode">
 		<div class="well">
 
 			<h4>Add New Member</h4>
@@ -59,27 +60,30 @@
 			<div class="form-group">
 				<label for="member-name">Member Name</label>
 				<input type="text" id="member-name" class="form-control">
+				<p class="help-block">First and last name, if possible.</p>
 			</div>
 
 			<div class="form-group">
 				<label for="member-email">Email</label>
 				<input type="text" id="member-email" class="form-control">
+				<p class="help-block">Optional, but recommended.</p>
 			</div>
 
 			<div class="form-group">
 				<label for="member-phone">Phone</label>
 				<input type="text" id="member-phone" class="form-control">
+				<p class="help-block">Optional, but recommended.</p>
 			</div>
 
 			<div class="form-group">
 				<button ng-click="createMember()" class="btn btn-primary">Add Now</button>
-				<button ng-click="membermode = false" class="btn btn-default">Cancel</button>
+				<button ng-click="member_mode = false" class="btn btn-default">Cancel</button>
 			</div>	
 
 		</div>
 	</div>
 </div>
-<div ng-show="editmode">
+<div ng-show="edit_mode">
 
 	<div class="row">
 		<div class="col-sm-4">
@@ -101,7 +105,7 @@
 
 			<div class="form-group">
 				<label for="description">Description</label>
-				<textarea id="description" class="form-control" ng-model="group.description" rows="3"></textarea>
+				<textarea id="description" class="form-control" ng-model="group.description" rows="5"></textarea>
 			</div>
 
 		</div>
@@ -135,7 +139,7 @@
 				<label for="maxsize">Group Status</label>  
 				<div>
 					<select id="status" name="status" class="form-control" ng-model="group.status">
-						<option ng-repeat="i in avail_status" value="{{i}}">{{i}}</option>
+						<option ng-repeat="i in avail_status" value="{{i.value}}">{{i.name}}</option>
 					</select> 
 				</div>
 			</div>
@@ -144,7 +148,7 @@
 				<label for="maxsize">Max Group Size</label>  
 				<div>
 					<select id="maxsize" name="maxsize" class="form-control" ng-model="group.max_members">
-						<option ng-repeat="i in avail_maxsize" value="{{i}}">{{i}}</option>
+						<option ng-repeat="i in avail_maxsize" value="{{i}}">{{i}} members</option>
 					</select> 
 				</div>
 			</div>

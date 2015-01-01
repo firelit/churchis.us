@@ -24,7 +24,8 @@ class Manage extends Firelit\Controller {
 			'title' => 'CHURCHIS.US',
 			'loggedIn' => $session->loggedIn,
 			'loggedInAs' => (!empty($user) ? $user->name : null),
-			'loginError' => $session->loginError
+			'loginError' => $session->loginError,
+			'isAdmin' => ($user->role == 'ADMIN')
 		));
 
 	}

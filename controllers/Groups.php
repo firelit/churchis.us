@@ -12,17 +12,9 @@ class Groups extends APIController {
 		$this->user = User::find($this->session->userId);
 
 		if ($this->user->role != 'ADMIN')
-			$this->okGroups = $this->user->getGroups();
+			$this->okGroups = $this->user->getGroupAccess(true);
 		else 
 			$this->okGroups = array();
-
-		$groupIds = array();
-
-		// Now let's extract group IDs
-		foreach ($this->okGroups as $group)
-			$groupIds[] = $group->id;
-
-		$this->okGroups = $groupIds;
 
 	}
 
@@ -128,7 +120,7 @@ class Groups extends APIController {
 		if (!$group)
 			throw new Firelit\RouteToError(400, 'Invalid group specified.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->user->getGroups())) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
 			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
 
 		$semester = Semester::find($group->semester_id);
@@ -141,7 +133,17 @@ class Groups extends APIController {
 		if (!$member)
 			throw new Firelit\RouteToError(400, 'Invalid member specified.');
 
-		$group->addMember($member->id);
+		if ($member->semester_id != $group->semester_id) {
+			// Member and group semesters do not match
+			if (new DateTime($member->created) > new DateTime('-1 minute')) {
+				// It was just created, and seems to have been created in the wrong semester
+				// Let's just quick fix that
+				$member->semester_id = $group->semester_id;
+				$member->save();
+			}
+		}
+
+		$group->addMember($member);
 
 		$this->response->code(204);
 		$this->response->cancel();
@@ -155,7 +157,7 @@ class Groups extends APIController {
 		if (!$group)
 			throw new Firelit\RouteToError(400, 'Invalid group specified.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->user->getGroups())) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
 			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
 
 		$semester = Semester::find($group->semester_id);
@@ -168,7 +170,26 @@ class Groups extends APIController {
 		if (!$member)
 			throw new Firelit\RouteToError(400, 'Invalid member specified.');
 
-		$group->removeMember($member->id);
+		$group->removeMember($member);
+
+		$this->response->code(204);
+		$this->response->cancel();
+
+	}
+
+	public function delete($id) {
+
+		$group = Group::find($id);
+
+		if (!$group) 
+			throw new Firelit\RouteToError(404, 'Group not found.');
+
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+			throw new Firelit\RouteToError(400, 'Not authorized to delete this group.');
+
+		$request = Firelit\Request::init();
+
+		$group->delete();
 
 		$this->response->code(204);
 		$this->response->cancel();

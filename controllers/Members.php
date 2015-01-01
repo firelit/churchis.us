@@ -12,17 +12,9 @@ class Members extends APIController {
 		$this->user = User::find($this->session->userId);
 
 		if ($this->user->role != 'ADMIN')
-			$this->okGroups = $this->user->getGroups();
+			$this->okGroups = $this->user->getGroupAccess(true);
 		else 
 			$this->okGroups = array();
-
-		$groupIds = array();
-
-		// Now let's extract group IDs
-		foreach ($this->okGroups as $group)
-			$groupIds[] = $group->id;
-
-		$this->okGroups = $groupIds;
 
 	}
 
@@ -59,7 +51,7 @@ class Members extends APIController {
 
 	}
 
-	public function view($id, $member = false) {
+	public function view($id, $member = false, $checkPermissions = true) {
 
 		if (!$member)
 			$member = Member::find($id);
@@ -79,13 +71,74 @@ class Members extends APIController {
 
 		}
 
-		if (($this->user->role != 'ADMIN') && !sizeof($groupsReturn)) 
+		if ($checkPermissions && ($this->user->role != 'ADMIN') && !sizeof($groupsReturn)) 
 			throw new Firelit\RouteToError(400, 'Access to member forbidden.');
 
 		$return = $member->getArray();
 		$return['groups'] = $groupsReturn;
 
 		$this->response->respond($return);
+		exit;
+
+	}
+
+	public function create() {
+
+		$request = Firelit\Request::init();
+
+		$name = trim($request->post['name']);
+
+		if (strlen($name) < 2) 
+			throw new Firelit\RouteToError(400, 'The name must be at least 2 characters long.');
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::NAME, $name);
+		if ($iv->isValid()) $name = $iv->getNormalized();
+		// else just keep the name as submitted
+
+		$email = strtolower(trim($request->post['email']));
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $email);
+		if (!$iv->isValid()) $email = null;
+		else $email = $iv->getNormalized();
+		
+		$phone = trim($request->post['phone']);
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::PHONE, $phone, 'US');
+		if (empty($phone)) $phone = null;
+		elseif ($iv->isValid()) $phone = $iv->getNormalized();
+		// else just keep the phone as submitted
+
+		$semester = Semester::latestOpen();
+
+		if (!empty($email) || !empty($phone)) {
+			// If we have a name and an email or phone
+			// then check to see if a member already matches
+			$sql = "SELECT * FROM `members` WHERE `semester_id`=:semester_id AND `name`=:name AND ";
+			if (!empty($email)) $sql .= '`email`=:email AND ';
+			if (!empty($phone)) $sql .= '`phone`=:phone AND ';
+
+			$q = new Firelit\Query(substr($sql, 0, -5), array(
+				':semester_id' => $semester->id,
+				':name' => $name,
+				':email' => $email,
+				':phone' => $phone
+			));
+
+			// A member with the same name and email/phone exists,
+			// so just use this member
+			if ($member = $q->getObject('Member'))
+				$this->view($member->id, $member, false);
+
+		}
+
+		$member = Member::create(array(
+			'semester_id' => $semester->id,
+			'name' => $name,
+			'email' => $email,
+			'phone' => $phone,
+			'contact_pref' => 'EITHER'
+		));
+
+		$this->view($member->id, $member, false);
 
 	}
 
@@ -147,50 +200,20 @@ class Members extends APIController {
 
 	}
 
-	public function create() {
+	public function delete($id) {
 
-		$request = Firelit\Request::init();
+		$member = Member::find($id);
 
-		$group = $request->post['group'];
+		if (!$member) 
+			throw new Firelit\RouteToError(404, 'Member not found.');
 
-		if (!preg_match('/^\d+$/', $group))
-			throw new Firelit\RouteToError(400, 'Invalid group specified.');
+		if ($this->user->role != 'ADMIN')
+			throw new Firelit\RouteToError(400, 'Not authorized to delete this member.');
 
-		$group = Group::find($group);
+		$member->delete();
 
-		if (!$group)
-			throw new Firelit\RouteToError(400, 'Invalid group specified.');
-
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->user->getGroups())) 
-			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
-
-		$semester = Semester::find($group->semester_id);
-
-		if (!$semester || ($semester->status != 'OPEN'))
-			throw new Firelit\RouteToError(400, 'Group is not part of a valid semester.');
-
-		$name = trim($request->post['name']);
-
-		if (strlen($name) < 2) 
-			throw new Firelit\RouteToError(400, 'The name must be at least 2 characters long.');
-
-		$email = strtolower(trim($request->post['email']));
-
-		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $email);
-		if (!$iv->isValid()) $email = null;
-		
-		$phone = trim($request->post['phone']);
-		if (empty($phone)) $phone = null;
-
-		$member = Member::create(array(
-			'semester_id' => $semester->id,
-			'name' => $name,
-			'email' => $email,
-			'phone' => $phone,
-			'contact_pref' => 'EITHER'
-		));
-
-		$this->view($member->id, $member);
+		$this->response->code(204);
+		$this->response->cancel();
 
 	}
 

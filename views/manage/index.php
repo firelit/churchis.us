@@ -20,6 +20,7 @@
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular-resource.js"></script>
 
 		<script src="/assets/manage.js"></script>
+		<script>window.is_admin = <?=json_encode($isAdmin); ?>;</script>
 	</head>
 	<body ng-app="churchis">
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -36,7 +37,9 @@
 					<ul class="nav navbar-nav" ng-controller="HeaderCtl">
 						<li ng-class="{ active: isActive('/groups(/\d+)?') }"><a href="#/groups">Groups</a></li>
 						<li ng-class="{ active: isActive('/members(/\d+)?') }"><a href="#/members">Members</a></li>
-						<li ng-class="{ active: isActive('/users(/\d+)?') }"><a href="#/users">Users</a></li>
+						<?php if ($isAdmin) { ?>
+						<li ng-class="{ active: isActive('/users(/\d+)?') }"><a href="#/users">User Accounts</a></li>
+						<?php } ?>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="hidden-xs"><a><?=htmlentities($loggedInAs); ?></a></li>
@@ -49,6 +52,7 @@
 			<div id="body" ng-view></div>
 		</div>
 		<div id="footer">
+			<p class="footer-sm">Frontline Community Church Small Groups<br>Need help? <a href="mailto:office@frontlinegr.com">office@frontlinegr.com</a></p>
 			<p class="footer-sm">Built with <i class="fa fa-heart"></i> by <a href="https://twitter.com/bigoness">Biggie</a></p>
 		</div>
 	</body>
