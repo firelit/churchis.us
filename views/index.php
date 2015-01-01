@@ -113,7 +113,7 @@
 				</div> <!-- /#content -->
 			</div> <!-- /#body -->
 			<div id="footer">
-				<!-- <p class="footer-em">And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another &ndash; and all the more as you see the Day approaching.</p> -->
+				<p class="footer-sm">Frontline Community Church Small Groups<br>Need help? <a href="mailto:office@frontlinegr.com">office@frontlinegr.com</a></p>
 				<p class="footer-sm">Built with <i class="fa fa-heart"></i> by <a href="https://twitter.com/bigoness">Biggie</a></p>
 			</div>
 		</div>

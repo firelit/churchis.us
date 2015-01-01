@@ -41,6 +41,9 @@ class User extends Firelit\DatabaseObject {
 
 		if (strlen($password) == 0) return null;
 
+		if (empty($_SERVER['PASS_HASH_SALT']))
+			throw new Exception('No password hash defined');
+
 		$hash = $password;
 
 		for ($i = 0; $i < 25; $i++) {

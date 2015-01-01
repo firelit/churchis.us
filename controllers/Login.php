@@ -130,7 +130,7 @@ class Login extends Firelit\Controller {
 
 		$semester = Semester::latestOpen();
 
-		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `data` LIKE :email LIMIT 1";
+		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `data` LIKE :email";
 		$q = new Firelit\Query($sql, array(
 			':semester_id' => $semester->id,
 			':email' => '%'. Firelit\Query::escapeLike('"email":"'. $email .'"') .'%'
@@ -150,7 +150,10 @@ class Login extends Firelit\Controller {
 		$user->save();
 
 		$user->grantGroupAccess($group->id);
-		
+
+		while ($group = $q->getObject('Group'))
+			$user->grantGroupAccess($group->id);
+
 		return $user;
 
 	}

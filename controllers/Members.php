@@ -29,7 +29,7 @@ class Members extends APIController {
 
 			if (!sizeof($this->okGroups)) $this->okGroups[] = 0;
 
-			$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `members`.`semester_id`=:semester_id AND `groups_members`.`group_id` IN (". implode(',', $this->okGroups) .") ORDER BY `name`, `email`, `created` ASC";
+			$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `members`.`semester_id`=:semester_id AND `groups_members`.`group_id` IN (". implode(',', $this->okGroups) .") GROUP BY `members`.`id` ORDER BY `name`, `email`, `created` ASC";
 		
 		} else {
 
