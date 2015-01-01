@@ -96,7 +96,6 @@ class Members extends APIController {
 		// else just keep the name as submitted
 
 		$email = strtolower(trim($request->post['email']));
-
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $email);
 		if (!$iv->isValid()) $email = null;
 		else $email = $iv->getNormalized();
@@ -171,12 +170,17 @@ class Members extends APIController {
 		$request = Firelit\Request::init();
 
 		$member->name = trim($request->put['name']);
-		$member->email = trim($request->put['email']);
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::NAME, $member->name);
+		$member->name = $iv->getNormalized();
 
+		$member->email = trim($request->put['email']);
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $member->email);
 		if (!$iv->isValid()) $member->email = null;
+		else $member->email = $iv->getNormalized();
 
 		$member->phone = trim($request->put['phone']);
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::PHONE, $member->phone, 'US');
+		if ($iv->isValid()) $member->phone = $iv->getNormalized();
 		if (empty($member->phone)) $member->phone = null;
 
 		$member->address = trim($request->put['address']);

@@ -25,7 +25,7 @@ class Groups extends APIController {
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
-		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id ORDER BY `public_id`, `name` ASC";
+		$sql = "SELECT *, (SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count` FROM `groups` WHERE `groups`.`semester_id`=:semester_id ORDER BY `groups`.`public_id`, `groups`.`name` ASC";
 		$q = new Firelit\Query($sql, array(':semester_id' => $semester->id));
 
 		$groups = array();
@@ -35,7 +35,9 @@ class Groups extends APIController {
 			if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
 				continue;
 
-			$groups[] = $group->getArray();
+			$array = $group->getArray();
+			$array['count'] = $group->count;
+			$groups[] = $array;
 
 		}
 
@@ -90,7 +92,16 @@ class Groups extends APIController {
 		$group->status = $request->put['status'];
 
 		$data = $group->data;
+
 		$data['leader'] = trim($request->put['leader']);
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $request->put['email']);
+		if ($iv->isValid()) $data['email'] = $iv->getNormalized();
+
+		$iv = new Firelit\InputValidator(Firelit\InputValidator::PHONE, $request->put['phone'], 'US');
+		if ($iv->isValid()) $data['phone'] = $iv->getNormalized();
+		else $data['phone'] = trim($request->put['phone']);
+
 		$data['cost'] = ($request->put['cost'] == 'Yes');
 		$data['childcare'] = ($request->put['childcare'] == 'Provided');
 		$data['demographic'] = trim($request->put['demographic']);

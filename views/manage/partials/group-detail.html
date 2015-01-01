@@ -16,7 +16,11 @@
 			<dt>Status</dt>
 				<dd><span ng-class="statusToLabel(group.status)">{{group.status}}</span></dd>
 			<dt>Leader</dt>
-				<dd>{{group.leader}}</dd>
+				<dd>{{group.leader}}
+					<div><a href="tel:{{group.phone}}" class="visible-xs-inline">{{group.phone}}</a>
+						<span class="hidden-xs">{{group.phone}}</span></div>
+					<div><a href="mailto:{{group.email}}">{{group.email}}</a></div>
+				</dd>
 			<dt>Meeting Time</dt>
 				<dd>{{group.days.join(', ')}} {{group.time}}</dd>
 			<dt>Meeting Place</dt>
@@ -47,7 +51,9 @@
 				<li class="list-group-item" ng-if="!group.members.length"><em class="text-muted">No members</em></li>
 				<li class="list-group-item" ng-repeat="member in group.members" id="member-{{member.id}}">
 					<a class="group-member-delete pull-right" ng-click="removeMember(member.id)"><i class="fa fa-times-circle"></i></button>
-					<a href="#/members/{{member.id}}">{{member.name}}</a>
+					<a href="#/members/{{member.id}}">{{member.name}}</a> &nbsp; 
+					<small class="text-muted" ng-show="member.contact_pref!='EMAIL'">{{member.phone}}</small> 
+					<small class="text-muted" ng-show="member.contact_pref!='PHONE'">{{member.email}}</small>
 				</li>
 			</ul>
 		</div>
@@ -101,6 +107,16 @@
 			<div class="form-group">
 				<label for="leader">Group Leader</label>
 				<input type="text" id="leader" class="form-control" ng-model="group.leader">
+			</div>
+
+			<div class="form-group">
+				<label for="phone">Leader Phone</label>
+				<input type="text" id="phone" class="form-control" ng-model="group.phone">
+			</div>
+
+			<div class="form-group">
+				<label for="email">Leader Email</label>
+				<input type="text" id="email" class="form-control" ng-model="group.email">
 			</div>
 
 			<div class="form-group">

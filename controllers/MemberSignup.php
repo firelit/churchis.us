@@ -61,11 +61,12 @@ class MemberSignup extends Firelit\Controller {
 
 		$phone = trim($request->post['phone']);
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::PHONE, $phone, 'US');
-		$phone = $iv->getNormalized();
+		if ($iv->isValid()) $phone = $iv->getNormalized();
 
 		$email = trim($request->post['email']);
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $email);
-		$email = $iv->getNormalized();
+		if ($iv->isValid()) $email = $iv->getNormalized();
+		else $email = null;
 
 		$smallgroup = trim($request->post['conta']);
 		$description = trim($request->post['description']);

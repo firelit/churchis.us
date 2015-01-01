@@ -86,6 +86,8 @@ class Group extends Firelit\DatabaseObject {
 			'public_id' => $this->public_id,
 			'description' => $this->description,
 			'leader' => $this->data['leader'],
+			'phone' => $this->data['phone'],
+			'email' => $this->data['email'],
 			'when' => (is_array($this->data['days']) ? implode(', ', $this->data['days']) : '') .' '. $this->data['time'],
 			'days' => (is_array($this->data['days']) ? $this->data['days'] : array()),
 			'time' => $this->data['time'],
