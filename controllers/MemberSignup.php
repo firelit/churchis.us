@@ -68,12 +68,6 @@ class MemberSignup extends Firelit\Controller {
 		if ($iv->isValid()) $email = $iv->getNormalized();
 		else $email = null;
 
-		$smallgroup = trim($request->post['conta']);
-		$description = trim($request->post['description']);
-
-		$cost = ($request->post['cost'] == 'Yes');
-		$maxsize = intval($request->post['maxsize']);
-
 		$contact = null;
 
 		if (in_array('Phone', $request->post['contact'])) {
@@ -85,7 +79,7 @@ class MemberSignup extends Firelit\Controller {
 			else $contact = 'EMAIL';
 		}
 
-		if ($request->post['childcare'] == 'Yes')
+		if (isset($request->post['childcare']) && ($request->post['childcare'] == 'Yes'))
 			$childcount = intval($request->post['childcount']);
 		else
 			$childcount = 0;
@@ -106,11 +100,18 @@ class MemberSignup extends Firelit\Controller {
 				'child_care' => $childcount
 			));
 
-			$member->addToGroup($group->id);
+			$group->addMember($member);
 
 		} catch (Exception $e) {
 			throw new Firelit\RouteToError(500, $e->getMessage());
 		}
+
+		try {
+			
+			$email = new EmailMemberSignup($member, $group);
+			$email->send();
+
+		} catch (Exception $e) { }
 
 		$groups = $this->getSmallGroups($semester->id);
 
@@ -119,7 +120,7 @@ class MemberSignup extends Firelit\Controller {
 			'title' => 'Frontline Small Group Signup',
 			'semester' => $semester->name,
 			'groups' => $groups,
-			'success' => 'You information has been received. Thank you!'
+			'success' => 'You information has been received. You should hear from your group\'s leader soon. Thank you!'
 		));
 
 	}

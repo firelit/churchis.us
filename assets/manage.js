@@ -160,7 +160,7 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 		}
 
 		var range = new Array();
-		for (var i = 6; i < 20; i++)
+		for (var i = 6; i <= 20; i++)
 			range.push(i);
 
 		$scope.is_admin = window.is_admin;

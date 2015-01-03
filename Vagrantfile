@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: "curl -sS http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm > epel-release-7.noarch.rpm" # Adding repo for php-mcrypt
   config.vm.provision "shell", inline: "rpm -Uvh epel-release-7.noarch.rpm"
 
-  config.vm.provision "shell", inline: "yum update -y"
+  # config.vm.provision "shell", inline: "yum update -y"
 
   config.vm.provision "shell", inline: "yum install -y httpd"
   config.vm.provision "shell", inline: "yum install -y php"

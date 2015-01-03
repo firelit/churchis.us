@@ -113,7 +113,7 @@
 				</div> <!-- /#content -->
 			</div> <!-- /#body -->
 			<div id="footer">
-				<p class="footer-sm">Frontline Community Church Small Groups<br>Need help? <a href="mailto:office@frontlinegr.com">office@frontlinegr.com</a></p>
+				<p class="footer-sm"><a href="http://frontlinegr.com">Frontline Community Church</a> Small Groups<br>Need help? <a href="mailto:office@frontlinegr.com">office@frontlinegr.com</a></p>
 				<p class="footer-sm">Built with <i class="fa fa-heart"></i> by <a href="https://twitter.com/bigoness">Biggie</a></p>
 			</div>
 		</div>

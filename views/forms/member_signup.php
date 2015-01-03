@@ -101,6 +101,8 @@
 					</div>
 				</div>
 
+				<input type="hidden" name="state" value="MI">
+				
 				<!-- Text input-->
 				<div class="form-group">
 					<label class="control-label" for="zip">Zip Code</label>  
