@@ -47,7 +47,7 @@ class User extends Firelit\DatabaseObject {
 		$hash = $password;
 
 		for ($i = 0; $i < 25; $i++) {
-			$hash = sha1('sha256', $_SERVER['PASS_HASH_SALT'] . $hash);
+			$hash = hash('sha256', $_SERVER['PASS_HASH_SALT'] . $hash, false);
 		}
 
 		return $hash;
