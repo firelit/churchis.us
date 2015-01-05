@@ -109,6 +109,15 @@ class MemberSignup extends Firelit\Controller {
 		try {
 			
 			$email = new EmailMemberSignup($member, $group);
+
+			$email->toMember();
+			$email->send();
+
+		} catch (Exception $e) { }
+
+		try {
+			
+			$email->toLeader();
 			$email->send();
 
 		} catch (Exception $e) { }
