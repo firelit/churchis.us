@@ -2,13 +2,14 @@
 <style type="text/css">
 #group-list { max-height: 800px; overflow-y: auto; }
 #group-list label { font-weight: normal; }
-#group-list .group-radio { float: left; }
-#group-list .group-id { margin-bottom: 10px; margin-top: -5px; }
+.group-radio { float: left; }
+.group-id { margin-bottom: 10px; margin-top: -5px; }
 #group-list .sg-name { font-size: 1.2em; margin-left: 20px; margin-top: 0; color: #333; }
 #group-list li { position: relative; padding-bottom: 10px; color: #555; }
 #group-side small.help-block { color: #a94442; }
 #group-side .form-control-feedback { opacity: 0; }
-#group-list .group-descrip { margin-top: 0.7em; }
+.group-descrip { margin-top: 0.7em; font-style: italic; }
+.group-leader, .group-demographic, .group-meeting { color: #777; }
 #group-list li.full:after {
 	position: absolute;
 	top: 30px;
@@ -51,11 +52,11 @@
 								<input type="radio" name="group" class="group-radio" value="<?=htmlentities($id); ?>" <?php if ($data['full']) echo 'disabled'; ?>> 
 								<h3 class="sg-name"><?=htmlentities($data['name']); ?></h3>
 							</div>
-							<div>Leader(s): <?=htmlentities($data['leader']); ?></div>
-							<div><?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
-							<div>
-								<?=(($data['demographic'] == 'None') ? '' : ucfirst($data['demographic']) .' '); ?>
-								<?=(($data['gender'] == 'None') ? '' : ucfirst($data['gender']) .'\'s group'); ?>
+							<div class="group-leader">Leader(s): <?=htmlentities($data['leader']); ?></div>
+							<div class="group-meeting"><?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
+							<div class="group-demographic">
+								<?=(($data['demographic'] == 'None') ? '' : ucfirst($data['demographic']) .'s '); ?>
+								<?=(($data['gender'] == 'None') ? '' : ucfirst($data['gender']) .' group'); ?>
 								<?=($data['childcare'] ? ' (childcare provided)' : ''); ?>
 							</div>
 							<div class="group-descrip">
