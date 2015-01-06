@@ -1,7 +1,7 @@
 <?php if (!is_object($this)) die; ?>
 <style type="text/css">
 #group-list { max-height: 800px; overflow-y: auto; }
-#group-list label { font-weight: normal; }
+#group-list label { font-weight: normal; cursor: pointer; }
 .group-radio { float: left; }
 .group-id { margin-bottom: 10px; margin-top: -5px; }
 #group-list .sg-name { font-size: 1.2em; margin-left: 20px; margin-top: 0; color: #333; }
@@ -52,11 +52,12 @@
 								<input type="radio" name="group" class="group-radio" value="<?=htmlentities($id); ?>" <?php if ($data['full']) echo 'disabled'; ?>> 
 								<h3 class="sg-name"><?=htmlentities($data['name']); ?></h3>
 							</div>
-							<div class="group-leader">Leader(s): <?=htmlentities($data['leader']); ?></div>
-							<div class="group-meeting"><?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
-							<div class="group-demographic">
+							<div class="group-leader"><i class="fa fa-fw fa-user"></i> Leader(s): <?=htmlentities($data['leader']); ?></div>
+							<div class="group-meeting"><i class="fa fa-fw fa-calendar"></i> <?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
+							<div class="group-demographic"><i class="fa fa-fw fa-check-circle"></i> 
 								<?=(($data['demographic'] == 'None') ? '' : ucfirst($data['demographic']) .'s '); ?>
 								<?=(($data['gender'] == 'None') ? '' : ucfirst($data['gender']) .' group'); ?>
+								<?=(($data['gender'] == 'None') && ($data['demographic'] == 'None') ? 'Open group' : ''); ?>
 								<?=($data['childcare'] ? ' (childcare provided)' : ''); ?>
 							</div>
 							<div class="group-descrip">
