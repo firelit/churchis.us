@@ -136,7 +136,7 @@ class MemberSignup extends Firelit\Controller {
 
 	public function getSmallGroups($semesterId) {
 
-		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `status` IN ('OPEN','FULL') ORDER BY `public_id`, `name` ASC";
+		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `status` IN ('OPEN','FULL') ORDER BY CAST(`public_id` AS UNSIGNED), `public_id`, `name` ASC";
 		$q = new Firelit\Query($sql, array(':semester_id' => $semesterId));
 
 		$groups = array();

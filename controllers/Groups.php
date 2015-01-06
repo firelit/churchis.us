@@ -25,7 +25,7 @@ class Groups extends APIController {
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
-		$sql = "SELECT *, (SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count` FROM `groups` WHERE `groups`.`semester_id`=:semester_id ORDER BY `groups`.`public_id`, `groups`.`name` ASC";
+		$sql = "SELECT *, (SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count` FROM `groups` WHERE `groups`.`semester_id`=:semester_id ORDER BY CAST(`groups`.`public_id` AS UNSIGNED), `groups`.`public_id`, `groups`.`name` ASC";
 		$q = new Firelit\Query($sql, array(':semester_id' => $semester->id));
 
 		$groups = array();
