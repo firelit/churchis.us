@@ -19,7 +19,7 @@
 	<body>
 		<div id="wrap" class="container">
 			<div id="header">
-				<h1>Frontline Small Groups</h1>
+				<h1><img src="/assets/fcclogo-medium.png" alt="" style="height:39px;"> Frontline Small Groups</h1>
 			</div>
 			<div id="body">
 				<div id="content">
