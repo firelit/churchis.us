@@ -100,7 +100,7 @@ class Login extends Firelit\Controller {
 			exit;
 		}
 
-		if (!$user->validatePassword($password)) {
+		if (!$user->validatePassword($password)) { 
 			sleep(1);
 			
 			$this->session->loggedIn = false;

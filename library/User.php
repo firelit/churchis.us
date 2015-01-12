@@ -14,7 +14,7 @@ class User extends Firelit\DatabaseObject {
 	public function validatePassword($password) {
 
 		$hash = static::hashPassword($password);
-
+		
 		return ($this->password === $hash);
 
 	}
@@ -47,7 +47,7 @@ class User extends Firelit\DatabaseObject {
 		$hash = $password;
 
 		for ($i = 0; $i < 25; $i++) {
-			$hash = hash('sha256', $_SERVER['PASS_HASH_SALT'] . $hash, false);
+			$hash = base64_encode(hash('sha256', $_SERVER['PASS_HASH_SALT'] . $hash, true));
 		}
 
 		return $hash;
