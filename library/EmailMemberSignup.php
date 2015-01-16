@@ -2,11 +2,12 @@
 
 class EmailMemberSignup extends Email {
 
-	protected $member, $group;
+	protected $member, $group, $secondMember;
 
-	public function __construct(Member $member, Group $group) {
+	public function __construct(Member $member, Group $group, Member $secondMember = null) {
 		
 		$this->member = $member;
+		$this->secondMember = $secondMember;
 		$this->group = $group;
 
 	}
@@ -14,6 +15,7 @@ class EmailMemberSignup extends Email {
 	public function toMember() {
 		
 		$member = $this->member;
+		$secondMember = $this->secondMember;
 		$group = $this->group;
 
 		$this->subject = "Small Group Signup";
@@ -21,7 +23,7 @@ class EmailMemberSignup extends Email {
 
 		$this->html = "<html><body>";
 
-		$this->html .= "<p>Hi ". htmlentities($member->name) ."!</p>";
+		$this->html .= "<p>Hi ". htmlentities($member->name) . (!empty($secondMember) ? ' &amp; '. $secondMember->name : '') ."!</p>";
 
 		$this->html .= "<p>I'm so glad you've decided to join a small group this semester. If you're receiving this email, it means we've received your registration. The group you chose, <em>". htmlentities($group->name) ."</em>, is being led by ". htmlentities($group->data['leader']) .". We'll also be emailing ". htmlentities($group->data['leader']) ." with your contact information.</p>";
 
@@ -40,9 +42,14 @@ class EmailMemberSignup extends Email {
 	public function toLeader() {
 		
 		$member = $this->member;
+		$secondMember = $this->secondMember;
 		$group = $this->group;
 
-		$this->subject = "New Member: ". $member->name;
+		if (!empty($secondMember))
+			$this->subject = "New Members: ". $member->name .' & '. $secondMember->name;
+		else
+			$this->subject = "New Member: ". $member->name;
+
 		$this->to = $group->data['email'];
 
 		$this->html = "<html><body>";
@@ -57,9 +64,13 @@ class EmailMemberSignup extends Email {
 		$ddS = ' style="float:left;margin-left:0;padding-top:7px"';
 
 		$this->html .= "<dt". $dtS .">Name</dt><dd". $ddS ."><strong>". htmlentities($member->name) ."</strong></dd>";
-		$this->html .= "<dt". $dtS .">Contact Preference</dt><dd". $ddS .">". htmlentities($member->contact_pref) ."</dd>";
+
+		if (!empty($secondMember))
+			$this->html .= "<dt". $dtS .">Name</dt><dd". $ddS ."><strong>". htmlentities($secondMember->name) ."</strong></dd>";
+
 		$this->html .= "<dt". $dtS .">Email</dt><dd". $ddS .">". htmlentities($member->email) ."</dd>";
 		$this->html .= "<dt". $dtS .">Phone</dt><dd". $ddS .">". htmlentities($member->phone) ."</dd>";
+		$this->html .= "<dt". $dtS .">Contact Preference</dt><dd". $ddS .">". htmlentities($member->contact_pref) ."</dd>";
 		$this->html .= "<dt". $dtS .">Childcare Needed</dt><dd". $ddS .">". (empty($member->child_care) ? 'No' : $member->child_care ." children") ."</dd>";
 
 		$this->html .= "</dl>";

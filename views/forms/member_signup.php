@@ -1,6 +1,6 @@
 <?php if (!is_object($this)) die; ?>
 <style type="text/css">
-#group-list { max-height: 800px; overflow-y: auto; margin-bottom: 0; }
+#group-list { max-height: 900px; overflow-y: auto; margin-bottom: 0; }
 #group-list label { font-weight: normal; cursor: pointer; }
 .group-radio { float: left; }
 .group-id { margin-bottom: 10px; margin-top: -5px; }
@@ -55,6 +55,7 @@
 	-ms-transform: rotate(-20deg); /* IE */
 	-o-transform: rotate(-20deg); /* Opera */
 }
+.second { display: none; }
 </style>
 <form method="post" id="form">
 	<fieldset>
@@ -114,6 +115,33 @@
 					<label class="control-label" for="last">Last Name</label>  
 					<div class="">
 						<input id="last" name="last" type="text" placeholder="Last Name" class="form-control input-md" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div>
+						<div class="checkbox">
+							<label for="addsecond">
+								<input type="checkbox" name="addsecond" id="addsecond" value="yes"> Also add my spouse, fianc&eacute;, friend, etc.
+							</label>
+							<p class="help-block text-small"><small>If checked, we'll register a second person to the selected group using the same contact information.</small></p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group second">
+					<label class="control-label" for="first2">Second Member: First Name</label>  
+					<div class="">
+						<input id="first2" name="first2" type="text" placeholder="First Name" class="form-control input-md">
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group second">
+					<label class="control-label" for="last2">Second Member: Last Name</label>  
+					<div class="">
+						<input id="last2" name="last2" type="text" placeholder="Last Name" class="form-control input-md">
 					</div>
 				</div>
 
@@ -217,7 +245,18 @@ $(function() {
 			if ($(this).closest('.form-group').hasClass('has-error'))
 				$('#form').bootstrapValidator('revalidateField', 'childcount');
 
+		})
+		.on('change', '#addsecond', function() {
+
+			if ($('#addsecond').is(':checked')) {
+				$('.second').slideDown();
+			} else {
+				$('.second').slideUp();
+			}
+
 		});
+
+	$('#addsecond').trigger('change');
 
 	$('#group-list')
 		.scroll(function(ev) {
@@ -289,6 +328,38 @@ $(function() {
 						}
 					}
 				},
+				first2: {
+					validators: {
+						callback: {
+							callback: function(value, validator, $field) {
+
+								if (!$('#addsecond').is(':checked')) return true;
+
+								return {
+									valid: (value.length >= 2),
+									message: 'The last name must be at least 2 characters long'
+								};
+
+							}
+						}
+					}
+				},
+				last2: {
+					validators: {
+						callback: {
+							callback: function(value, validator, $field) {
+
+								if (!$('#addsecond').is(':checked')) return true;
+
+								return {
+									valid: (value.length >= 2),
+									message: 'The last name must be at least 2 characters long'
+								};
+
+							}
+						}
+					}
+				},
 				address: {
 					validators: {
 						notEmpty: {
@@ -318,7 +389,7 @@ $(function() {
 						},
 						zipCode: {
 							country: 'US',
-							message: 'The last name must be at least 2 characters long'
+							message: 'This is not a valid zip code'
 						}
 					}
 				},
@@ -328,7 +399,7 @@ $(function() {
 							message: 'The phone is required and cannot be empty'
 						},
 						phone: {
-							message: 'The input is not a valid phone address',
+							message: 'This is not a valid phone address',
 							country: 'US'
 						}
 					}
@@ -339,7 +410,7 @@ $(function() {
 							message: 'The email is required and cannot be empty'
 						},
 						emailAddress: {
-							message: 'The input is not a valid email address'
+							message: 'This is not a valid email address'
 						}
 					}
 				},
@@ -354,7 +425,7 @@ $(function() {
 				childcount: {
 					validators: {
 						callback: {
-							message: 'Test',
+							message: 'Please indicate how many children',
 							callback: function(value, validator, $field) {
 
 								if (!$('#childcare').is(':checked')) return true;

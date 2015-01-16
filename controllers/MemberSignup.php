@@ -16,7 +16,7 @@ class MemberSignup extends Firelit\Controller {
 
 		$request = Firelit\Request::init();
 
-		if (isset($request->get['success']))
+		if (isset($request->get['success']) && ($request->get['success'] > strtotime('-2 minutes')))
 			$success = 'You information has been received. You should hear from your group\'s leader soon. Thank you!';
 		else
 			$success = false;
@@ -69,6 +69,17 @@ class MemberSignup extends Firelit\Controller {
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::NAME, $name);
 		$name = $iv->getNormalized();
 
+		if ($request->post['addsecond'] == 'yes') {
+
+			$first2 = trim($request->post['first2']);
+			$last2 = trim($request->post['last2']);
+			$name2 = $first2 .' '. $last2;
+
+			$iv = new Firelit\InputValidator(Firelit\InputValidator::NAME, $name2);
+			$name2 = $iv->getNormalized();
+
+		} else $name2 = false;
+
 		$address = trim($request->post['address']);
 		$city = trim($request->post['city']);
 		$zip = trim($request->post['zip']);
@@ -90,7 +101,7 @@ class MemberSignup extends Firelit\Controller {
 		}
 
 		if (in_array('Email', $request->post['contact'])) {
-			if ($contact = 'PHONE') $contact = 'BOTH';
+			if ($contact == 'PHONE') $contact = 'BOTH';
 			else $contact = 'EMAIL';
 		}
 
@@ -117,13 +128,34 @@ class MemberSignup extends Firelit\Controller {
 
 			$newCount = $group->addMember($member);
 
+			if ($name2) {
+
+				$member2 = Member::create(array(
+					'semester_id' => $semester->id,
+					'name' => $name2,
+					'email' => $email,
+					'phone' => $phone,
+					'email' => $email,
+					'address' => $address,
+					'city' => $city,
+					'state' => $state,
+					'zip' => $zip,
+					'contact_pref' => $contact,
+					'child_care' => 0
+				));
+
+				$newCount = $group->addMember($member2);
+
+			} else $member2 = null;
+
+
 		} catch (Exception $e) {
 			throw new Firelit\RouteToError(500, $e->getMessage());
 		}
 
 		try {
 			
-			$email = new EmailMemberSignup($member, $group);
+			$email = new EmailMemberSignup($member, $group, $member2);
 
 			$email->toMember();
 			$email->send();
@@ -149,7 +181,7 @@ class MemberSignup extends Firelit\Controller {
 		}
 
 		$response = Firelit\Response::init();
-		$response->redirect('/signup/member?success');
+		$response->redirect('/signup/member?success='. time());
 
 	}
 
