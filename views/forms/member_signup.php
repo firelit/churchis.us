@@ -1,11 +1,41 @@
 <?php if (!is_object($this)) die; ?>
 <style type="text/css">
-#group-list { max-height: 800px; overflow-y: auto; }
+#group-list { max-height: 800px; overflow-y: auto; margin-bottom: 0; }
 #group-list label { font-weight: normal; cursor: pointer; }
 .group-radio { float: left; }
 .group-id { margin-bottom: 10px; margin-top: -5px; }
 #group-list .sg-name { font-size: 1.2em; margin-left: 20px; margin-top: 0; color: #333; }
 #group-list li { position: relative; padding-bottom: 10px; color: #555; }
+#group-side { position: relative; }
+#group-side.scrolled:before {
+	content: ""; 
+	position: absolute; 
+	margin-left: -15px; 
+	top: 0; 
+	height: 20px; 
+	width: 100%; 
+	z-index: 1;
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+}
+#group-side:after { 
+	content: ""; 
+	position: absolute; 
+	margin-left: -15px; 
+	bottom: 0; 
+	height: 20px; 
+	width: 100%; 
+	background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C */
+}
 #group-side small.help-block { color: #a94442; }
 #group-side .form-control-feedback { opacity: 0; }
 .group-descrip { margin-top: 0.7em; font-style: italic; }
@@ -187,6 +217,15 @@ $(function() {
 			if ($(this).closest('.form-group').hasClass('has-error'))
 				$('#form').bootstrapValidator('revalidateField', 'childcount');
 
+		});
+
+	$('#group-list')
+		.scroll(function(ev) {
+			if (ev.target.scrollTop < 10) {
+				$('#group-side').removeClass('scrolled');
+			} else if ((ev.target.scrollTop >= 10) && (ev.target.scrollTop < 100)) {
+				$('#group-side').addClass('scrolled');
+			}  
 		});
 
 	$('#form').bootstrapValidator({
