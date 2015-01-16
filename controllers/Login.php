@@ -126,7 +126,7 @@ class Login extends Firelit\Controller {
 	 */
 	public function tempCreateUser($email, $password) {
 
-		if ($password != 'frontLINE33') return false;
+		if ($password != $_SERVER['TEMP_PASSWORD']) return false;
 
 		$semester = Semester::latestOpen();
 

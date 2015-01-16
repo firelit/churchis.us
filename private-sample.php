@@ -8,6 +8,12 @@ $_SERVER['MAILGUN_DOM'] = 'MAILGUN DOMAIN';
 
 $_SERVER['PASS_HASH_SALT'] = 'ENTER RANDOM HASH SALT';
 
+$_SERVER['EMAIL_FROM'] = 'EMAIL FROM HERE';
+$_SERVER['EMAIL_FOOTER'] = 'HTML EMAIL FOOTER HERE';
+
+$_SERVER['OFFICE_NAME'] = 'OFFICE NAME'; // e.g., "Frontline Office"
+$_SERVER['OFFICE_EMAIL'] = 'OFFICE EMAIL HERE'; 
+
 // Set as environmental variables in Apache or set here
 if (!isset($_SERVER['DB_HOST'])) $_SERVER['DB_HOST'] = 'localhost';
 if (!isset($_SERVER['DB_NAME'])) $_SERVER['DB_NAME'] = 'DB_NAME';

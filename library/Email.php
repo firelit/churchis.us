@@ -17,8 +17,8 @@ class Email {
 			throw new Exception('Nothing to send!');
 
 		if (empty($this->from)) {
-			$this->from = 'Frontline Small Groups <noreply@churchis.us>';
-			$this->replyTo = 'Frontline Office <office@frontlinegr.com>';
+			$this->from = $_SERVER['EMAIL_FROM'];
+			$this->replyTo = '"'. $_SERVER['OFFICE_NAME'] .'" <'. $_SERVER['OFFICE_EMAIL'] .'>';
 		}
 		
 		$mg = new Mailgun\Mailgun($_SERVER['MAILGUN_KEY']);

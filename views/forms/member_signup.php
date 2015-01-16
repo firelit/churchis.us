@@ -228,124 +228,145 @@ $(function() {
 			}  
 		});
 
-	$('#form').bootstrapValidator({
-		message: 'This value is not valid',
-		submitButtons: '#submit_button',
-		feedbackIcons: {
-			valid: 'glyphicon glyphicon-ok',
-			invalid: 'glyphicon glyphicon-remove',
-			validating: 'glyphicon glyphicon-refresh'
-		},
-		trigger: 'blur',
-		fields: {
-			group: {
-				trigger: 'change',
-				validators: {
-					notEmpty: {
-						message: 'Please select a group'
-					}
-				}
-			},
-			first: {
-				validators: {
-					notEmpty: {
-						message: 'First name is required'
-					},
-					stringLength: {
-						min: 2,
-						message: 'The first name must be at least 2 characters long'
-					}
-				}
-			},
-			last: {
-				validators: {
-					notEmpty: {
-						message: 'Last name is required'
-					},
-					stringLength: {
-						min: 2,
-						message: 'The last name must be at least 2 characters long'
-					}
-				}
-			},
-			address: {
-				validators: {
-					notEmpty: {
-						message: 'Address is required'
-					},
-					stringLength: {
-						min: 2,
-						message: 'The address must be at least 2 characters long'
-					}
-				}
-			},
-			city: {
-				validators: {
-					notEmpty: {
-						message: 'City is required'
-					},
-					stringLength: {
-						min: 2,
-						message: 'The city must be at least 2 characters long'
-					}
-				}
-			},
-			zip: {
-				validators: {
-					notEmpty: {
-						message: 'Zip code is required'
-					},
-					zipCode: {
-						country: 'US',
-						message: 'The last name must be at least 2 characters long'
-					}
-				}
-			},
-			phone: {
-				validators: {
-					notEmpty: {
-						message: 'The phone is required and cannot be empty'
-					},
-					phone: {
-						message: 'The input is not a valid phone address',
-						country: 'US'
-					}
-				}
-			},
-			email: {
-				validators: {
-					notEmpty: {
-						message: 'The email is required and cannot be empty'
-					},
-					emailAddress: {
-						message: 'The input is not a valid email address'
-					}
-				}
-			},
-			'contact[]': {
-				trigger: 'change',
-				validators: {
-					notEmpty: {
-						message: 'Please select at least one contact method'
-					}
-				}
-			},
-			childcount: {
-				validators: {
-					callback: {
-						message: 'Test',
-						callback: function(value, validator, $field) {
+	$('#submit_button')
+		.click(function() {
+			$('.alert-success').remove();
+		});
 
-							if (!$('#childcare').is(':checked')) return true;
+	setTimeout(function() {
 
-							return (value.length >= 1);
+		$('.alert-success').slideUp('slow');
 
+	}, 10000);
+
+	$('#form')
+		.on('submit', function() {
+
+			$('#validated').remove();
+
+			$('<input type="hidden" name="validated" id="validated">')
+				.val( $('#address').val() )
+				.appendTo('#form');
+
+		})
+		.bootstrapValidator({
+			message: 'This value is not valid',
+			submitButtons: '#submit_button',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			trigger: 'blur',
+			fields: {
+				group: {
+					trigger: 'change',
+					validators: {
+						notEmpty: {
+							message: 'Please select a group'
+						}
+					}
+				},
+				first: {
+					validators: {
+						notEmpty: {
+							message: 'First name is required'
+						},
+						stringLength: {
+							min: 2,
+							message: 'The first name must be at least 2 characters long'
+						}
+					}
+				},
+				last: {
+					validators: {
+						notEmpty: {
+							message: 'Last name is required'
+						},
+						stringLength: {
+							min: 2,
+							message: 'The last name must be at least 2 characters long'
+						}
+					}
+				},
+				address: {
+					validators: {
+						notEmpty: {
+							message: 'Address is required'
+						},
+						stringLength: {
+							min: 2,
+							message: 'The address must be at least 2 characters long'
+						}
+					}
+				},
+				city: {
+					validators: {
+						notEmpty: {
+							message: 'City is required'
+						},
+						stringLength: {
+							min: 2,
+							message: 'The city must be at least 2 characters long'
+						}
+					}
+				},
+				zip: {
+					validators: {
+						notEmpty: {
+							message: 'Zip code is required'
+						},
+						zipCode: {
+							country: 'US',
+							message: 'The last name must be at least 2 characters long'
+						}
+					}
+				},
+				phone: {
+					validators: {
+						notEmpty: {
+							message: 'The phone is required and cannot be empty'
+						},
+						phone: {
+							message: 'The input is not a valid phone address',
+							country: 'US'
+						}
+					}
+				},
+				email: {
+					validators: {
+						notEmpty: {
+							message: 'The email is required and cannot be empty'
+						},
+						emailAddress: {
+							message: 'The input is not a valid email address'
+						}
+					}
+				},
+				'contact[]': {
+					trigger: 'change',
+					validators: {
+						notEmpty: {
+							message: 'Please select at least one contact method'
+						}
+					}
+				},
+				childcount: {
+					validators: {
+						callback: {
+							message: 'Test',
+							callback: function(value, validator, $field) {
+
+								if (!$('#childcare').is(':checked')) return true;
+
+								return (value.length >= 1);
+
+							}
 						}
 					}
 				}
 			}
-		}
-	});
+		});
 
 });
 </script>

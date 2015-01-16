@@ -13,11 +13,20 @@ class MemberSignup extends Firelit\Controller {
 
 		$groups = $this->getSmallGroups($semester->id);
 
+
+		$request = Firelit\Request::init();
+
+		if (isset($request->get['success']))
+			$success = 'You information has been received. You should hear from your group\'s leader soon. Thank you!';
+		else
+			$success = false;
+
 		$v = new Firelit\View('forms/member_signup', 'forms/layout');
 		$v->render(array(
 			'title' => 'Frontline Small Group Signup',
 			'semester' => $semester->name,
-			'groups' => $groups
+			'groups' => $groups,
+			'success' => $success
 		));
 
 	}
@@ -46,6 +55,12 @@ class MemberSignup extends Firelit\Controller {
 
 		if (!$semester || ($semester->status != 'OPEN'))
 			throw new Firelit\RouteToError(400, 'The small group\'s semester is closed.');
+
+		if (empty($request->post['validated']))
+			throw new Firelit\RouteToError(400, 'The form was not properly validated (1).');
+
+		if ($request->post['validated'] != $request->post['address'])
+			throw new Firelit\RouteToError(400, 'The form was not properly validated (2).');
 
 		$first = trim($request->post['first']);
 		$last = trim($request->post['last']);
@@ -100,7 +115,7 @@ class MemberSignup extends Firelit\Controller {
 				'child_care' => $childcount
 			));
 
-			$group->addMember($member);
+			$newCount = $group->addMember($member);
 
 		} catch (Exception $e) {
 			throw new Firelit\RouteToError(500, $e->getMessage());
@@ -122,15 +137,19 @@ class MemberSignup extends Firelit\Controller {
 
 		} catch (Exception $e) { }
 
-		$groups = $this->getSmallGroups($semester->id);
+		if ($newCount >= $group->max_members) {
 
-		$v = new Firelit\View('forms/member_signup', 'forms/layout');
-		$v->render(array(
-			'title' => 'Frontline Small Group Signup',
-			'semester' => $semester->name,
-			'groups' => $groups,
-			'success' => 'You information has been received. You should hear from your group\'s leader soon. Thank you!'
-		));
+			try {
+				
+				$email->groupFull($newCount);
+				$email->send();
+
+			} catch (Exception $e) { }
+		
+		}
+
+		$response = Firelit\Response::init();
+		$response->redirect('/signup/member?success');
 
 	}
 
