@@ -1,16 +1,20 @@
 <?php if (!is_object($this)) die; ?>
 <style type="text/css">
+#signup-again { margin: 40px 0px; }
+#form h3 { margin-top: 0px; margin-bottom: 20px; }
+#form legend { color: #666; }
 #group-list { max-height: 900px; overflow-y: auto; margin-bottom: 0; }
 #group-list label { font-weight: normal; cursor: pointer; }
 .group-radio { float: left; }
 .group-id { margin-bottom: 10px; margin-top: -5px; }
 #group-list .sg-name { font-size: 1.2em; margin-left: 20px; margin-top: 0; color: #333; }
 #group-list li { position: relative; padding-bottom: 10px; color: #555; }
-#group-side { position: relative; }
-#group-side.scrolled:before {
+#group-list li.group-selected { background-color: #efe; border-color: #ded; }
+#group-side-wrap { position: relative; }
+#group-side-wrap.scrolled:before {
 	content: ""; 
 	position: absolute; 
-	margin-left: -15px; 
+	margin-left: 0; 
 	top: 0; 
 	height: 20px; 
 	width: 100%; 
@@ -22,10 +26,10 @@
 	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
 }
-#group-side:after { 
+#group-side-wrap:after { 
 	content: ""; 
 	position: absolute; 
-	margin-left: -15px; 
+	margin-left: 0; 
 	bottom: 0; 
 	height: 20px; 
 	width: 100%; 
@@ -56,52 +60,65 @@
 	-o-transform: rotate(-20deg); /* Opera */
 }
 .second { display: none; }
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: rgba(156, 156, 156, .6);
+}
 </style>
 <form method="post" id="form">
 	<fieldset>
-		<legend>Member Sign-Up for <?=htmlentities($semester); ?></legend>
+		<legend>Sign-Up for <?=htmlentities($semester); ?> Semester</legend>
 
 		<?php
 
 		if (!empty($success)) {
-			echo '<div class="alert alert-success">'. $success .'</div>';
+			echo '<div class="alert alert-success signup-again-hide">'. $success .'</div>';
+			echo '<div class="row signup-again-hide"><div class="col-md-12 text-center"><a href="#" id="signup-again" class="btn btn-primary btn-lg">Sign-Up for a Group</a></div></div>';
 		}
 
 		?>
 
-		<div class="row">
+		<div class="row signup-again-show <?=(!empty($success) ? 'hidden' : ''); ?>">
 			<div class="col-md-6" id="group-side">
-				<ul id="group-list" class="list-unstyled">
-				<?php
+				<h3>1. Pick a group:</h3>
+				<div id="group-side-wrap">
+					<ul id="group-list" class="list-unstyled">
+					<?php
 
-					if (is_array($groups))
-					foreach ($groups as $id => $data) {
-						?>
-						<li class="well <?php if ($data['full']) echo 'full'; ?>"><label>
-							<?=(!empty($data['public_id']) ? '<div class="group-id"><span class="label label-default">Group '. $data['public_id'] .'</span></div>' : ''); ?>
-							<div>
-								<input type="radio" name="group" class="group-radio" value="<?=htmlentities($id); ?>" <?php if ($data['full']) echo 'disabled'; ?>> 
-								<h3 class="sg-name"><?=htmlentities($data['name']); ?></h3>
-							</div>
-							<div class="group-leader"><i class="fa fa-fw fa-user"></i> Leader(s): <?=htmlentities($data['leader']); ?></div>
-							<div class="group-meeting"><i class="fa fa-fw fa-calendar"></i> <?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
-							<div class="group-demographic"><i class="fa fa-fw fa-check-circle"></i> 
-								<?=(($data['demographic'] == 'None') ? '' : ucfirst($data['demographic']) .'s '); ?>
-								<?=(($data['gender'] == 'None') ? '' : ucfirst($data['gender']) .' group'); ?>
-								<?=(($data['gender'] == 'None') && ($data['demographic'] == 'None') ? 'Open group' : ''); ?>
-								<?=($data['childcare'] ? ' (childcare provided)' : ''); ?>
-							</div>
-							<div class="group-descrip">
-								<?=htmlentities($data['description']); ?>
-							</div>
-						</label></li>
-						<?php
-					}
+						if (is_array($groups))
+						foreach ($groups as $id => $data) {
+							?>
+							<li class="well <?php if ($data['full']) echo 'full'; ?>"><label>
+								<?=(!empty($data['public_id']) ? '<div class="group-id"><span class="label label-default">Group '. $data['public_id'] .'</span></div>' : ''); ?>
+								<div>
+									<input type="radio" name="group" class="group-radio" value="<?=htmlentities($id); ?>" <?php if ($data['full']) echo 'disabled'; ?>> 
+									<h3 class="sg-name"><?=htmlentities($data['name']); ?></h3>
+								</div>
+								<div class="group-leader"><i class="fa fa-fw fa-user"></i> Leader(s): <?=htmlentities($data['leader']); ?></div>
+								<div class="group-meeting"><i class="fa fa-fw fa-calendar"></i> <?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
+								<div class="group-demographic"><i class="fa fa-fw fa-check-circle"></i> 
+									<?=(($data['demographic'] == 'None') ? '' : ucfirst($data['demographic']) .'s '); ?>
+									<?=(($data['gender'] == 'None') ? '' : ucfirst($data['gender']) .' group'); ?>
+									<?=(($data['gender'] == 'None') && ($data['demographic'] == 'None') ? 'Open group' : ''); ?>
+									<?=($data['childcare'] ? ' (childcare provided)' : ''); ?>
+								</div>
+								<div class="group-descrip">
+									<?=htmlentities($data['description']); ?>
+								</div>
+							</label></li>
+							<?php
+						}
 
-				?>
-				</ul>
+					?>
+					</ul>
+				</div>
 			</div>
 			<div class="col-md-6">
+				<h3>2. Enter your info:</h3>
 				<!-- Text input-->
 				<div class="form-group">
 					<label class="control-label" for="first">First Name</label>  
@@ -254,6 +271,12 @@ $(function() {
 				$('.second').slideUp();
 			}
 
+		})
+		.on('click', '#signup-again', function() {
+
+			$('.signup-again-show').removeClass('hidden');
+			$('.signup-again-hide').addClass('hidden');
+
 		});
 
 	$('#addsecond').trigger('change');
@@ -261,10 +284,16 @@ $(function() {
 	$('#group-list')
 		.scroll(function(ev) {
 			if (ev.target.scrollTop < 10) {
-				$('#group-side').removeClass('scrolled');
+				$('#group-side-wrap').removeClass('scrolled');
 			} else if ((ev.target.scrollTop >= 10) && (ev.target.scrollTop < 100)) {
-				$('#group-side').addClass('scrolled');
+				$('#group-side-wrap').addClass('scrolled');
 			}  
+		});
+
+	$('#group-list')
+		.on('change', 'input', function() {
+			$('#group-list input').filter(':checked').closest('li').addClass('group-selected');
+			$('#group-list input').filter(':not(:checked)').closest('li').removeClass('group-selected');
 		});
 
 	$('#submit_button')
