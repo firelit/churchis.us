@@ -48,7 +48,7 @@ class MemberSignup extends Firelit\Controller {
 
 		$total = $group->getMemberCount();
 
-		if ($total >= $group->max_members)
+		if (!is_null($group->max_members) && ($total >= $group->max_members))
 			throw new Firelit\RouteToError(400, 'Sorry, this group is full! Please click back and pick a different group.');
 
 		$semester = Semester::find($group->semester_id);
@@ -169,7 +169,7 @@ class MemberSignup extends Firelit\Controller {
 
 		} catch (Exception $e) { }
 
-		if ($newCount >= $group->max_members) {
+		if (!is_null($group->max_members) && ($newCount >= $group->max_members)) {
 
 			try {
 				

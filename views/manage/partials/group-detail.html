@@ -34,7 +34,7 @@
 			<dt>Costs Involved</dt>
 				<dd>{{group.cost}}</dd>
 			<dt>Max Group Size</dt>
-				<dd>{{group.max_members}} members</dd>
+				<dd>{{group.max_members | memberdisplay}}</dd>
 		</dl>
 		<p>
 			<span class="btn btn-default btn-sm pull-right" ng-show="is_admin" ng-click="deleteGroup()"><i class="glyphicon glyphicon-trash"></i></span>
@@ -164,7 +164,7 @@
 				<label for="maxsize">Max Group Size</label>  
 				<div>
 					<select id="maxsize" name="maxsize" class="form-control" ng-model="group.max_members">
-						<option ng-repeat="i in avail_maxsize" value="{{i}}">{{i}} members</option>
+						<option ng-repeat="i in avail_maxsize" value="{{i.value}}">{{i.name}}</option>
 					</select> 
 				</div>
 			</div>

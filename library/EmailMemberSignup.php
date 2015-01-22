@@ -110,8 +110,14 @@ class EmailMemberSignup extends Email {
 		$this->html .= "<dt". $dtS .">Leader</dt><dd". $ddS .">". htmlentities($group->data['leader']) ."</dd>";
 		$this->html .= "<dt". $dtS .">Email</dt><dd". $ddS .">". htmlentities($group->data['email']) ."</dd>";
 		$this->html .= "<dt". $dtS .">Phone</dt><dd". $ddS .">". htmlentities($group->data['phone']) ."</dd>";
-		$this->html .= "<dt". $dtS .">Current Count</dt><dd". substr($ddS, 0, -1) . (($memberCount > $group->max_members) ? ';color:red' : '') ."\">". $memberCount ." Members</dd>";
-		$this->html .= "<dt". $dtS .">Max Size</dt><dd". $ddS .">". htmlentities($group->max_members) ." Members</dd>";
+
+		if (is_null($group->max_members)) {
+			$this->html .= "<dt". $dtS .">Current Count</dt><dd". $ddS .">". $memberCount ." Members</dd>";
+			$this->html .= "<dt". $dtS .">Max Size</dt><dd". $ddS .">None</dd>";
+		} else {
+			$this->html .= "<dt". $dtS .">Current Count</dt><dd". substr($ddS, 0, -1) . (($memberCount > $group->max_members) ? ';color:red' : '') ."\">". $memberCount ." Members</dd>";
+			$this->html .= "<dt". $dtS .">Max Size</dt><dd". $ddS .">". htmlentities($group->max_members) ." Members</dd>";
+		}
 
 		$this->html .= "</dl>";
 

@@ -55,7 +55,14 @@ churchis.config(['$routeProvider',
 	}
 ]);
 
-var churchisServices = angular.module('churchisServices', ['ngResource']);
+angular.module('GroupFilters', []).filter('memberdisplay', function() {
+	return function(input) {
+		if (!input || (input == 'null')) return 'No maximum';
+		return input + ' members';
+	};
+});
+
+var churchisServices = angular.module('churchisServices', ['ngResource', 'GroupFilters']);
 
 churchisServices.factory('Group', ['$resource',
 	function($resource) {
@@ -126,7 +133,7 @@ churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group',
 	}
 ]);
 
-churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', '$location', 'Group', 'Member',
+churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', '$location', 'Group', 'Member', 
 	function($scope, $routeParams, $http, $location, Group, Member) {
 
 		$scope.group = Group.get({groupId: $routeParams.groupId});
@@ -161,7 +168,15 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 
 		var range = new Array();
 		for (var i = 6; i <= 20; i++)
-			range.push(i);
+			range.push({
+				value: i,
+				name: i + ' members'
+			});
+
+		range.push({
+			value: 'null',
+			name: 'No maximum'
+		});
 
 		$scope.is_admin = window.is_admin;
 		$scope.avail_maxsize = range;

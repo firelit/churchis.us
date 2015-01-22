@@ -111,7 +111,10 @@ class Groups extends APIController {
 		$data['location'] = trim($request->put['where']);
 		$group->data = $data;
 
-		$max_members = intval($request->put['max_members']);
+		if ($request->put['max_members'] == 'No maximum') $max_members = null;
+		elseif ($request->put['max_members'] == 'null') $max_members = null;
+		else $max_members = intval($request->put['max_members']);
+
 		if ($group->max_members != $max_members) {
 			// Status is set above, let's not change here
 			$group->max_members = $max_members;

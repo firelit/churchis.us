@@ -53,7 +53,7 @@ class Group extends Firelit\DatabaseObject {
 		$count = $this->getMemberCount();
 
 		// If adding this member puts us at max members, and the status is OPEN, fix status
-		if (($this->status == 'OPEN') && ($count >= $this->max_members)) {
+		if (($this->status == 'OPEN') && !is_null($this->max_members) && ($count >= $this->max_members)) {
 
 			$this->status = 'FULL';
 			$this->save();
@@ -73,7 +73,7 @@ class Group extends Firelit\DatabaseObject {
 		));
 
 		// If removing this member drops below max members, and the status is FULL, fix status
-		if (($this->status == 'FULL') && (($this->getMemberCount() + 1) == $this->max_members)) {
+		if (($this->status == 'FULL') && !is_null($this->max_members) && (($this->getMemberCount() + 1) == $this->max_members)) {
 
 			$this->status = 'OPEN';
 			$this->save();

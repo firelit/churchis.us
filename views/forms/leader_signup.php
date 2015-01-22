@@ -103,6 +103,7 @@
 					}
 
 					?>
+					<option value="null">No Maximum</option>
 				</select>
 				<span class="help-block">Preferred maximum number of attendees</span>  
 			</div>
