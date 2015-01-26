@@ -38,12 +38,15 @@ class Groups extends APIController {
 			$array = $group->getArray();
 			$array['count'] = $group->count;
 
-			if (strlen($array['name']) > 35)
-				$array['name'] = substr($array['name'], 0, 32) .'...';
+			if (strlen($array['name']) > 30)
+				$array['name'] = substr($array['name'], 0, 27) .'...';
 
-			if (strlen($array['leader']) > 35)
-				$array['leader'] = substr($array['leader'], 0, 32) .'...';
+			if (strlen($array['leader']) > 30)
+				$array['leader'] = substr($array['leader'], 0, 27) .'...';
 
+			if (strlen($array['time']) > 30)
+				$array['time'] = substr($array['time'], 0, 27) .'...';
+			
 			$array['meets'] = $array['time'];
 
 			$days = $array['days'];
