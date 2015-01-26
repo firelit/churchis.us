@@ -77,6 +77,7 @@ class Groups extends APIController {
 	 		if ($array['demographic'] == 'None') $array['demographic'] = '';
 	 		if ($array['childcare'] == 'Not available') $array['childcare'] = '';
 
+	 		$array['child_count'] = $group->child_count;
 	 		if (empty($array['child_count'])) $array['child_count'] = 0;
 
 			$groups[] = $array;
