@@ -51,7 +51,7 @@ class Groups extends APIController {
 	 		$days = array_map(function($value) {
 
 	 			$abbrv = substr($value, 0, 1);
-	 			if ($abbrv == 'T')
+	 			if (($abbrv == 'T') || ($abbrv == 'S'))
 	 				$abbrv = substr($value, 0, 2);
 
 	 			return $abbrv;
