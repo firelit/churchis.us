@@ -8,8 +8,8 @@
 			<th>Group Name</th>
 			<th class="hidden-xs">Status</th>
 			<th>Leader</th>
+			<th class="hidden-xs">Meets</th>
 			<th class="hidden-xs">Childcare</th>
-			<th class="hidden-xs">Gender</th>
 			<th class="hidden-xs">Demographic</th>
 			<th class="hidden-xs">Member Count</th>
 		</tr>
@@ -20,9 +20,9 @@
 			<td>{{group.name}}</td>
 			<td class="hidden-xs"><span ng-class="statusToLabel(group.status)">{{group.status}}</span></td>
 			<td>{{group.leader}}</td>
+			<td class="hidden-xs">{{group.meets}}</td>
 			<td class="hidden-xs">{{group.childcare}}</td>
-			<td class="hidden-xs">{{group.gender}}</td>
-			<td class="hidden-xs">{{group.demographic}}</td>
+			<td class="hidden-xs">{{group.gender}} {{group.demographic}}</td>
 			<td class="hidden-xs">{{group.count}} <span class="text-super-muted" ng-show="group.max_members">of {{group.max_members}}</td>
 		</tr>
 	</tbody>

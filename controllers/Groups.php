@@ -37,6 +37,37 @@ class Groups extends APIController {
 
 			$array = $group->getArray();
 			$array['count'] = $group->count;
+
+			if (strlen($array['name']) > 35)
+				$array['name'] = substr($array['name'], 0, 32) .'...';
+
+			if (strlen($array['leader']) > 35)
+				$array['leader'] = substr($array['leader'], 0, 32) .'...';
+
+			$array['meets'] = $array['time'];
+
+			$days = $array['days'];
+
+	 		$days = array_map(function($value) {
+
+	 			$abbrv = substr($value, 0, 1);
+	 			if ($abbrv == 'T')
+	 				$abbrv = substr($value, 0, 2);
+
+	 			return $abbrv;
+
+	 		}, $days);
+
+	 		$days = implode(', ', $days);
+
+	 		if (strlen($array['meets']) && strlen($days)) $array['meets'] .= ' on ';
+
+	 		$array['meets'] .= $days;
+
+	 		if ($array['gender'] == 'None') $array['gender'] = '';
+	 		if ($array['demographic'] == 'None') $array['demographic'] = '';
+	 		if ($array['childcare'] == 'Not available') $array['childcare'] = '';
+
 			$groups[] = $array;
 
 		}
