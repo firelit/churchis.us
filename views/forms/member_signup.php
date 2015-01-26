@@ -281,8 +281,14 @@ $(function() {
 
 	$('#addsecond').trigger('change');
 
+	var ua = navigator.userAgent.toLowerCase();
+	var isAndroid = ua.indexOf("android") > -1;
+
 	$('#group-list')
 		.scroll(function(ev) {
+
+			if (isAndroid) return; // A bug on android causes div scrolling to freeze
+
 			if (ev.target.scrollTop < 10) {
 				$('#group-side-wrap').removeClass('scrolled');
 			} else if ((ev.target.scrollTop >= 10) && (ev.target.scrollTop < 100)) {

@@ -21,9 +21,9 @@
 			<td class="hidden-xs"><span ng-class="statusToLabel(group.status)">{{group.status}}</span></td>
 			<td>{{group.leader}}</td>
 			<td class="hidden-xs">{{group.meets}}</td>
-			<td class="hidden-xs"><span class="badge" ng-show="group.child_count">{{group.child_count}}</span> {{group.childcare}}</td>
+			<td class="hidden-xs">{{group.childcare}} <span class="badge" ng-show="group.child_count">{{group.child_count}}</span></td>
 			<td class="hidden-xs">{{group.gender}} {{group.demographic}}</td>
-			<td class="hidden-xs"><span class="badge">{{group.count}}</span> <span class="text-super-muted pull-right" ng-show="group.max_members">{{group.max_members}} max</span></td>
+			<td class="hidden-xs">{{group.count}} <span class="text-super-muted pull-right" ng-show="group.max_members">{{group.max_members}} max</span></td>
 		</tr>
 	</tbody>
 </table>

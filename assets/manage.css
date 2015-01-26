@@ -38,6 +38,7 @@ body { padding-top: 70px; }
 	}
 }
 .text-super-muted { color: #ccc; }
+.badge { background-color: #ccc; }
 /* Group Detail */
 .group-members { padding-top: 10px; }
 .group-member-delete { color: #ccc; cursor: pointer; }
