@@ -25,7 +25,13 @@ class Groups extends APIController {
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
-		$sql = "SELECT *, (SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count` FROM `groups` WHERE `groups`.`semester_id`=:semester_id ORDER BY CAST(`groups`.`public_id` AS UNSIGNED), `groups`.`public_id`, `groups`.`name` ASC";
+		$sql = "SELECT *, 
+			(SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count`, 
+			(SELECT SUM(`child_care`) FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `child_count`
+			FROM `groups` 
+			WHERE `groups`.`semester_id`=:semester_id 
+			ORDER BY CAST(`groups`.`public_id` AS UNSIGNED), `groups`.`public_id`, `groups`.`name` ASC";
+
 		$q = new Firelit\Query($sql, array(':semester_id' => $semester->id));
 
 		$groups = array();
@@ -71,12 +77,7 @@ class Groups extends APIController {
 	 		if ($array['demographic'] == 'None') $array['demographic'] = '';
 	 		if ($array['childcare'] == 'Not available') $array['childcare'] = '';
 
-
-			$sql = "SELECT SUM(`child_care`) AS `child_care` FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `groups_members`.`group_id`=:group_id";
-			$q1 = new Firelit\Query($sql, array(':group_id' => $group->id));
-
-			if ($row = $q1->getRow()) $array['child_count'] = (int) $row['child_care'];
-			else $array['child_count'] = 0;
+	 		if (empty($array['child_count'])) $array['child_count'] = 0;
 
 			$groups[] = $array;
 
