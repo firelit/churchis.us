@@ -1,4 +1,7 @@
-<table class="table" ng-cloak>
+<div class="loading text-center" ng-hide="users.$resolved">
+	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
+</div>
+<table class="table" ng-show="users.$resolved">
 	<thead>
 		<tr>
 			<th>User Name</th>

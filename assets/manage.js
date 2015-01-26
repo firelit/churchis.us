@@ -118,7 +118,7 @@ churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group',
 		$scope.loading = true;
 
 		$scope.groups = Group.query();
-		
+
 		$scope.viewGroup = function(group) {
 			$location.path('/groups/' + group.id);
 		}

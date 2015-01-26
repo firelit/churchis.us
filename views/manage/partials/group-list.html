@@ -1,7 +1,7 @@
-<!-- <div class="loading text-center">
+<div class="loading text-center" ng-hide="groups.$resolved">
 	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
-</div> -->
-<table class="table">
+</div>
+<table class="table" ng-show="groups.$resolved">
 	<thead>
 		<tr>
 			<th class="hidden-xs">#</th>
@@ -23,7 +23,7 @@
 			<td class="hidden-xs">{{group.childcare}}</td>
 			<td class="hidden-xs">{{group.gender}}</td>
 			<td class="hidden-xs">{{group.demographic}}</td>
-			<td class="hidden-xs">{{group.count}}</td>
+			<td class="hidden-xs">{{group.count}} <span class="text-super-muted" ng-show="group.max_members">of {{group.max_members}}</td>
 		</tr>
 	</tbody>
 </table>

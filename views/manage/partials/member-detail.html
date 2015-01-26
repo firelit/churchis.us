@@ -1,7 +1,7 @@
-<div class="loading text-center" ng-show="!member.id">
+<div class="loading text-center" ng-hide="member.$resolved">
 	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
 </div>
-<div class="row" ng-hide="!member.id">
+<div class="row" ng-show="member.$resolved">
 	<div class="col-sm-12">
 		<h3 class="page-header">
 			<i class="fa fa-user"></i> {{member.name}} 
@@ -9,7 +9,7 @@
 		</h3>
 	</div>
 </div>
-<div class="row" ng-hide="edit_mode || !member.id">
+<div class="row" ng-hide="edit_mode || !member.$resolved">
 
 	<div class="col-sm-6">
 		<dl class="dl-horizontal group-details">

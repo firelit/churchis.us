@@ -1,7 +1,7 @@
-<div class="loading text-center" ng-show="!group.id">
+<div class="loading text-center" ng-hide="group.$resolved">
 	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
 </div>
-<div class="row" ng-hide="!group.id">
+<div class="row" ng-show="group.$resolved">
 	<div class="col-sm-12">
 		<h3 class="page-header">
 			<small class="label label-default">#{{group.public_id}}</small> {{group.name}} 
@@ -9,7 +9,7 @@
 		</h3>
 	</div>
 </div>
-<div class="row" ng-hide="edit_mode || !group.id">
+<div class="row" ng-hide="edit_mode || !group.$resolved">
 	<div class="col-sm-6">
 		<p class="group-description">{{group.description}}</p>
 		<dl class="dl-horizontal group-details">

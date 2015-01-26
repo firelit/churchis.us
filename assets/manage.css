@@ -37,6 +37,7 @@ body { padding-top: 70px; }
 		transform: rotate(359deg);
 	}
 }
+.text-super-muted { color: #ccc; }
 /* Group Detail */
 .group-members { padding-top: 10px; }
 .group-member-delete { color: #ccc; cursor: pointer; }

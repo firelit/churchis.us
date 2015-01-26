@@ -1,9 +1,12 @@
-<div class="row" ng-cloak>
+<div class="loading text-center" ng-hide="user.$resolved">
+	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
+</div>
+<div class="row" ng-show="user.$resolved">
 	<div class="col-sm-12">
 		<h3 class="page-header">{{user.name}}</h3>
 	</div>
 </div>
-<div class="row" ng-cloak>
+<div class="row" ng-show="user.$resolved">
 	<div class="col-sm-6">
 		<dl class="dl-horizontal group-details">
 			<dt>Email</dt>
