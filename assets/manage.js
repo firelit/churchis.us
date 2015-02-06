@@ -5,7 +5,12 @@ $(function() {
 			$(".navbar-collapse").collapse('hide');
 		});
 	});
+
 });
+
+function copyToClipboard(text) {
+	window.prompt("Copy to clipboard: Ctrl+C or Cmd+C", text);
+}
 
 var churchis = angular.module('churchis', [
 	'ngRoute',
@@ -164,6 +169,24 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 			
 			$scope.group.$delete();
 			$location.path('/groups');
+		}
+
+		$scope.copyEmails = function() {
+			var emails = '';
+
+			for (x in $scope.group.members) {
+				if ($scope.group.members[x].email) 
+					emails = emails +', '+ $scope.group.members[x].email;
+			}
+
+			if (emails.length < 3) {
+				alert('No email addresses to copy :(');
+				return;
+			}
+
+			emails = emails.substr(2);
+
+			copyToClipboard(emails);
 		}
 
 		var range = new Array();

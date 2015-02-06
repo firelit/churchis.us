@@ -44,7 +44,8 @@
 	<div class="col-sm-6" ng-hide="member_mode">
 		<div class="well">
 			<div class="members-header clearfix">
-				<button class="btn btn-sm btn-primary pull-right" ng-click="member_mode = true"><i class="fa fa-plus"></i> Add</button>
+				<button class="btn btn-sm btn-primary pull-right" ng-click="member_mode = true" title="Quick-add a member"><i class="fa fa-user-plus"></i> Add</button> 
+				<button class="btn btn-sm btn-default pull-right" ng-click="copyEmails()" style="margin-right:5px;" title="Copy group email addresses to clipboard">Copy <i class="fa fa-envelope-o"></i></button> 
 				<h4><i class="fa fa-group"></i> Members</h4>
 			</div>
 			<ul class="group-members list-group">
