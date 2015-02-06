@@ -29,7 +29,7 @@ Firelit\DatabaseSessionHandler::$config = array(
 	'colKey' => 'key', // The key column for the unique session ID
 	'colData' => 'data', // The data column for storing session data
 	'colExp' => 'expires', // The datetime column for expiration date
-	'expSeconds' => 1800 // 30 minutes
+	'expSeconds' => 604800 // 7 days
 );
 
 Firelit\Session::$config['validatorSalt'] = 'fZ40iPuJiv11';
