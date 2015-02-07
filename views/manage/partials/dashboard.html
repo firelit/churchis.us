@@ -1,0 +1,32 @@
+<div class="loading text-center" ng-hide="resolved">
+	<h1><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></h1>
+</div>
+<div class="row" ng-show="resolved">
+	<div class="col-xs-12 col-md-10">
+		<div class="text-center"><strong>Member Signups</strong></div>
+		<canvas id="signupChart" height="250" width="945"></canvas>
+	</div>
+	<div class="col-xs-6 col-md-1">
+		<div><div id="memberCount" class="dashboard-stat"></div><div class="dashboard-label">Members</div></div>
+		<div><div id="childCount" class="dashboard-stat"></div><div class="dashboard-label">Children</div></div>
+	</div>
+	<div class="col-xs-6 col-md-1">
+		<div><div id="groupCount" class="dashboard-stat"></div><div class="dashboard-label">Groups</div></div>
+		<div><div id="fullCount" class="dashboard-stat"></div><div class="dashboard-label">Full</div></div>
+	</div>
+</div>
+<div class="row" ng-show="resolved">
+	<div class="col-md-3">
+		<div><strong>Member Signup Form</strong></div>
+		<button class="btn btn-danger" id="dashboard-disable"><i class="fa fa-check"></i> Disable</button>
+		<button class="btn btn-success" id="dashboard-enable"><i class="fa fa-check"></i> Enable</button>
+	</div>
+	<div class="col-md-2">
+		<div><strong>Leader Emails</strong></div>
+		<button class="btn btn-default dashboard-copy" id="dashboard-leader-copy"><i class="fa fa-copy"></i> Copy</button>
+	</div>
+	<div class="col-md-2">
+		<div><strong>Member Emails</strong></div>
+		<button class="btn btn-default dashboard-copy" id="dashboard-member-copy"><i class="fa fa-copy"></i> Copy</button>
+	</div>
+</div>

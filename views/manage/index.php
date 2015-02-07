@@ -20,6 +20,12 @@
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular-resource.js"></script>
 
 		<script src="/assets/manage.js"></script>
+
+		<?php if ($isAdmin) { ?>
+		<script src="/assets/Chart.min.js"></script>
+		<script src="/assets/dashboard.js"></script>
+		<?php } ?>
+
 		<script>window.is_admin = <?=json_encode($isAdmin); ?>;</script>
 	</head>
 	<body ng-app="churchis">
@@ -35,6 +41,9 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav" ng-controller="HeaderCtl">
+						<?php if ($isAdmin) { ?>
+						<li ng-class="{ active: isActive('/dashboard') }"><a href="#/dashboard">Dashboard</a></li>
+						<?php } ?>
 						<li ng-class="{ active: isActive('/groups(/\d+)?') }"><a href="#/groups">Groups</a></li>
 						<li ng-class="{ active: isActive('/members(/\d+)?') }"><a href="#/members">Members</a></li>
 						<?php if ($isAdmin) { ?>

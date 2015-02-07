@@ -58,6 +58,10 @@ $router->add('GET', '!^/manage/(.*)$!', function() {
 
 // API routes
 
+$router->add('GET', '!^/api/dashboard$!', function() {
+	Controller::handoff('Dashboard', 'view');
+});
+
 $router->add('GET', '!^/api/groups$!', function() {
 	Controller::handoff('Groups', 'viewAll');
 });

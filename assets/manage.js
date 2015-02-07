@@ -29,6 +29,10 @@ churchis.config(['$routeProvider',
 	function($routeProvider) {
 
 		$routeProvider
+			.when('/dashboard', {
+				templateUrl: '/views/manage/partials/dashboard.html',
+				controller: 'DashboardCtl'
+			})
 			.when('/groups', {
 				templateUrl: '/views/manage/partials/group-list.html',
 				controller: 'GroupListCtl'
@@ -54,7 +58,7 @@ churchis.config(['$routeProvider',
 				controller: 'UserDetailCtl'
 			})
 			.otherwise({
-				redirectTo: '/groups'
+				redirectTo: function() { if (window.is_admin) return '/dashboard'; else return '/groups'; }
 			});
 
 	}

@@ -43,3 +43,6 @@ body { padding-top: 70px; }
 .group-members { padding-top: 10px; }
 .group-member-delete { color: #ccc; cursor: pointer; }
 .group-member-delete:hover { color: #F33; }
+/* Dashboard */
+.dashboard-stat { font-size: 3em; font-weight: bold; text-align: center; padding-top: 20px; }
+.dashboard-label { text-align: center; padding-bottom: 10px; }
