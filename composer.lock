@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/firelit/firelit-framework.git",
-                "reference": "5acc92dbfe97733b477d1493d3c9146b69f278cd"
+                "reference": "088ef484af4b97b3f135cb643545248515ce038e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firelit/firelit-framework/zipball/5acc92dbfe97733b477d1493d3c9146b69f278cd",
-                "reference": "5acc92dbfe97733b477d1493d3c9146b69f278cd",
+                "url": "https://api.github.com/repos/firelit/firelit-framework/zipball/088ef484af4b97b3f135cb643545248515ce038e",
+                "reference": "088ef484af4b97b3f135cb643545248515ce038e",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "source": "https://github.com/firelit/firelit-framework/tree/master",
                 "issues": "https://github.com/firelit/firelit-framework/issues"
             },
-            "time": "2014-12-23 19:49:03"
+            "time": "2015-02-13 18:34:10"
         },
         {
             "name": "guzzle/guzzle",
@@ -244,17 +244,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.6.1",
+            "version": "v2.6.4",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "720fe9bca893df7ad1b4546649473b5afddf0216"
+                "reference": "f75989f3ab2743a82fe0b03ded2598a2b1546813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/720fe9bca893df7ad1b4546649473b5afddf0216",
-                "reference": "720fe9bca893df7ad1b4546649473b5afddf0216",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/f75989f3ab2743a82fe0b03ded2598a2b1546813",
+                "reference": "f75989f3ab2743a82fe0b03ded2598a2b1546813",
                 "shasum": ""
             },
             "require": {
@@ -262,10 +262,10 @@
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "~2.0",
+                "symfony/config": "~2.0,>=2.0.5",
                 "symfony/dependency-injection": "~2.6",
                 "symfony/expression-language": "~2.6",
-                "symfony/stopwatch": "~2.2"
+                "symfony/stopwatch": "~2.3"
             },
             "suggest": {
                 "symfony/dependency-injection": "",
@@ -298,7 +298,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:19:20"
+            "time": "2015-02-01 16:10:57"
         }
     ],
     "packages-dev": [],

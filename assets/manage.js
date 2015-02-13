@@ -274,6 +274,74 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 
 		}
 
+		$scope.add_meeting = false;
+		$scope.date = new Date();
+
+		$scope.createMeeting = function() {
+
+			var meeting = {};
+
+			meeting.date = $("#meeting-date").val();
+			meeting.attendance = $("#meeting-attend").val();
+			meeting.group_size = $("#meeting-size").val();
+			meeting.group = $routeParams.groupId;
+
+			$http
+				.post('/api/groups/'+ $routeParams.groupId +'/meetings', meeting)
+				.success(function() {
+
+					$("#meeting-date").val('');
+					$("#meeting-attend").val('');
+					$("#meeting-size").val('');
+
+					$scope.group = Group.get({groupId: $routeParams.groupId});
+					$scope.add_meeting = false;
+
+				})
+				.error(function(data) {
+					alert('An error occured: '+ data.errors[0].message);
+				});
+
+		}
+
+		$scope.editMeeting = function(meetingId) {
+
+			$http
+				.edit('/api/groups/'+ $routeParams.groupId +'/meetings/'+ meetingId)
+				.success(function() {
+
+					$scope.group = Group.get({groupId: $routeParams.groupId});
+
+				})
+				.error(function() {
+					alert('An error occured');
+				});
+
+		}
+
+		$scope.removeMeeting = function(meetingId) {
+			var conf = confirm('Delete this meeting?');
+			if (!conf) return;
+
+			$http
+				.delete('/api/groups/'+ $routeParams.groupId +'/meetings/'+ meetingId)
+				.success(function() {
+
+					$('#meeting-'+ meetingId).fadeOut(function() {
+						
+						$scope.group = Group.get({groupId: $routeParams.groupId});
+
+					});
+
+				})
+				.error(function() {
+					alert('An error occured: '+ data.errors[0].message);
+				});
+
+			return false;
+
+		}
+
 	}
 ]);
 

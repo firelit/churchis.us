@@ -40,9 +40,12 @@ body { padding-top: 70px; }
 .text-super-muted { color: #ccc; }
 .badge { background-color: #ccc; }
 /* Group Detail */
-.group-members { padding-top: 10px; }
-.group-member-delete { color: #ccc; cursor: pointer; }
-.group-member-delete:hover { color: #F33; }
+.group-members, .group-meetings { padding-top: 10px; }
+.group-member-delete, .group-meeting-delete { color: #ccc; cursor: pointer; }
+.group-member-delete:hover, .group-meeting-delete:hover { color: #F33; }
+.group-meetings input { line-height: 24px; width: 80px; }
+.meeting-new-row { padding: 3px 0; }
+.rounded-corner { border-top-right-radius: 4px; border-top-left-radius: 4px; }
 /* Dashboard */
 .dashboard-stat { font-size: 3em; font-weight: bold; text-align: center; padding-top: 20px; }
 .dashboard-label { text-align: center; padding-bottom: 10px; }

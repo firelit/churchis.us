@@ -8,20 +8,23 @@ class Member extends Firelit\DatabaseObject {
 	// Optional fields to set in extension
 	protected static $colsJson = array(); // Columns that should be automatically JSON-encoded/decoded when using
 
+	/**
+	 *	Return all groups this member is a part of
+	 *	@return Firelit\QueryIterator object with iteratable result set
+	 */
 	public function getGroups() {
 
 		$sql = "SELECT `groups`.* FROM `groups` INNER JOIN `groups_members` ON `groups`.`id`=`groups_members`.`group_id` WHERE `groups_members`.`member_id`=:member_id";
 		$q = new Firelit\Query($sql, array(':member_id' => $this->id));
 
-		$groups = array();
-
-		while ($group = $q->getObject('Group'))
-			$groups[] = $group;
-		
-		return $groups;
+		return new Firelit\QueryIterator($q, 'Group');
 
 	}
 
+	/**
+	 *	Get this object's details in an associative array
+	 *	@return Array
+	 */
 	public function getArray() {
 
 		return array(

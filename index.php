@@ -86,6 +86,18 @@ $router->add('GET', '!^/api/groups$!', function() {
 			Controller::handoff('Groups', 'removeMember', $matches[0], $matches[1]);
 		});
 
+		$router->add('GET', '!^/api/groups/(\d+)/meetings$!', function($matches) {
+			Controller::handoff('GroupMeetings', 'viewAll', $matches[0]);
+		});
+
+			$router->add('POST', '!^/api/groups/(\d+)/meetings$!', function($matches) {
+				Controller::handoff('GroupMeetings', 'addMeeting', $matches[0]);
+			});
+
+			$router->add('DELETE', '!^/api/groups/(\d+)/meetings/(\d+)$!', function($matches) {
+				Controller::handoff('GroupMeetings', 'removeMeeting', $matches[0], $matches[1]);
+			});
+
 $router->add('GET', '!^/api/members$!', function() {
 	Controller::handoff('Members', 'viewAll');
 });

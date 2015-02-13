@@ -153,8 +153,8 @@ class Members extends APIController {
 			$groups = $member->getGroups();
 			$match = false;
 			
-			foreach ($this->okGroups as $groupId) {
-				foreach ($groups as $group) {
+			foreach ($groups as $group) {
+				foreach ($this->okGroups as $groupId) {
 					if ($groupId == $group->id) {
 						$match = true;
 						break 2;

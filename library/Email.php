@@ -5,6 +5,10 @@ class Email {
 	public $subject, $to, $from, $replyTo, $cc, $bcc;
 	public $html;
 
+	/**
+	 *	Send the email now
+	 *	@return Bool success
+	 */
 	public function send() {
 
 		if (empty($_SERVER['MAILGUN_KEY'])) 

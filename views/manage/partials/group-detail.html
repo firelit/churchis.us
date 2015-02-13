@@ -10,7 +10,7 @@
 	</div>
 </div>
 <div class="row" ng-hide="edit_mode || !group.$resolved">
-	<div class="col-sm-6">
+	<div class="col-sm-6 col-md-4">
 		<p class="group-description">{{group.description}}</p>
 		<dl class="dl-horizontal group-details">
 			<dt>Status</dt>
@@ -40,8 +40,41 @@
 			<span class="btn btn-default btn-sm pull-right" ng-show="is_admin" ng-click="deleteGroup()"><i class="glyphicon glyphicon-trash"></i></span>
 			<span class="btn btn-default btn-sm" ng-click="edit_mode = true"><i class="glyphicon glyphicon-pencil"></i></span>
 		</p>
+
 	</div>
-	<div class="col-sm-6" ng-hide="member_mode">
+	<div class="col-sm-6 col-md-4">
+		<div class="well">
+			<div class="meetings-header clearfix">
+				<button class="btn btn-sm btn-primary pull-right" ng-click="add_meeting = true" ng-hide="add_meeting" title="Add a meeting"><i class="fa fa-plus-square"></i> Add</button> 
+				<h4><i class="fa fa-calendar"></i> Meetings</h4>
+			</div>
+			<ul class="group-meetings list-group" ng-show="add_meeting">
+				<li class="list-group-item clearfix" id="meeting-new">
+					<a class="group-meeting-delete pull-right" ng-click="add_meeting = false"><i class="fa fa-times-circle"></i></a>
+					<div class="meeting-new-row">
+						<label for="meeting-date">We met on</label> <input type="date" name="meeting-date" id="meeting-date" value="{{ date | date : 'M/d/yy'}}" placeholder="mm/dd/yy"> 
+					</div>
+					<div class="meeting-new-row">
+						<input type="date" name="meeting-attend" id="meeting-attend" value="{{group.members.length}}" placeholder="count"> 
+						<label for="meeting-size">of</label> 
+						<input type="date" name="meeting-size" id="meeting-size" value="{{group.members.length}}" placeholder="num members">
+						<label for="meeting-attend">attended</label>
+					</div>
+					<div class="meeting-new-row">
+						<button class="btn btn-sm btn-primary pull-right" ng-click="createMeeting()" title="Add this meeting"><i class="fa fa-check"></i> Save</button>
+					</div>
+				</li>
+			</ul>
+			<ul class="group-meetings list-group">
+				<li class="list-group-item" ng-if="!group.meetings.length"><em class="text-muted">No meetings recorded</em></li>
+				<li class="list-group-item" ng-repeat="meeting in group.meetings" id="meeting-{{meeting.id}}">
+					<a class="group-meeting-delete pull-right" ng-click="removeMeeting(meeting.id)"><i class="fa fa-times-circle"></i></a>
+					<strong>{{meeting.date}}</strong> &nbsp; {{meeting.attendance}} of {{meeting.group_size}} attended
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-sm-12 col-md-4" ng-hide="member_mode">
 		<div class="well">
 			<div class="members-header clearfix">
 				<button class="btn btn-sm btn-primary pull-right" ng-click="member_mode = true" title="Quick-add a member"><i class="fa fa-user-plus"></i> Add</button> 
@@ -51,7 +84,7 @@
 			<ul class="group-members list-group">
 				<li class="list-group-item" ng-if="!group.members.length"><em class="text-muted">No members</em></li>
 				<li class="list-group-item" ng-repeat="member in group.members" id="member-{{member.id}}">
-					<a class="group-member-delete pull-right" ng-click="removeMember(member.id)"><i class="fa fa-times-circle"></i></button>
+					<a class="group-member-delete pull-right" ng-click="removeMember(member.id)"><i class="fa fa-times-circle"></i></a>
 					<a href="#/members/{{member.id}}">{{member.name}}</a> &nbsp; 
 					<small class="text-muted" ng-show="member.contact_pref!='EMAIL'">{{member.phone}}</small> 
 					<small class="text-muted" ng-show="member.contact_pref!='PHONE'">{{member.email}}</small>
@@ -59,7 +92,7 @@
 			</ul>
 		</div>
 	</div>
-	<div class="col-sm-6" ng-show="member_mode">
+	<div class="col-sm-12 col-sm-4" ng-show="member_mode">
 		<div class="well">
 
 			<h4>Add New Member</h4>

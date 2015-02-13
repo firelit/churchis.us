@@ -8,6 +8,10 @@ class Group extends Firelit\DatabaseObject {
 	// Optional fields to set in extension
 	protected static $colsJson = array('data'); // Columns that should be automatically JSON-encoded/decoded when using
 
+	/**
+	 *	Get the number of members in group
+	 *	@return Int count
+	 */
 	public function getMemberCount() {
 
 		$sql = "SELECT COUNT(*) AS `count` FROM `groups_members` WHERE `group_id`=:group_id";
@@ -18,20 +22,24 @@ class Group extends Firelit\DatabaseObject {
 
 	}
 
+	/**
+	 *	Get all members of the group
+	 *	@return Firelit\QueryIterator object with iteratable result set
+	 */
 	public function getMembers() {
 
 		$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `members`.`id`=`groups_members`.`member_id` WHERE `groups_members`.`group_id`=:group_id ORDER BY `members`.`name`";
 		$q = new Firelit\Query($sql, array(':group_id' => $this->id));
 
-		$members = array();
-
-		while ($member = $q->getObject('Member'))
-			$members[] = $member;
-		
-		return $members;
+		return new Firelit\QueryIterator($q, 'Member');
 
 	}
 
+	/**
+	 *	Add this member to the group
+	 *	@param Member $member
+	 *	@param Bool $leader
+	 */
 	public function addMember(Member $member, $leader = false) {
 		
 		if ($member->semester_id != $this->semester_id) {
@@ -64,6 +72,10 @@ class Group extends Firelit\DatabaseObject {
 
 	}
 
+	/**
+	 *	Remove this member from the group
+	 *	@param Member $member
+	 */
 	public function removeMember(Member $member) {
 		
 		$sql = "DELETE FROM `groups_members` WHERE `group_id`=:group_id AND `member_id`=:member_id";
@@ -82,6 +94,25 @@ class Group extends Firelit\DatabaseObject {
 
 	}
 
+	/**
+	 *	Return all recorded meetings for this group
+	 *	@return Firelit\QueryIterator object with iteratable result set
+	 */
+	public function getMeetings() {
+
+		$sql = "SELECT * FROM `meetings` WHERE `group_id`=:group_id ORDER BY `date` ASC";
+		$q = new Firelit\Query($sql, array(
+			':group_id' => $this->id
+		));
+
+		return new Firelit\QueryIterator($q, 'Meeting');
+
+	}
+
+	/**
+	 *	Get this object's details in an associative array
+	 *	@return Array
+	 */
 	public function getArray() {
 		
 		return array(

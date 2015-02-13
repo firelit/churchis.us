@@ -102,14 +102,18 @@ class Groups extends APIController {
 		$members = $group->getMembers();
 		$membersReturn = array();
 
-		foreach ($members as $member) {
-
+		foreach ($members as $member) 
 			$membersReturn[] = $member->getArray();
 
-		}
+		$meetings = $group->getMeetings();
+		$meetingsReturn = array();
 
+		foreach ($meetings as $meeting) 
+			$meetingsReturn[] = $meeting->getArray();
+		
 		$return = $group->getArray();
 		$return['members'] = $membersReturn;
+		$return['meetings'] = $meetingsReturn;
 
 		$this->response->respond($return);
 
