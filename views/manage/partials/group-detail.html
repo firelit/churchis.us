@@ -55,9 +55,9 @@
 						<label for="meeting-date">We met on</label> <input type="date" name="meeting-date" id="meeting-date" value="{{ date | date : 'M/d/yy'}}" placeholder="mm/dd/yy"> 
 					</div>
 					<div class="meeting-new-row">
-						<input type="date" name="meeting-attend" id="meeting-attend" value="{{group.members.length}}" placeholder="count"> 
+						<input type="number" name="meeting-attend" id="meeting-attend" value="{{group.members.length}}" placeholder="count"> 
 						<label for="meeting-size">of</label> 
-						<input type="date" name="meeting-size" id="meeting-size" value="{{group.members.length}}" placeholder="num members">
+						<input type="number" name="meeting-size" id="meeting-size" value="{{group.members.length}}" placeholder="num members">
 						<label for="meeting-attend">attended</label>
 					</div>
 					<div class="meeting-new-row">
