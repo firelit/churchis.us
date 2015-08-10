@@ -110,6 +110,8 @@ class Login extends Firelit\Controller {
 			exit;
 		}
 
+		$this->tempConnectUser($user);
+
 		$this->executeLogin($user);
 
 	}
@@ -155,6 +157,37 @@ class Login extends Firelit\Controller {
 			$user->grantGroupAccess($group->id);
 
 		return $user;
+
+	}
+
+	/**
+	 *	Temporary method makes sure an existing user is connected to all
+	 *	of the existing groups. (Useful for new semesters with new groups, 
+	 *	but with the same leaders.)
+	 *
+	 *	@param String $user 
+	 *	@return User True for success or false for failure
+	 */
+	public function tempConnectUser($user) {
+
+		if ($password != $_SERVER['TEMP_PASSWORD']) return false;
+
+		$semester = Semester::latestOpen();
+
+		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `data` LIKE :email";
+		$q = new Firelit\Query($sql, array(
+			':semester_id' => $semester->id,
+			':email' => '%'. Firelit\Query::escapeLike('"email":"'. $user->email .'"') .'%'
+		));
+
+		if (!$group = $q->getObject('Group')) return false;
+
+		$user->grantGroupAccess($group->id);
+
+		while ($group = $q->getObject('Group'))
+			$user->grantGroupAccess($group->id);
+
+		return true;
 
 	}
 
