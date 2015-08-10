@@ -170,8 +170,6 @@ class Login extends Firelit\Controller {
 	 */
 	public function tempConnectUser($user) {
 
-		if ($password != $_SERVER['TEMP_PASSWORD']) return false;
-
 		$semester = Semester::latestOpen();
 
 		$sql = "SELECT * FROM `groups` WHERE `semester_id`=:semester_id AND `data` LIKE :email";
