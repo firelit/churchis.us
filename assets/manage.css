@@ -2,10 +2,11 @@ body { padding-top: 70px; }
 #body { min-height: 500px; }
 .rowclickable tr { cursor: pointer; }
 .rowclickable tr:hover > td { background-color: #d9edf7; }
+#navbar .label { position: relative; top: 14px; left: 14px; }
 #footer { color: #999; text-align: center; margin-top: 30px; }
-.footer-sm { 
-	font-size: 0.85em; 
-	opacity: 0.4; 
+.footer-sm {
+	font-size: 0.85em;
+	opacity: 0.4;
 	transition: opacity .25s ease-in-out;
 	-moz-transition: opacity .25s ease-in-out;
 	-webkit-transition: opacity .25s ease-in-out;

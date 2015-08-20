@@ -12,12 +12,12 @@
 #group-list li.group-selected { background-color: #efe; border-color: #ded; }
 #group-side-wrap { position: relative; }
 #group-side-wrap.scrolled:before {
-	content: ""; 
-	position: absolute; 
-	margin-left: 0; 
-	top: 0; 
-	height: 20px; 
-	width: 100%; 
+	content: "";
+	position: absolute;
+	margin-left: 0;
+	top: 0;
+	height: 20px;
+	width: 100%;
 	z-index: 1;
 	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
@@ -26,13 +26,13 @@
 	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
 }
-#group-side-wrap:after { 
-	content: ""; 
-	position: absolute; 
-	margin-left: 0; 
-	bottom: 0; 
-	height: 20px; 
-	width: 100%; 
+#group-side-wrap:after {
+	content: "";
+	position: absolute;
+	margin-left: 0;
+	bottom: 0;
+	height: 20px;
+	width: 100%;
 	background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
@@ -95,12 +95,12 @@
 							<li class="well <?php if ($data['full']) echo 'full'; ?>"><label>
 								<?=(!empty($data['public_id']) ? '<div class="group-id"><span class="label label-default">Group '. $data['public_id'] .'</span></div>' : ''); ?>
 								<div>
-									<input type="radio" name="group" class="group-radio" value="<?=htmlentities($id); ?>" <?php if ($data['full']) echo 'disabled'; ?>> 
+									<input type="radio" name="group" class="group-radio" value="<?=htmlentities($id); ?>" <?php if ($data['full']) echo 'disabled'; ?>>
 									<h3 class="sg-name"><?=htmlentities($data['name']); ?></h3>
 								</div>
 								<div class="group-leader"><i class="fa fa-fw fa-user"></i> Leader(s): <?=htmlentities($data['leader']); ?></div>
 								<div class="group-meeting"><i class="fa fa-fw fa-calendar"></i> <?=htmlentities($data['when']); ?> at <?=htmlentities($data['where']); ?></div>
-								<div class="group-demographic"><i class="fa fa-fw fa-check-circle"></i> 
+								<div class="group-demographic"><i class="fa fa-fw fa-check-circle"></i>
 									<?=(($data['demographic'] == 'None') ? '' : ucfirst($data['demographic']) .'s '); ?>
 									<?=(($data['gender'] == 'None') ? '' : ucfirst($data['gender']) .' group'); ?>
 									<?=(($data['gender'] == 'None') && ($data['demographic'] == 'None') ? 'Open group' : ''); ?>
@@ -121,7 +121,7 @@
 				<h3>2. Enter your info:</h3>
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="first">First Name</label>  
+					<label class="control-label" for="first">First Name</label>
 					<div class="">
 						<input id="first" name="first" type="text" placeholder="First Name" class="form-control input-md" required>
 					</div>
@@ -129,7 +129,7 @@
 
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="last">Last Name</label>  
+					<label class="control-label" for="last">Last Name</label>
 					<div class="">
 						<input id="last" name="last" type="text" placeholder="Last Name" class="form-control input-md" required>
 					</div>
@@ -148,7 +148,7 @@
 
 				<!-- Text input-->
 				<div class="form-group second">
-					<label class="control-label" for="first2">Second Member: First Name</label>  
+					<label class="control-label" for="first2">Second Member: First Name</label>
 					<div class="">
 						<input id="first2" name="first2" type="text" placeholder="First Name" class="form-control input-md">
 					</div>
@@ -156,7 +156,7 @@
 
 				<!-- Text input-->
 				<div class="form-group second">
-					<label class="control-label" for="last2">Second Member: Last Name</label>  
+					<label class="control-label" for="last2">Second Member: Last Name</label>
 					<div class="">
 						<input id="last2" name="last2" type="text" placeholder="Last Name" class="form-control input-md">
 					</div>
@@ -164,7 +164,7 @@
 
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="address">Address</label>  
+					<label class="control-label" for="address">Address</label>
 					<div class="">
 						<input id="address" name="address" type="text" placeholder="Address" class="form-control input-md" required>
 					</div>
@@ -172,17 +172,17 @@
 
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="city">City</label>  
+					<label class="control-label" for="city">City</label>
 					<div class="">
 						<input id="city" name="city" type="text" placeholder="City" class="form-control input-md" required>
 					</div>
 				</div>
 
 				<input type="hidden" name="state" value="MI">
-				
+
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="zip">Zip Code</label>  
+					<label class="control-label" for="zip">Zip Code</label>
 					<div class="">
 						<input id="zip" name="zip" type="text" placeholder="Zip Code" class="form-control input-md" required>
 					</div>
@@ -190,7 +190,7 @@
 
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="phone">Phone</label>  
+					<label class="control-label" for="phone">Phone</label>
 					<div class="">
 						<input id="phone" name="phone" type="text" placeholder="Phone" class="form-control input-md" required>
 					</div>
@@ -198,7 +198,7 @@
 
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="control-label" for="email">Email</label>  
+					<label class="control-label" for="email">Email</label>
 					<div class="">
 						<input id="email" name="email" type="text" placeholder="Email" class="form-control input-md" required>
 					</div>
@@ -226,12 +226,20 @@
 					<label class="control-label" for="childcount">Need Childcare?</label>
 					<div class="">
 						<div class="input-group">
-							<span class="input-group-addon">     
-								<input type="checkbox" name="childcare" id="childcare" value="Yes">     
+							<span class="input-group-addon">
+								<input type="checkbox" name="childcare" id="childcare" value="Yes">
 							</span>
 							<input id="childcount" name="childcount" class="form-control" type="text" placeholder="# of Children">
 						</div>
 						<p class="help-block">If childcare is needed, please enter the number of children</p>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group ages">
+					<label class="control-label" for="ages">Ages of Children</label>
+					<div class="">
+						<input id="ages" name="ages" type="text" placeholder="Example: 2, 5, 8" class="form-control input-md">
 					</div>
 				</div>
 
@@ -262,6 +270,11 @@ $(function() {
 			if ($(this).closest('.form-group').hasClass('has-error'))
 				$('#form').bootstrapValidator('revalidateField', 'childcount');
 
+			if ($(this).is(':checked'))
+				$('.form-group.ages').show();
+			else
+				$('.form-group.ages').hide();
+
 		})
 		.on('change', '#addsecond', function() {
 
@@ -280,6 +293,7 @@ $(function() {
 		});
 
 	$('#addsecond').trigger('change');
+	$('#childcare').trigger('change');
 
 	var ua = navigator.userAgent.toLowerCase();
 	var isAndroid = ua.indexOf("android") > -1;
@@ -293,7 +307,7 @@ $(function() {
 				$('#group-side-wrap').removeClass('scrolled');
 			} else if ((ev.target.scrollTop >= 10) && (ev.target.scrollTop < 100)) {
 				$('#group-side-wrap').addClass('scrolled');
-			}  
+			}
 		});
 
 	$('#group-list')

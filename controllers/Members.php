@@ -1,11 +1,11 @@
 <?php
 
 class Members extends APIController {
-	
+
 	private $session, $user, $okGroups;
 
 	public function __construct() {
-		
+
 		parent::__construct();
 
 		$this->session = Firelit\Session::init();
@@ -13,14 +13,14 @@ class Members extends APIController {
 
 		if ($this->user->role != 'ADMIN')
 			$this->okGroups = $this->user->getGroupAccess(true);
-		else 
+		else
 			$this->okGroups = array();
 
 	}
 
 	public function viewAll() {
 
-		$semester = Semester::latestOpen();
+		$semester = Semester::getCurrent();
 
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
@@ -30,7 +30,7 @@ class Members extends APIController {
 			if (!sizeof($this->okGroups)) $this->okGroups[] = 0;
 
 			$sql = "SELECT `members`.* FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `members`.`semester_id`=:semester_id AND `groups_members`.`group_id` IN (". implode(',', $this->okGroups) .") GROUP BY `members`.`id` ORDER BY `name`, `email`, `created` ASC";
-		
+
 		} else {
 
 			$sql = "SELECT * FROM `members` WHERE `semester_id`=:semester_id ORDER BY `name`, `email`, `created` ASC";
@@ -56,7 +56,7 @@ class Members extends APIController {
 		if (!$member)
 			$member = Member::find($id);
 
-		if (!$member) 
+		if (!$member)
 			throw new Firelit\RouteToError(404, 'Member not found.');
 
 		$groups = $member->getGroups();
@@ -64,14 +64,14 @@ class Members extends APIController {
 
 		foreach ($groups as $group) {
 
-			if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+			if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 				continue;
 
 			$groupsReturn[] = $group->getArray();
 
 		}
 
-		if ($checkPermissions && ($this->user->role != 'ADMIN') && !sizeof($groupsReturn)) 
+		if ($checkPermissions && ($this->user->role != 'ADMIN') && !sizeof($groupsReturn))
 			throw new Firelit\RouteToError(400, 'Access to member forbidden.');
 
 		$return = $member->getArray();
@@ -88,7 +88,7 @@ class Members extends APIController {
 
 		$name = trim($request->post['name']);
 
-		if (strlen($name) < 2) 
+		if (strlen($name) < 2)
 			throw new Firelit\RouteToError(400, 'The name must be at least 2 characters long.');
 
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::NAME, $name);
@@ -99,14 +99,14 @@ class Members extends APIController {
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $email);
 		if (!$iv->isValid()) $email = null;
 		else $email = $iv->getNormalized();
-		
+
 		$phone = trim($request->post['phone']);
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::PHONE, $phone, 'US');
 		if (empty($phone)) $phone = null;
 		elseif ($iv->isValid()) $phone = $iv->getNormalized();
 		// else just keep the phone as submitted
 
-		$semester = Semester::latestOpen();
+		$semester = Semester::getCurrent();
 
 		if (!empty($email) || !empty($phone)) {
 			// If we have a name and an email or phone
@@ -145,14 +145,14 @@ class Members extends APIController {
 
 		$member = Member::find($id);
 
-		if (!$member) 
+		if (!$member)
 			throw new Firelit\RouteToError(404, 'Member not found.');
 
 		if ($this->user->role != 'ADMIN') {
 
 			$groups = $member->getGroups();
 			$match = false;
-			
+
 			foreach ($groups as $group) {
 				foreach ($this->okGroups as $groupId) {
 					if ($groupId == $group->id) {
@@ -208,7 +208,7 @@ class Members extends APIController {
 
 		$member = Member::find($id);
 
-		if (!$member) 
+		if (!$member)
 			throw new Firelit\RouteToError(404, 'Member not found.');
 
 		if ($this->user->role != 'ADMIN')

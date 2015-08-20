@@ -2,18 +2,30 @@
 
 $(function() {
 
-	$('body').on('click', '.dashboard-copy', function() {
-		copyToClipboard( $(this).data('emails') );
-	});
+	$('body')
+		.on('click', '.dashboard-copy', function() {
+			copyToClipboard( $(this).data('emails') );
+		})
+		.on('change', '#semesterPicker', function() {
+			$.ajax('/api/dashboard', {
+				type: 'POST',
+				data: JSON.stringify({
+					'new_semester': $('#semesterPicker').val()
+				}),
+				success: function() {
+					window.location.reload();
+				}
+			});
+		});
 
 });
 
-churchisControllers.controller('DashboardCtl', ['$scope', '$location', '$http', 
+churchisControllers.controller('DashboardCtl', ['$scope', '$location', '$http',
 	function($scope, $location, $http) {
 
 		$http.get('/api/dashboard')
 			.success(function(data, status, headers, config) {
-			
+
 				var ctx = $('#signupChart').get(0).getContext('2d');
 				var myLineChart = new Chart(ctx).Line({
 					labels: data.signups.labels,
@@ -39,11 +51,19 @@ churchisControllers.controller('DashboardCtl', ['$scope', '$location', '$http',
 				$('#dashboard-leader-copy').data('emails', data.emails.leaders);
 				$('#dashboard-member-copy').data('emails', data.emails.members);
 
+				var semPick = $('#semesterPicker').empty();
+
+				for (i in data.semesters) {
+					semester = data.semesters[i];
+					var opt = $('<option></option>').attr('value', semester.id).html(semester.name).appendTo(semPick);
+					if (semester.selected) opt.prop('selected', true);
+				}
+
 				$scope.resolved = true;
 
 			})
 			.error(function(data, status, headers, config) {
-			
+
 				$('#signupChart').replaceWith('<div class="alert alert-danger">Could not load graph data.</div>');
 
 				$scope.resolved = true;

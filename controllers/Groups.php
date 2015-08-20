@@ -1,11 +1,11 @@
 <?php
 
 class Groups extends APIController {
-	
+
 	private $session, $user, $okGroups;
 
 	public function __construct() {
-		
+
 		parent::__construct();
 
 		$this->session = Firelit\Session::init();
@@ -13,23 +13,23 @@ class Groups extends APIController {
 
 		if ($this->user->role != 'ADMIN')
 			$this->okGroups = $this->user->getGroupAccess(true);
-		else 
+		else
 			$this->okGroups = array();
 
 	}
 
 	public function viewAll() {
 
-		$semester = Semester::latestOpen();
+		$semester = Semester::getCurrent();
 
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
-		$sql = "SELECT *, 
-			(SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count`, 
+		$sql = "SELECT *,
+			(SELECT COUNT(*) FROM `groups_members` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `count`,
 			(SELECT SUM(`child_care`) FROM `members` INNER JOIN `groups_members` ON `groups_members`.`member_id`=`members`.`id` WHERE `groups_members`.`group_id`=`groups`.`id`) AS `child_count`
-			FROM `groups` 
-			WHERE `groups`.`semester_id`=:semester_id 
+			FROM `groups`
+			WHERE `groups`.`semester_id`=:semester_id
 			ORDER BY CAST(`groups`.`public_id` AS UNSIGNED), `groups`.`public_id`, `groups`.`name` ASC";
 
 		$q = new Firelit\Query($sql, array(':semester_id' => $semester->id));
@@ -38,7 +38,7 @@ class Groups extends APIController {
 
 		while ($group = $q->getObject('Group')) {
 
-			if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+			if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 				continue;
 
 			$array = $group->getArray();
@@ -52,7 +52,7 @@ class Groups extends APIController {
 
 			if (strlen($array['time']) > 30)
 				$array['time'] = substr($array['time'], 0, 27) .'...';
-			
+
 			$array['meets'] = $array['time'];
 
 			$days = $array['days'];
@@ -93,24 +93,24 @@ class Groups extends APIController {
 		if (!$group)
 			$group = Group::find($id);
 
-		if (!$group) 
+		if (!$group)
 			throw new Firelit\RouteToError(404, 'Group not found.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 			throw new Firelit\RouteToError(400, 'Not authorized to view this group.');
 
 		$members = $group->getMembers();
 		$membersReturn = array();
 
-		foreach ($members as $member) 
+		foreach ($members as $member)
 			$membersReturn[] = $member->getArray();
 
 		$meetings = $group->getMeetings();
 		$meetingsReturn = array();
 
-		foreach ($meetings as $meeting) 
+		foreach ($meetings as $meeting)
 			$meetingsReturn[] = $meeting->getArray();
-		
+
 		$return = $group->getArray();
 		$return['members'] = $membersReturn;
 		$return['meetings'] = $meetingsReturn;
@@ -123,10 +123,10 @@ class Groups extends APIController {
 
 		$group = Group::find($id);
 
-		if (!$group) 
+		if (!$group)
 			throw new Firelit\RouteToError(404, 'Group not found.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 			throw new Firelit\RouteToError(400, 'Not authorized to edit this group.');
 
 		$request = Firelit\Request::init();
@@ -181,7 +181,7 @@ class Groups extends APIController {
 		if (!$group)
 			throw new Firelit\RouteToError(400, 'Invalid group specified.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
 
 		$semester = Semester::find($group->semester_id);
@@ -218,7 +218,7 @@ class Groups extends APIController {
 		if (!$group)
 			throw new Firelit\RouteToError(400, 'Invalid group specified.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 			throw new Firelit\RouteToError(400, 'Access to group forbidden.');
 
 		$semester = Semester::find($group->semester_id);
@@ -242,10 +242,10 @@ class Groups extends APIController {
 
 		$group = Group::find($id);
 
-		if (!$group) 
+		if (!$group)
 			throw new Firelit\RouteToError(404, 'Group not found.');
 
-		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups)) 
+		if (($this->user->role != 'ADMIN') && !in_array($group->id, $this->okGroups))
 			throw new Firelit\RouteToError(400, 'Not authorized to delete this group.');
 
 		$request = Firelit\Request::init();

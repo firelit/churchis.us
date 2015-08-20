@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `churchis_main`.`members` (
   `zip` VARCHAR(5) NULL,
   `contact_pref` ENUM('PHONE','EMAIL','BOTH','EITHER') NULL,
   `child_care` INT UNSIGNED NOT NULL DEFAULT 0,
+  `child_ages` TINYTEXT NULL DEFAULT NULL,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `semester_idx` (`semester_id` ASC),

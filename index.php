@@ -62,6 +62,10 @@ $router->add('GET', '!^/api/dashboard$!', function() {
 	Controller::handoff('Dashboard', 'view');
 });
 
+	$router->add('POST', '!^/api/dashboard$!', function() {
+		Controller::handoff('Dashboard', 'semester');
+	});
+
 $router->add('GET', '!^/api/groups$!', function() {
 	Controller::handoff('Groups', 'viewAll');
 });

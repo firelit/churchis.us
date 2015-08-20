@@ -110,18 +110,18 @@ churchisServices.factory('User', ['$resource',
 
 var churchisControllers = angular.module('churchisControllers', ['churchisServices']);
 
-churchisControllers.controller('HeaderCtl', ['$scope', '$location', 
+churchisControllers.controller('HeaderCtl', ['$scope', '$location',
 	function($scope, $location) {
 
 		$scope.isActive = function(viewLocation) {
 			var regex = new RegExp(viewLocation);
 			return regex.test( $location.path() );
 		}
-		
+
 	}
 ]);
 
-churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group', 
+churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group',
 	function($scope, $location, Group) {
 
 		$scope.loading = true;
@@ -142,7 +142,7 @@ churchisControllers.controller('GroupListCtl', ['$scope', '$location', 'Group',
 	}
 ]);
 
-churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', '$location', 'Group', 'Member', 
+churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$http', '$location', 'Group', 'Member',
 	function($scope, $routeParams, $http, $location, Group, Member) {
 
 		$scope.group = Group.get({groupId: $routeParams.groupId});
@@ -170,7 +170,7 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 		$scope.deleteGroup = function() {
 			var conf = confirm('Delete group? This cannot be undone.');
 			if (!conf) return;
-			
+
 			$scope.group.$delete();
 			$location.path('/groups');
 		}
@@ -179,7 +179,7 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 			var emails = '';
 
 			for (x in $scope.group.members) {
-				if ($scope.group.members[x].email) 
+				if ($scope.group.members[x].email)
 					emails = emails +', '+ $scope.group.members[x].email;
 			}
 
@@ -260,7 +260,7 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 				.success(function() {
 
 					$('#member-'+ memberId).fadeOut(function() {
-						
+
 						$scope.group = Group.get({groupId: $routeParams.groupId});
 
 					});
@@ -328,7 +328,7 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 				.success(function() {
 
 					$('#meeting-'+ meetingId).fadeOut(function() {
-						
+
 						$scope.group = Group.get({groupId: $routeParams.groupId});
 
 					});
@@ -345,11 +345,11 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 	}
 ]);
 
-churchisControllers.controller('MemberListCtl', ['$scope', '$location', 'Member', 
+churchisControllers.controller('MemberListCtl', ['$scope', '$location', 'Member',
 	function($scope, $location, Member) {
 
 		$scope.members = Member.query();
-		
+
 		$scope.viewMember = function(member) {
 			$location.path('/members/' + member.id);
 		}
@@ -361,7 +361,7 @@ churchisControllers.controller('MemberDetailCtl', ['$scope', '$routeParams', '$l
 	function($scope, $routeParams, $location, Member) {
 
 		$scope.member = Member.get({memberId: $routeParams.memberId});
-		
+
 		$scope.cancelEdit = function() {
 			$scope.member = Member.get({memberId: $routeParams.memberId});
 			$scope.edit_mode = false;
@@ -386,11 +386,11 @@ churchisControllers.controller('MemberDetailCtl', ['$scope', '$routeParams', '$l
 	}
 ]);
 
-churchisControllers.controller('UserListCtl', ['$scope', '$location', 'User', 
+churchisControllers.controller('UserListCtl', ['$scope', '$location', 'User',
 	function($scope, $location, User) {
 
 		$scope.users = User.query();
-		
+
 		$scope.viewUser = function(user) {
 			$location.path('/users/' + user.id);
 		}

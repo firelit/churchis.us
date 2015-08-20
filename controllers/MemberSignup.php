@@ -1,7 +1,7 @@
 <?php
 
 class MemberSignup extends Firelit\Controller {
-	
+
 	public function __construct() { }
 
 	public function viewForm() {
@@ -110,6 +110,11 @@ class MemberSignup extends Firelit\Controller {
 		else
 			$childcount = 0;
 
+		if (isset($request->post['ages']) && strlen(trim($request->post['ages'])))
+			$childages = trim($request->post['ages']);
+		else
+			$childages = null;
+
 		try {
 
 			$member = Member::create(array(
@@ -123,7 +128,8 @@ class MemberSignup extends Firelit\Controller {
 				'state' => $state,
 				'zip' => $zip,
 				'contact_pref' => $contact,
-				'child_care' => $childcount
+				'child_care' => $childcount,
+				'child_ages' => $childages
 			));
 
 			$newCount = $group->addMember($member);
@@ -154,7 +160,7 @@ class MemberSignup extends Firelit\Controller {
 		}
 
 		try {
-			
+
 			$email = new EmailMemberSignup($member, $group, $member2);
 
 			$email->toMember();
@@ -163,7 +169,7 @@ class MemberSignup extends Firelit\Controller {
 		} catch (Exception $e) { }
 
 		try {
-			
+
 			$email->toLeader();
 			$email->send();
 
@@ -172,12 +178,12 @@ class MemberSignup extends Firelit\Controller {
 		if (!is_null($group->max_members) && ($newCount >= $group->max_members)) {
 
 			try {
-				
+
 				$email->groupFull($newCount);
 				$email->send();
 
 			} catch (Exception $e) { }
-		
+
 		}
 
 		$response = Firelit\Response::init();

@@ -1,9 +1,11 @@
 # 1 HOUR CACHING
+<IfModule mod_headers.c>
 <FilesMatch "\.(jpg|jpeg|png|gif|swf|css|js|pdf|ico)$">
 Header set Cache-Control "max-age=14400, public"
 </FilesMatch>
+</IfModule>
 
-Options -indexes
+#Options -indexes
 
 <IfModule mod_rewrite.c>
 RewriteEngine On

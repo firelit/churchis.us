@@ -1,11 +1,11 @@
 <?php
 
 class Dashboard extends APIController {
-	
+
 	private $session, $user, $okGroups;
 
 	public function __construct() {
-		
+
 		parent::__construct();
 
 		$this->session = Firelit\Session::init();
@@ -22,7 +22,7 @@ class Dashboard extends APIController {
 
 	public function view() {
 
-		$semester = Semester::latestOpen();
+		$semester = Semester::getCurrent();
 
 		if (!$semester)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
@@ -51,8 +51,8 @@ class Dashboard extends APIController {
 		ksort($data);
 		$labels = array_keys($data);
 
-		$min = min($labels);
-		$max = max($labels);
+		$min = sizeof($labels) ? min($labels) : 0;
+		$max = sizeof($labels) ? max($labels) : 0;
 		$sum = 0;
 
 		for ($x = $min; $x <= $max; ) {
@@ -103,6 +103,21 @@ class Dashboard extends APIController {
 
 		}
 
+		$sql = "SELECT * FROM `semesters` WHERE 1 ORDER BY `start_date` DESC";
+		$q = new Firelit\Query($sql);
+
+		$semesters = array();
+
+		while ($aSemester = $q->getObject('Semester')) {
+
+			$semesters[] = array(
+				'id' => $aSemester->id,
+				'name' => $aSemester->name,
+				'selected' => ($aSemester->id == $semester->id)
+			);
+
+		}
+
 		$this->response->respond(array(
 			'loaded' => true,
 			'signups' => array(
@@ -119,8 +134,23 @@ class Dashboard extends APIController {
 			'emails' => array(
 				'leaders' => array_keys($leaderEmails),
 				'members' => array_keys($emails)
-			)
+			),
+			'semesters' => $semesters
 		));
+
+	}
+
+	public function semester() {
+
+		$req = Firelit\Request::init();
+
+		$new = intval($req->post['new_semester']);
+
+		$sem = Semester::find($new);
+
+		if ($sem) setCookie('semester', $sem->id);
+
+		$this->response->respond(array('success' => true));
 
 	}
 

@@ -5,7 +5,7 @@ class EmailMemberSignup extends Email {
 	protected $member, $group, $secondMember;
 
 	public function __construct(Member $member, Group $group, Member $secondMember = null) {
-		
+
 		$this->member = $member;
 		$this->secondMember = $secondMember;
 		$this->group = $group;
@@ -13,7 +13,7 @@ class EmailMemberSignup extends Email {
 	}
 
 	public function toMember() {
-		
+
 		$member = $this->member;
 		$secondMember = $this->secondMember;
 		$group = $this->group;
@@ -40,7 +40,7 @@ class EmailMemberSignup extends Email {
 	}
 
 	public function toLeader() {
-		
+
 		$member = $this->member;
 		$secondMember = $this->secondMember;
 		$group = $this->group;
@@ -71,7 +71,11 @@ class EmailMemberSignup extends Email {
 		$this->html .= "<dt". $dtS .">Email</dt><dd". $ddS .">". htmlentities($member->email) ."</dd>";
 		$this->html .= "<dt". $dtS .">Phone</dt><dd". $ddS .">". htmlentities($member->phone) ."</dd>";
 		$this->html .= "<dt". $dtS .">Contact Preference</dt><dd". $ddS .">". htmlentities($member->contact_pref) ."</dd>";
-		$this->html .= "<dt". $dtS .">Childcare Needed</dt><dd". $ddS .">". (empty($member->child_care) ? 'No' : $member->child_care ." children") ."</dd>";
+
+		$childcare = (empty($member->child_care) ? 'No' : $member->child_care ." children ");
+		if (!empty($member->child_care) && !empty($member->child_ages)) $childcare .= "(". (preg_match('/^\d/', $member->child_ages) ? 'age ' : '') . $member->child_ages .")";
+
+		$this->html .= "<dt". $dtS .">Childcare Needed</dt><dd". $ddS .">". $childcare ."</dd>";
 
 		$this->html .= "</dl>";
 
@@ -84,11 +88,11 @@ class EmailMemberSignup extends Email {
 		$this->html .= $_SERVER['EMAIL_FOOTER'];
 
 		$this->html .= "</body></html>";
-		
+
 	}
 
 	public function groupFull($memberCount) {
-		
+
 		$member = $this->member;
 		$group = $this->group;
 
