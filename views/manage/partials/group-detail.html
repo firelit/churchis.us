@@ -4,7 +4,7 @@
 <div class="row" ng-show="group.$resolved">
 	<div class="col-sm-12">
 		<h3 class="page-header">
-			<small class="label label-default">#{{group.public_id}}</small> {{group.name}} 
+			<small class="label label-default">#{{group.public_id}}</small> {{group.name}}
 			<small ng-show="edit_mode">Edit Group</small>
 		</h3>
 	</div>
@@ -45,18 +45,18 @@
 	<div class="col-sm-6 col-md-4">
 		<div class="well">
 			<div class="meetings-header clearfix">
-				<button class="btn btn-sm btn-primary pull-right" ng-click="add_meeting = true" ng-hide="add_meeting" title="Add a meeting"><i class="fa fa-plus-square"></i> Add</button> 
+				<button class="btn btn-sm btn-primary pull-right" ng-click="add_meeting = true" ng-hide="add_meeting" title="Add a meeting"><i class="fa fa-plus-square"></i> Add</button>
 				<h4><i class="fa fa-calendar"></i> Meetings</h4>
 			</div>
 			<ul class="group-meetings list-group" ng-show="add_meeting">
 				<li class="list-group-item clearfix" id="meeting-new">
 					<a class="group-meeting-delete pull-right" ng-click="add_meeting = false"><i class="fa fa-times-circle"></i></a>
 					<div class="meeting-new-row">
-						<label for="meeting-date">We met on</label> <input type="date" name="meeting-date" id="meeting-date" value="{{ date | date : 'M/d/yy'}}" placeholder="mm/dd/yy"> 
+						<label for="meeting-date">We met on</label> <input type="date" name="meeting-date" id="meeting-date" value="{{ date | date : 'M/d/yy'}}" placeholder="mm/dd/yy">
 					</div>
 					<div class="meeting-new-row">
-						<input type="number" name="meeting-attend" id="meeting-attend" value="{{group.members.length}}" placeholder="count"> 
-						<label for="meeting-size">of</label> 
+						<input type="number" name="meeting-attend" id="meeting-attend" value="{{group.members.length}}" placeholder="count">
+						<label for="meeting-size">of</label>
 						<input type="number" name="meeting-size" id="meeting-size" value="{{group.members.length}}" placeholder="num members">
 						<label for="meeting-attend">attended</label>
 					</div>
@@ -77,17 +77,20 @@
 	<div class="col-sm-12 col-md-4" ng-hide="member_mode">
 		<div class="well">
 			<div class="members-header clearfix">
-				<button class="btn btn-sm btn-primary pull-right" ng-click="member_mode = true" title="Quick-add a member"><i class="fa fa-user-plus"></i> Add</button> 
-				<button class="btn btn-sm btn-default pull-right" ng-click="copyEmails()" style="margin-right:5px;" title="Copy group email addresses to clipboard">Copy <i class="fa fa-envelope-o"></i></button> 
+				<button class="btn btn-sm btn-primary pull-right" ng-click="member_mode = true" title="Quick-add a member"><i class="fa fa-user-plus"></i> Add</button>
+				<button class="btn btn-sm btn-default pull-right" ng-click="copyEmails()" style="margin-right:5px;" title="Copy group email addresses to clipboard">Copy <i class="fa fa-envelope-o"></i></button>
 				<h4><i class="fa fa-group"></i> Members</h4>
 			</div>
 			<ul class="group-members list-group">
 				<li class="list-group-item" ng-if="!group.members.length"><em class="text-muted">No members</em></li>
 				<li class="list-group-item" ng-repeat="member in group.members" id="member-{{member.id}}">
-					<a class="group-member-delete pull-right" ng-click="removeMember(member.id)"><i class="fa fa-times-circle"></i></a>
-					<a href="#/members/{{member.id}}">{{member.name}}</a> &nbsp; 
-					<small class="text-muted" ng-show="member.contact_pref!='EMAIL'">{{member.phone}}</small> 
-					<small class="text-muted" ng-show="member.contact_pref!='PHONE'">{{member.email}}</small>
+					<div>
+						<a class="group-member-delete pull-right" ng-click="removeMember(member.id)"><i class="fa fa-times-circle"></i></a>
+						<a href="#/members/{{member.id}}">{{member.name}}</a>
+					</div>
+					<div ng-show="member.contact_pref!='EMAIL'"><small class="text-muted">{{member.phone}}</small></div>
+					<div ng-show="member.contact_pref!='PHONE'"><small class="text-muted">{{member.email}}</small></div>
+					<div ng-show="member.child_care!=0"><small class="text-muted"><span class="badge">{{member.child_care}}</span> child<span ng-show="member.child_care > 1">ren</span> <span ng-show="member.child_ages">(age: {{member.child_ages}})</span></small></div>
 				</li>
 			</ul>
 		</div>
@@ -118,7 +121,7 @@
 			<div class="form-group">
 				<button ng-click="createMember()" class="btn btn-primary">Add Now</button>
 				<button ng-click="member_mode = false" class="btn btn-default">Cancel</button>
-			</div>	
+			</div>
 
 		</div>
 	</div>
@@ -186,20 +189,20 @@
 		<div class="col-sm-4">
 
 			<div class="form-group">
-				<label for="maxsize">Group Status</label>  
+				<label for="maxsize">Group Status</label>
 				<div>
 					<select id="status" name="status" class="form-control" ng-model="group.status">
 						<option ng-repeat="i in avail_status" value="{{i.value}}">{{i.name}}</option>
-					</select> 
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label for="maxsize">Max Group Size</label>  
+				<label for="maxsize">Max Group Size</label>
 				<div>
 					<select id="maxsize" name="maxsize" class="form-control" ng-model="group.max_members">
 						<option ng-repeat="i in avail_maxsize" value="{{i.value}}">{{i.name}}</option>
-					</select> 
+					</select>
 				</div>
 			</div>
 
@@ -217,10 +220,10 @@
 
 			<div class="form-group">
 				<label for="childcare">Childcare Provided?</label>
-				<div> 
+				<div>
 					<label class="radio-inline" for="childcare-0">
 						<input type="radio" name="childcare" id="childcare-0" value="Not available" ng-model="group.childcare"> No
-					</label> 
+					</label>
 					<label class="radio-inline" for="childcare-1">
 						<input type="radio" name="childcare" id="childcare-1" value="Provided" ng-model="group.childcare"> Yes
 					</label>
@@ -229,10 +232,10 @@
 
 			<div class="form-group">
 				<label for="gender">Gender Preference?</label>
-				<div> 
+				<div>
 					<label class="radio-inline" for="gender-0">
 						<input type="radio" name="gender" id="gender-0" value="None" ng-model="group.gender"> None
-					</label> 
+					</label>
 					<label class="radio-inline" for="gender-1">
 						<input type="radio" name="gender" id="gender-1" value="Male" ng-model="group.gender"> Male
 					</label>
@@ -244,10 +247,10 @@
 
 			<div class="form-group">
 				<label for="demographic">Demographic Focus?</label>
-				<div> 
+				<div>
 					<label class="radio-inline" for="demographic-0">
 						<input type="radio" name="demographic" id="demographic-0" value="None" ng-model="group.demographic"> None
-					</label> 
+					</label>
 					<label class="radio-inline" for="demographic-1">
 						<input type="radio" name="demographic" id="demographic-1" value="Married" ng-model="group.demographic"> Married
 					</label>

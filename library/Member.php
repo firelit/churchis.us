@@ -1,7 +1,7 @@
 <?php
 
 class Member extends Firelit\DatabaseObject {
-	
+
 	protected static $tableName = 'members'; // The table name
 	protected static $primaryKey = 'id'; // The primary key for table (or false if n/a)
 
@@ -38,9 +38,10 @@ class Member extends Firelit\DatabaseObject {
 			'zip' => $this->zip,
 			'contact_pref' => $this->contact_pref,
 			'child_care' => $this->child_care,
+			'child_ages' => $this->child_ages,
 			'created' => $this->created
 		);
-		
+
 	}
 
 }
