@@ -15,7 +15,7 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="semester">Semester</label>  
+			<label class="control-label" for="semester">Semester</label>
 			<div>
 				<select id="semester" name="semester" class="form-control input-md" required>
 					<?php
@@ -34,7 +34,7 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="leader">Leader's First &amp; Last Name(s)</label>  
+			<label class="control-label" for="leader">Leader's First &amp; Last Name(s)</label>
 			<div>
 				<input id="leader" name="leader" type="text" placeholder="Full Name" class="form-control input-md" required>
 			</div>
@@ -42,7 +42,7 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="phone">Phone Number</label>  
+			<label class="control-label" for="phone">Phone Number</label>
 			<div>
 				<input id="phone" name="phone" type="text" placeholder="Phone Number" class="form-control input-md" required>
 			</div>
@@ -50,7 +50,7 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="email">Email</label>  
+			<label class="control-label" for="email">Email</label>
 			<div>
 				<input id="email" name="email" type="text" placeholder="Email" class="form-control input-md" required>
 			</div>
@@ -58,19 +58,30 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="smallgroup">Small Group Name</label>  
+			<label class="control-label" for="smallgroup">Small Group Name</label>
 			<div>
 				<input id="smallgroup" name="smallgroup" type="text" placeholder="Small Group Name" class="form-control input-md" required>
-				<span class="help-block">The name as you wish to appear everywhere</span>  
+				<span class="help-block">The name as you wish to appear everywhere</span>
 			</div>
 		</div>
 
 		<!-- Textarea -->
 		<div class="form-group">
 			<label class="control-label" for="description">Topic Description</label>
-			<div>                     
+			<div>
 				<textarea class="form-control" id="description" name="description"></textarea>
-				<span class="help-block">Description of study topic in 20 words or less</span>  
+				<span class="help-block">Description of study topic in 20 words or less</span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label" for="status">Group Status</label>
+			<div>
+				<select id="status" name="status" class="form-control">
+					<option value="OPEN">OPEN: Accepting new members</option>
+					<option value="CLOSED">CLOSED: Not accepting new members</option>
+					<option value="FULL">FULL: Reached member limit</option>
+				</select>
 			</div>
 		</div>
 
@@ -93,7 +104,7 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="maxsize">Max Group Size</label>  
+			<label class="control-label" for="maxsize">Max Group Size</label>
 			<div>
 				<select id="maxsize" name="maxsize" class="form-control input-md" required>
 					<?php
@@ -105,7 +116,7 @@
 					?>
 					<option value="null">No Maximum</option>
 				</select>
-				<span class="help-block">Preferred maximum number of attendees</span>  
+				<span class="help-block">Preferred maximum number of attendees</span>
 			</div>
 		</div>
 
@@ -153,38 +164,38 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="time">Meeting Time</label>  
+			<label class="control-label" for="time">Meeting Time</label>
 			<div>
 				<input id="time" name="time" type="text" placeholder="Meeting Time" class="form-control input-md" required>
-				<span class="help-block">Start time and stop time (e.g., 7pm - 8pm)</span>  
+				<span class="help-block">Start time and stop time (e.g., 7pm - 8pm)</span>
 			</div>
 		</div>
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="startdate">Start Date</label>  
+			<label class="control-label" for="startdate">Start Date</label>
 			<div>
 				<input id="startdate" name="startdate" type="text" placeholder="Start Date" class="form-control input-md" required>
-				<span class="help-block">Day the small group starts meeting (e.g., <span id="start_date_ex">Jan 19, 2015</span>)</span>  
+				<span class="help-block">Day the small group starts meeting (e.g., <span id="start_date_ex">Jan 19, 2015</span>)</span>
 			</div>
 		</div>
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="enddate">End Date</label>  
+			<label class="control-label" for="enddate">End Date</label>
 			<div>
 				<input id="enddate" name="enddate" type="text" placeholder="End Date" class="form-control input-md" required>
-				<span class="help-block">Date the small group stops meeting (e.g., <span id="end_date_ex">March 31, 2015</span>)</span>  
+				<span class="help-block">Date the small group stops meeting (e.g., <span id="end_date_ex">March 31, 2015</span>)</span>
 			</div>
 		</div>
 
 		<!-- Multiple Radios (inline) -->
 		<div class="form-group">
 			<label class="control-label" for="gender">Group gender preference?</label>
-			<div> 
+			<div>
 				<label class="radio-inline" for="gender-0">
 					<input type="radio" name="gender" id="gender-0" value="None" checked="checked"> None
-				</label> 
+				</label>
 				<label class="radio-inline" for="gender-1">
 					<input type="radio" name="gender" id="gender-1" value="Male"> Male
 				</label>
@@ -197,10 +208,10 @@
 		<!-- Multiple Radios (inline) -->
 		<div class="form-group">
 			<label class="control-label" for="demographic">Will your curriculum have a demographic focus?</label>
-			<div> 
+			<div>
 				<label class="radio-inline" for="demographic-0">
 					<input type="radio" name="demographic" id="demographic-0" value="None" checked="checked"> None
-				</label> 
+				</label>
 				<label class="radio-inline" for="demographic-1">
 					<input type="radio" name="demographic" id="demographic-1" value="Married"> Married
 				</label>
@@ -219,23 +230,23 @@
 		<!-- Multiple Radios (inline) -->
 		<div class="form-group">
 			<label class="control-label" for="childcare">Will child care be needed?</label>
-			<div> 
+			<div>
 				<label class="radio-inline" for="childcare-0">
 					<input type="radio" name="childcare" id="childcare-0" value="No" checked="checked"> No
-				</label> 
+				</label>
 				<label class="radio-inline" for="childcare-1">
 					<input type="radio" name="childcare" id="childcare-1" value="Yes"> Yes
 				</label>
-				<span class="help-block">Child care will most likely be provided if you meet at Frontline. If meeting offsite, childcare <em>may</em> be available.</span> 
+				<span class="help-block">Child care will most likely be provided if you meet at Frontline. If meeting offsite, childcare <em>may</em> be available.</span>
 			</div>
 		</div>
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="location">Meeting Location</label>  
+			<label class="control-label" for="location">Meeting Location</label>
 			<div>
 				<input id="location" name="location" type="text" placeholder="Meeting Location" class="form-control input-md" required>
-				<span class="help-block">Enter "Frontline" or a full address if elsewhere.</span>  
+				<span class="help-block">Enter "Frontline" or a full address if elsewhere.</span>
 			</div>
 		</div>
 

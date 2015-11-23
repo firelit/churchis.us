@@ -50,6 +50,7 @@ class LeaderSignup extends Firelit\Controller {
 			foreach ($request->post['days'] as $day)
 				$days[] = $day;
 
+		$status = $request->post['status'];
 		$startdate = new DateTime($request->post['startdate']);
 		$enddate = new DateTime($request->post['enddate']);
 		$childcare = ($request->post['childcare'] == 'Yes');
@@ -79,7 +80,7 @@ class LeaderSignup extends Firelit\Controller {
 					'demographic' => $demographic
 				),
 				'max_members' => $maxsize,
-				'status' => 'OPEN'
+				'status' => $status
 			));
 
 		} catch (Exception $e) {
