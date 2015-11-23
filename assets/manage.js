@@ -228,6 +228,8 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 			member.name = $("#member-name").val();
 			member.email = $("#member-email").val();
 			member.phone = $("#member-phone").val();
+			member.child_care = $("#member-childcount").val();
+			member.child_ages = $("#member-childages").val();
 			member.group = $routeParams.groupId;
 
 			member.$save(function() {
@@ -239,6 +241,8 @@ churchisControllers.controller('GroupDetailCtl', ['$scope', '$routeParams', '$ht
 						$("#member-name").val('');
 						$("#member-email").val('');
 						$("#member-phone").val('');
+						$("#member-childcount").val('0');
+						$("#member-childages").val('');
 
 						$scope.group = Group.get({groupId: $routeParams.groupId});
 						$scope.member_mode = false;

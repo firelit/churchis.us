@@ -119,6 +119,18 @@
 			</div>
 
 			<div class="form-group">
+				<label for="member-childcount">Child Count</label>
+				<input type="text" id="member-childcount" class="form-control" value="0" placeholder="0">
+				<p class="help-block">Children needing childcare.</p>
+			</div>
+
+			<div class="form-group">
+				<label for="member-childages">Ages for Childcare</label>
+				<input type="text" id="member-childages" class="form-control">
+				<p class="help-block">Ages of children, comma-seperated.</p>
+			</div>
+
+			<div class="form-group">
 				<button ng-click="createMember()" class="btn btn-primary">Add Now</button>
 				<button ng-click="member_mode = false" class="btn btn-default">Cancel</button>
 			</div>

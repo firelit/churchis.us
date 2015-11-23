@@ -106,6 +106,10 @@ class Members extends APIController {
 		elseif ($iv->isValid()) $phone = $iv->getNormalized();
 		// else just keep the phone as submitted
 
+		$child_care = intval(trim($request->post['child_care']));
+		if ($child_care > 0) $child_ages = trim($request->post['child_ages']);
+		else $child_ages = null;
+
 		$semester = Semester::getCurrent();
 
 		if (!empty($email) || !empty($phone)) {
@@ -124,8 +128,16 @@ class Members extends APIController {
 
 			// A member with the same name and email/phone exists,
 			// so just use this member
-			if ($member = $q->getObject('Member'))
+			if ($member = $q->getObject('Member')) {
+
+				if ($member->child_care != $child_care) {
+					$member->child_care = $child_care;
+					$member->child_ages = $child_ages;
+					$member->save();
+				}
+
 				$this->view($member->id, $member, false);
+			}
 
 		}
 
@@ -134,7 +146,9 @@ class Members extends APIController {
 			'name' => $name,
 			'email' => $email,
 			'phone' => $phone,
-			'contact_pref' => 'EITHER'
+			'contact_pref' => 'EITHER',
+			'child_care' => $child_care,
+			'child_ages' => $child_ages
 		));
 
 		$this->view($member->id, $member, false);
