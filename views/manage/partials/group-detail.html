@@ -11,7 +11,10 @@
 </div>
 <div class="row" ng-hide="edit_mode || !group.$resolved">
 	<div class="col-sm-6 col-md-4">
-		<p class="group-description">{{group.description}}</p>
+		<p class="group-description">
+			{{group.description}}
+			<div class="text-muted" ng-show="group.author!=null"><em>Book by {{group.author}}</em></div>
+		</p>
 		<dl class="dl-horizontal group-details">
 			<dt>Status</dt>
 				<dd><span ng-class="statusToLabel(group.status)">{{group.status}}</span></dd>
@@ -25,6 +28,8 @@
 				<dd>{{group.days.join(', ')}} {{group.time}}</dd>
 			<dt>Meeting Place</dt>
 				<dd>{{group.where}}</dd>
+			<dt>Meeting Dates</dt>
+				<dd>{{group.start_date}} - {{group.end_date}}</dd>
 			<dt>Childcare</dt>
 				<dd>{{group.childcare}}</dd>
 			<dt>Gender Preference</dt>
@@ -151,6 +156,11 @@
 			<div class="form-group">
 				<label for="name">Group Name</label>
 				<input type="text" id="name" class="form-control" ng-model="group.name">
+			</div>
+
+			<div class="form-group">
+				<label for="author">Book Author</label>
+				<input type="text" id="author" class="form-control" ng-model="group.author">
 			</div>
 
 			<div class="form-group">

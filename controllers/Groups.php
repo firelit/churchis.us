@@ -141,6 +141,7 @@ class Groups extends APIController {
 		$data = $group->data;
 
 		$data['leader'] = trim($request->put['leader']);
+		$data['author'] = trim($request->put['author']);
 
 		$iv = new Firelit\InputValidator(Firelit\InputValidator::EMAIL, $request->put['email']);
 		if ($iv->isValid()) $data['email'] = $iv->getNormalized();

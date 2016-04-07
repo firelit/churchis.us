@@ -41,6 +41,7 @@ class LeaderSignup extends Firelit\Controller {
 		$smallgroup = trim($request->post['smallgroup']);
 		$description = trim($request->post['description']);
 		$cost = ($request->post['cost'] == 'Yes');
+		$author = trim($request->post['author']);
 
 		if ($request->post['maxsize'] == 'null') $maxsize = null;
 		else $maxsize = intval($request->post['maxsize']);
@@ -71,6 +72,7 @@ class LeaderSignup extends Firelit\Controller {
 					'email' => $email,
 					'cost' => $cost,
 					'days' => $days,
+					'author' => $author,
 					'start_date' => $startdate,
 					'end_date' => $enddate,
 					'childcare' => $childcare,

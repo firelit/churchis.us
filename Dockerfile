@@ -1,5 +1,8 @@
 FROM tutum/lamp:latest
 
+# Make sure everything is up-to-date
+RUN sudo apt-get update
+
 # Enable mcrypt support
 RUN php5enmod mcrypt
 

@@ -58,10 +58,19 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="smallgroup">Small Group Name</label>
+			<label class="control-label" for="smallgroup">Name of Study</label>
 			<div>
-				<input id="smallgroup" name="smallgroup" type="text" placeholder="Small Group Name" class="form-control input-md" required>
-				<span class="help-block">The name as you wish to appear everywhere</span>
+				<input id="smallgroup" name="smallgroup" type="text" placeholder="Name of Study" class="form-control input-md" required>
+				<span class="help-block">The name as you wish it to appear publicly</span>
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="author">Book Author (if applicable)</label>
+			<div>
+				<input id="author" name="author" type="text" placeholder="Author" class="form-control input-md">
+				<span class="help-block">The author of the book being studied, if applicable</span>
 			</div>
 		</div>
 
@@ -69,8 +78,8 @@
 		<div class="form-group">
 			<label class="control-label" for="description">Topic Description</label>
 			<div>
-				<textarea class="form-control" id="description" name="description"></textarea>
-				<span class="help-block">Description of study topic in 20 words or less</span>
+				<textarea class="form-control" id="description" name="description" required></textarea>
+				<span class="help-block">Description of study topic in 2-3 sentences</span>
 			</div>
 		</div>
 

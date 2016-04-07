@@ -1,7 +1,7 @@
 <?php
 
 class Group extends Firelit\DatabaseObject {
-	
+
 	protected static $tableName = 'groups'; // The table name
 	protected static $primaryKey = 'id'; // The primary key for table (or false if n/a)
 
@@ -41,11 +41,11 @@ class Group extends Firelit\DatabaseObject {
 	 *	@param Bool $leader
 	 */
 	public function addMember(Member $member, $leader = false) {
-		
+
 		if ($member->semester_id != $this->semester_id) {
 			// Member in wrong semster
-			// Possible fix: 
-			//		Clone the member and assign to this group? 
+			// Possible fix:
+			//		Clone the member and assign to this group?
 			//		Problem: Return the new member to caller?
 			throw new Exception('Member and group semesters do not match');
 		}
@@ -77,7 +77,7 @@ class Group extends Firelit\DatabaseObject {
 	 *	@param Member $member
 	 */
 	public function removeMember(Member $member) {
-		
+
 		$sql = "DELETE FROM `groups_members` WHERE `group_id`=:group_id AND `member_id`=:member_id";
 		$q = new Firelit\Query($sql, array(
 			':group_id' => $this->id,
@@ -114,16 +114,24 @@ class Group extends Firelit\DatabaseObject {
 	 *	@return Array
 	 */
 	public function getArray() {
-		
+
+		$start = $this->data['start_date'];
+		$end = $this->data['end_date'];
+		if (!$start instanceof DateTime) $start = new DateTime($start['date']);
+		if (!$end instanceof DateTime) $end = new DateTime($end['date']);
+
 		return array(
 			'id' => $this->id,
 			'name' => $this->name,
+			'author' => !empty($this->data['author']) ? $this->data['author'] : null,
 			'status' => $this->status,
 			'public_id' => $this->public_id,
 			'description' => $this->description,
 			'leader' => $this->data['leader'],
 			'phone' => $this->data['phone'],
 			'email' => $this->data['email'],
+			'start_date' => $start->format('n/j/y'),
+			'end_date' => $end->format('n/j/y'),
 			'when' => (is_array($this->data['days']) ? implode(', ', $this->data['days']) : '') .' '. $this->data['time'],
 			'days' => (is_array($this->data['days']) ? $this->data['days'] : array()),
 			'time' => $this->data['time'],

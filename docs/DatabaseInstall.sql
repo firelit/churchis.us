@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `churchis_main`.`groups` (
   `semester_id` INT UNSIGNED NOT NULL,
   `public_id` VARCHAR(10) NULL DEFAULT NULL,
   `name` TINYTEXT NOT NULL,
-  `description` TEXT NULL DEFAULT NULL,
+  `description` MEDIUMTEXT NULL DEFAULT NULL,
   `data` LONGTEXT NULL DEFAULT NULL,
   `max_members` INT NULL DEFAULT NULL,
   `status` ENUM('OPEN','CLOSED','FULL','CANCELED') NULL,
