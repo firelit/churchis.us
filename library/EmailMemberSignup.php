@@ -25,13 +25,13 @@ class EmailMemberSignup extends Email {
 
 		$this->html .= "<p>Hi ". htmlentities($member->name) . (!empty($secondMember) ? ' &amp; '. $secondMember->name : '') ."!</p>";
 
-		$this->html .= "<p>I'm so glad you've decided to join a small group this semester. If you're receiving this email, it means we've received your registration. The group you chose, <em>". htmlentities($group->name) ."</em>, is being led by ". htmlentities($group->data['leader']) .". We'll also be emailing ". htmlentities($group->data['leader']) ." with your contact information.</p>";
+		$this->html .= "<p>We're so glad you've decided to join a small group this semester. If you're receiving this email, it means we've received your registration. The group you chose, <em>". htmlentities($group->name) ."</em>, is being led by ". htmlentities($group->data['leader']) .". We'll also be emailing ". htmlentities($group->data['leader']) ." with your contact information.</p>";
 
-		$this->html .= "<p>If for some reason your group leader doesn't connect with you within a week, please email the Frontline office at <a href=\"mailto:". htmlentities($_SERVER['OFFICE_EMAIL']) ."\">". htmlentities($_SERVER['OFFICE_EMAIL']) ."</a> or give us a call (647-1111). Once in a while an email slips through the cracks or a phone number is misentered and it's really important to me that everyone gets connected to their groups.</p>";
+		$this->html .= "<p>If for some reason your group leader doesn't connect with you within a week, please email the Frontline office at <a href=\"mailto:". htmlentities($_SERVER['OFFICE_EMAIL']) ."\">". htmlentities($_SERVER['OFFICE_EMAIL']) ."</a> or give us a call (647-1111). Once in a while an email slips through the cracks or a phone number is misentered and it's really important to us that everyone gets connected to their groups.</p>";
 
-		$this->html .= "<p>If you have any questions, you can send an email to my assistant, Holly, by replying to this email.</p>";
+		$this->html .= "<p>If you have any questions, feel free to reply to this email.</p>";
 
-		$this->html .= "<p>I'm praying you have an amazing small group experience this semester.</p>";
+		$this->html .= "<p>We're praying you have an amazing small group experience this semester.</p>";
 
 		$this->html .= $_SERVER['EMAIL_FOOTER'];
 
@@ -127,7 +127,7 @@ class EmailMemberSignup extends Email {
 
 		$this->html .= "<div style=\"clear:left;\"></div>";
 
-		$this->html .= "<p>If you have any questions, you know where my office is.</p>";
+		$this->html .= "<p>If you have any questions, let us know!</p>";
 
 		$this->html .= $_SERVER['EMAIL_FOOTER'];
 
