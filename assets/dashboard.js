@@ -81,6 +81,7 @@ churchisControllers.controller('DashboardCtl', ['$scope', '$location', '$http',
 					if (semester.selected) opt.prop('selected', true);
 				}
 
+				$scope.memberSignupDisabled = data.memberSignupDisabled;
 				$scope.resolved = true;
 
 			})

@@ -118,7 +118,7 @@ class Dashboard extends APIController {
 
 		}
 
-		$disabled = Var::find('member-signup-disabled');
+		$disabled = Vars::find('member-signup-disabled');
 
 		$this->response->respond(array(
 			'loaded' => true,
@@ -147,7 +147,7 @@ class Dashboard extends APIController {
 
 		$req = Firelit\Request::init();
 
-		if (!empty($req->post['new_semester'])) {
+		if (isset($req->post['new_semester'])) {
 
 			$new = intval($req->post['new_semester']);
 
@@ -159,7 +159,7 @@ class Dashboard extends APIController {
 
 		}
 
-		if (!empty($req->post['signup'])) {
+		if (isset($req->post['signup'])) {
 
 			$disabled = !$req->post['signup'];
 

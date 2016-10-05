@@ -23,8 +23,8 @@
 	<div class="col-md-2"></div>
 	<div class="col-md-3">
 		<div><strong>Member Signup Form</strong></div>
-		<button class="btn btn-danger" id="signup-disable">{{#memberSignupDisabled}}<i class="fa fa-check"></i>{{/memberSignupDisabled}} Disable</button>
-		<button class="btn btn-success" id="signup-enable">{{^memberSignupDisabled}}<i class="fa fa-check"></i>{{/memberSignupDisabled}} Enable</button>
+		<button class="btn btn-danger" id="signup-disable"><i class="fa fa-check" ng-show="memberSignupDisabled"></i> Disable</button>
+		<button class="btn btn-success" id="signup-enable"><i class="fa fa-check" ng-hide="memberSignupDisabled"></i> Enable</button>
 	</div>
 	<div class="col-md-2">
 		<div><strong>Leader Emails</strong></div>
