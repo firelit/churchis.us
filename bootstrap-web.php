@@ -11,7 +11,7 @@ $router->exceptionHandler(function($e) use ($response) {
 	else $message = 'Server error :(';
 
 	Firelit\View::quickRender('error', false, array(
-		'error' => 500, 
+		'error' => 500,
 		'message' => $message
 	));
 
@@ -37,12 +37,12 @@ Firelit\Session::$config['validatorSalt'] = 'fZ40iPuJiv11';
 Firelit\Session::$config['cookie']['httpOnly'] = true;
 Firelit\Session::init(new Firelit\DatabaseSessionHandler);
 
-// Error routes 
+// Error routes
 
 $router->errorRoute(0, function() use ($response) {
 	$response->setCode(500);
 	Firelit\View::quickRender('error', false, array(
-		'error' => 500, 
+		'error' => 500,
 		'message' => 'Server error!'
 	));
 	exit;
@@ -51,7 +51,7 @@ $router->errorRoute(0, function() use ($response) {
 $router->errorRoute(404, function() use ($response) {
 	$response->setCode(404);
 	Firelit\View::quickRender('error', false, array(
-		'error' => 404, 
+		'error' => 404,
 		'message' => 'Page not found!'
 	));
 	exit;
@@ -60,7 +60,7 @@ $router->errorRoute(404, function() use ($response) {
 $router->errorRoute(400, function($code, $message) use ($response) {
 	$response->setCode(400);
 	Firelit\View::quickRender('error', false, array(
-		'error' => 400, 
+		'error' => 400,
 		'message' => $message
 	));
 	exit;

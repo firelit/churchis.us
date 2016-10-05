@@ -118,6 +118,8 @@ class Dashboard extends APIController {
 
 		}
 
+		$disabled = Var::find('member-signup-disabled');
+
 		$this->response->respond(array(
 			'loaded' => true,
 			'signups' => array(
@@ -135,6 +137,7 @@ class Dashboard extends APIController {
 				'leaders' => array_keys($leaderEmails),
 				'members' => array_keys($emails)
 			),
+			'memberSignupDisabled' => ($disabled && $disabled->value),
 			'semesters' => $semesters
 		));
 
@@ -158,7 +161,23 @@ class Dashboard extends APIController {
 
 		if (!empty($req->post['signup'])) {
 
-			Vars::set('member-signup', (bool) $req->post['signup']);
+			$disabled = !$req->post['signup'];
+
+			$var = Var::find('member-signup-disabled');
+
+			if ($var) {
+
+				$var->value = $disabled;
+				$var->save();
+
+			} else {
+
+				Var::create(array(
+					'name' => 'member-signup-disabled',
+					'value' => $disabled
+				));
+
+			}
 
 			$this->response->respond(array('success' => true));
 
