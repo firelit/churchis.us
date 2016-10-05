@@ -140,17 +140,29 @@ class Dashboard extends APIController {
 
 	}
 
-	public function semester() {
+	public function post() {
 
 		$req = Firelit\Request::init();
 
-		$new = intval($req->post['new_semester']);
+		if (!empty($req->post['new_semester'])) {
 
-		$sem = Semester::find($new);
+			$new = intval($req->post['new_semester']);
 
-		if ($sem) setCookie('semester', $sem->id);
+			$sem = Semester::find($new);
 
-		$this->response->respond(array('success' => true));
+			if ($sem) setCookie('semester', $sem->id);
+
+			$this->response->respond(array('success' => true));
+
+		}
+
+		if (!empty($req->post['signup'])) {
+
+			Vars::set('member-signup', (bool) $req->post['signup']);
+
+			$this->response->respond(array('success' => true));
+
+		}
 
 	}
 

@@ -16,6 +16,28 @@ $(function() {
 					window.location.reload();
 				}
 			});
+		})
+		.on('click', '#signup-enable', function() {
+			$.ajax('/api/dashboard', {
+				type: 'POST',
+				data: JSON.stringify({
+					'signup': true
+				}),
+				success: function() {
+					window.location.reload();
+				}
+			});
+		})
+		.on('click', '#signup-disable', function() {
+			$.ajax('/api/dashboard', {
+				type: 'POST',
+				data: JSON.stringify({
+					'signup': false
+				}),
+				success: function() {
+					window.location.reload();
+				}
+			});
 		});
 
 });

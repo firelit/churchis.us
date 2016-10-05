@@ -73,10 +73,6 @@
 	<fieldset>
 		<legend>Sign-Up for <?=htmlentities($semester); ?> Semester</legend>
 
-<!-- TEMP
-<div class="alert alert-danger">Small group sign-ups have now ended.</div>
--->
-
 		<?php
 
 		if (!empty($success)) {

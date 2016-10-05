@@ -6,6 +6,10 @@ class MemberSignup extends Firelit\Controller {
 
 	public function viewForm() {
 
+		$enabled = Vars::get('member-signup');
+		if ($enabled === false)
+			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
+
 		$semester = Semester::latestOpen();
 
 		if (!$semester)
@@ -32,6 +36,10 @@ class MemberSignup extends Firelit\Controller {
 	}
 
 	public function submitForm() {
+
+		$enabled = Vars::get('member-signup');
+		if ($enabled === false)
+			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
 		$request = Firelit\Request::init();
 
