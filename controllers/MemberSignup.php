@@ -6,7 +6,7 @@ class MemberSignup extends Firelit\Controller {
 
 	public function viewForm() {
 
-		$disabled = Var::find('member-signup-disabled');
+		$disabled = Vars::find('member-signup-disabled');
 		if ($disabled && $disabled->value)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 
@@ -37,7 +37,7 @@ class MemberSignup extends Firelit\Controller {
 
 	public function submitForm() {
 
-		$disabled = Var::find('member-signup-disabled');
+		$disabled = Vars::find('member-signup-disabled');
 		if ($disabled && $disabled->value)
 			throw new Firelit\RouteToError(400, 'No open small group semesters found.');
 

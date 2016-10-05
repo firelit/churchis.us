@@ -163,7 +163,7 @@ class Dashboard extends APIController {
 
 			$disabled = !$req->post['signup'];
 
-			$var = Var::find('member-signup-disabled');
+			$var = Vars::find('member-signup-disabled');
 
 			if ($var) {
 
@@ -172,7 +172,7 @@ class Dashboard extends APIController {
 
 			} else {
 
-				Var::create(array(
+				Vars::create(array(
 					'name' => 'member-signup-disabled',
 					'value' => $disabled
 				));
